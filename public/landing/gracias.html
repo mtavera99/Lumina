@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es-PR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¡Gracias! | Lumina PR</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- ============================================================
+       PÍXEL DE META + EVENTO "Lead"
+       Esta página se abre cuando alguien COMPLETA el formulario,
+       así el evento Lead se cuenta solo con conversiones reales.
+       Reemplaza 1847378283322726 por el mismo ID de tu píxel.
+       (Ver README: configurar el redirect del widget de OpenSolar
+        hacia esta página.)
+       ============================================================ -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1847378283322726');
+    fbq('track', 'PageView');
+    fbq('track', 'Lead');   // <-- conversión: lead capturado
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1847378283322726&ev=Lead&noscript=1" alt="" />
+  </noscript>
+  <!-- ============================================================ -->
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Open Sans', sans-serif; color: #fff; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px;
+      background: linear-gradient(135deg, #0a2342, #061831);
+    }
+    .box { max-width: 480px; }
+    .emoji { font-size: 64px; }
+    h1 { font-family: 'Poppins', sans-serif; font-size: 30px; margin: 16px 0 10px; }
+    h1 span { color: #c9a84c; }
+    p { color: rgba(255,255,255,.82); font-size: 16px; }
+    .btn {
+      display: inline-block; margin-top: 26px; background: #c9a84c; color: #0a2342;
+      font-family: 'Poppins', sans-serif; font-weight: 800; padding: 14px 26px; border-radius: 999px; font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="emoji">🎉</div>
+    <h1>¡Gracias! Recibimos tu <span>solicitud</span></h1>
+    <p>Un asesor de Lumina te contactará muy pronto para tu evaluación solar gratuita. Mientras tanto, prepara tu factura de luz más reciente para agilizar el proceso.</p>
+    <a href="/" class="btn">Volver al inicio</a>
+  </div>
+</body>
+</html>

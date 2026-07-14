@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es-PR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Energía Solar en Puerto Rico | Lumina — Evaluación Gratuita</title>
+  <meta name="description" content="Reduce tu factura de luz y protege tu hogar de los apagones con energía solar. Financiamiento desde $150/mes. Evaluación gratuita y sin compromiso con Lumina PR." />
+
+  <!-- Open Graph (para compartir en redes) -->
+  <meta property="og:title" content="Energía Solar en Puerto Rico | Lumina" />
+  <meta property="og:description" content="Reduce tu factura y protege tu hogar de los apagones. Financiamiento desde $150/mes. Evaluación gratuita." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://solar.luminapr.net/" />
+
+  <!-- Tipografías de marca -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- ============================================================
+       PÍXEL DE META  ·  PASO IMPORTANTE
+       Reemplaza  1847378283322726  por el ID real de tu píxel de Meta
+       (Administrador de eventos -> Orígenes de datos -> tu píxel).
+       ============================================================ -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1847378283322726');   // <-- pon aquí tu ID
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1847378283322726&ev=PageView&noscript=1" alt="" />
+  </noscript>
+  <!-- ============================================================ -->
+
+  <style>
+    :root {
+      --navy: #0a2342;
+      --navy-deep: #061831;
+      --gold: #c9a84c;
+      --gold-soft: #e0c877;
+      --text: #1a2233;
+      --muted: #5c6b83;
+      --bg: #f4f6fb;
+      --white: #fff;
+      --radius: 16px;
+      --shadow: 0 12px 40px rgba(10, 35, 66, 0.14);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, .brand-name { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--gold); color: var(--navy); font-weight: 800; font-family: 'Poppins', sans-serif;
+      padding: 15px 28px; border-radius: 999px; font-size: 16px; border: none; cursor: pointer;
+      transition: transform .08s ease, filter .15s ease; box-shadow: 0 6px 18px rgba(201,168,76,.35);
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn:active { transform: translateY(1px); }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 50; background: rgba(10,35,66,.97);
+      backdrop-filter: blur(6px); color: #fff;
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; max-width: 1120px; margin: 0 auto; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo { width: 34px; height: 34px; }
+    .brand-name { font-weight: 800; font-size: 18px; letter-spacing: .3px; }
+    .brand-name span { color: var(--gold); }
+    .header-cta { font-size: 14px; padding: 10px 18px; }
+    .header-cta.hide-mobile { display: none; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+      color: #fff; padding: 56px 0 64px; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,.22), transparent 70%);
+      top: -120px; right: -120px;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 36px; position: relative; z-index: 1; }
+    .eyebrow { color: var(--gold); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; }
+    .hero h1 { font-size: 34px; line-height: 1.15; margin: 14px 0 16px; font-weight: 800; }
+    .hero p.lead { font-size: 17px; color: rgba(255,255,255,.85); max-width: 560px; }
+    .benefits { list-style: none; margin: 24px 0 30px; display: grid; gap: 12px; max-width: 560px; }
+    .benefits li { display: flex; gap: 12px; align-items: flex-start; font-size: 15.5px; color: rgba(255,255,255,.95); }
+    .check { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); color: var(--navy); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
+    .hero-note { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 14px; }
+
+    /* Trust strip */
+    .trust { background: var(--bg); border-bottom: 1px solid #e4e8f0; }
+    .trust-inner { display: flex; flex-wrap: wrap; gap: 18px 34px; justify-content: center; padding: 18px 20px; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--navy); }
+    .trust-item .ico { font-size: 18px; }
+
+    /* Sections */
+    section.block { padding: 60px 0; }
+    .section-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+    .section-head h2 { font-size: 28px; color: var(--navy); }
+    .section-head p { color: var(--muted); margin-top: 10px; font-size: 16px; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .card { background: var(--white); border: 1px solid #e4e8f0; border-radius: var(--radius); padding: 26px; box-shadow: 0 2px 10px rgba(10,35,66,.04); }
+    .card .ico { font-size: 30px; }
+    .card h3 { color: var(--navy); font-size: 18px; margin: 12px 0 6px; }
+    .card p { color: var(--muted); font-size: 14.5px; }
+
+    /* Steps */
+    .steps { background: var(--bg); }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .step { background: #fff; border-radius: var(--radius); padding: 24px; border: 1px solid #e4e8f0; }
+    .step-num { width: 38px; height: 38px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'Poppins'; margin-bottom: 12px; }
+    .step h3 { color: var(--navy); font-size: 16px; margin-bottom: 5px; }
+    .step p { color: var(--muted); font-size: 14px; }
+
+    /* Financing */
+    .fin { background: linear-gradient(135deg, var(--navy), var(--navy-deep)); color: #fff; }
+    .fin .section-head h2 { color: #fff; }
+    .fin .section-head p { color: rgba(255,255,255,.8); }
+    .fin-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .fin-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); padding: 26px; text-align: center; }
+    .fin-card .sys { font-size: 14px; color: rgba(255,255,255,.75); }
+    .fin-card .price { font-size: 34px; font-weight: 800; color: var(--gold); font-family: 'Poppins'; margin: 8px 0 2px; }
+    .fin-card .price small { font-size: 15px; font-weight: 600; }
+    .fin-card .msg { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 8px; }
+    .fin-disclaimer { text-align: center; font-size: 12.5px; color: rgba(255,255,255,.55); margin-top: 24px; }
+
+    /* Form */
+    .form-section { background: var(--bg); }
+    .form-wrap { max-width: 720px; margin: 0 auto; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 34px; border: 1px solid #e4e8f0; }
+    .form-wrap h2 { color: var(--navy); font-size: 26px; text-align: center; }
+    .form-wrap .sub { text-align: center; color: var(--muted); margin: 8px 0 22px; }
+    #lead-widget { min-height: 420px; }
+    #lead-widget iframe { width: 100% !important; border: 0; }
+
+    /* Footer */
+    footer { background: var(--navy-deep); color: rgba(255,255,255,.7); text-align: center; padding: 30px 20px; font-size: 13px; }
+    footer .brand-name { font-size: 16px; color: #fff; }
+
+    /* Sticky mobile CTA */
+    .mobile-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: rgba(10,35,66,.98); padding: 12px 16px; display: flex; box-shadow: 0 -4px 20px rgba(0,0,0,.2); }
+    .mobile-cta .btn { width: 100%; }
+
+    /* Responsive */
+    @media (min-width: 860px) {
+      .hero { padding: 76px 0 84px; }
+      .hero h1 { font-size: 46px; }
+      .header-cta.hide-mobile { display: inline-flex; }
+      .mobile-cta { display: none; }
+      body { padding-bottom: 0; }
+    }
+    @media (max-width: 859px) { body { padding-bottom: 74px; } }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0A2342"/>
+          <circle cx="32" cy="32" r="11" fill="#C9A84C"/>
+          <g stroke="#C9A84C" stroke-width="3" stroke-linecap="round">
+            <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
+            <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
+            <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
+            <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
+          </g>
+        </svg>
+        <div class="brand-name">LUMINA<span>PR</span></div>
+      </div>
+      <a href="#formulario" class="btn header-cta hide-mobile">Evaluación gratuita</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Evaluación solar gratuita · Puerto Rico</div>
+        <h1>Tu hogar merece energía que nunca te abandone.</h1>
+        <p class="lead">Reduce tu factura de luz y protege tu casa de los apagones con un sistema solar residencial financiado. Sin pagar todo de contado y con acompañamiento completo.</p>
+        <ul class="benefits">
+          <li><span class="check">✓</span> Reduce tu factura desde el primer mes</li>
+          <li><span class="check">✓</span> Respaldo ante apagones con batería</li>
+          <li><span class="check">✓</span> Financiamiento desde $150/mes, sin pagar de contado</li>
+          <li><span class="check">✓</span> Empresa 100% puertorriqueña, con acompañamiento completo</li>
+        </ul>
+        <a href="#formulario" class="btn">Solicita tu evaluación gratuita →</a>
+        <p class="hero-note">Sin compromiso · Respuesta rápida de un asesor</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust strip -->
+  <div class="trust">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="ico">🇵🇷</span> 100% puertorriqueña</div>
+      <div class="trust-item"><span class="ico">🔋</span> Respaldo ante apagones</div>
+      <div class="trust-item"><span class="ico">📅</span> Financiamiento flexible</div>
+      <div class="trust-item"><span class="ico">🤝</span> Acompañamiento completo</div>
+    </div>
+  </div>
+
+  <!-- Beneficios -->
+  <section class="block">
+    <div class="container">
+      <div class="section-head">
+        <h2>Por qué pasar a solar con Lumina</h2>
+        <p>No empezamos vendiéndote: empezamos explicándote. Tú decides informado.</p>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="ico">🔋</div><h3>Respaldo</h3><p>Con batería, mantén funcionando lo esencial de tu hogar aunque se vaya la luz.</p></div>
+        <div class="card"><div class="ico">💰</div><h3>Ahorro</h3><p>Tu techo produce tu propia energía y tu factura baja desde el primer mes.</p></div>
+        <div class="card"><div class="ico">⚡</div><h3>Independencia</h3><p>Menos dependencia de LUMA y más control de la energía de tu casa.</p></div>
+        <div class="card"><div class="ico">📅</div><h3>Financiamiento</h3><p>Desde $150/mes. En muchos casos, menos de lo que pagas hoy de luz.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section class="block steps">
+    <div class="container">
+      <div class="section-head">
+        <h2>Qué incluye tu evaluación gratuita</h2>
+        <p>Gratis y sin compromiso. Así tomas la decisión con toda la información.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step"><div class="step-num">1</div><h3>Revisamos tu factura</h3><p>Analizamos tu consumo real para dimensionar el sistema correcto.</p></div>
+        <div class="step"><div class="step-num">2</div><h3>Diseñamos tu sistema</h3><p>Una recomendación pensada para tu hogar, con o sin batería.</p></div>
+        <div class="step"><div class="step-num">3</div><h3>Te mostramos el ahorro</h3><p>Estimación de tu ahorro y las opciones de financiamiento disponibles.</p></div>
+        <div class="step"><div class="step-num">4</div><h3>Instalación y seguimiento</h3><p>Equipo técnico certificado y acompañamiento de principio a fin.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Financiamiento -->
+  <section class="block fin">
+    <div class="container">
+      <div class="section-head">
+        <h2>Planes desde $150 al mes</h2>
+        <p>Nunca lideramos con el precio total, sino con una cuota que encaja en tu presupuesto.</p>
+      </div>
+      <div class="fin-cards">
+        <div class="fin-card"><div class="sys">5kW + batería</div><div class="price">$150<small>/mes</small></div><div class="msg">Respaldado por menos de $5/día</div></div>
+        <div class="fin-card"><div class="sys">10kW + batería</div><div class="price">$250<small>/mes</small></div><div class="msg">Potencia completa para tu familia</div></div>
+        <div class="fin-card"><div class="sys">15kW + batería</div><div class="price">$369<small>/mes</small></div><div class="msg">Solución premium para hogar grande</div></div>
+      </div>
+      <p class="fin-disclaimer">Cifras orientativas. La cuota final se confirma en tu evaluación gratuita, según tu consumo y las opciones de financiamiento.</p>
+    </div>
+  </section>
+
+  <!-- Formulario (widget de OpenSolar) -->
+  <section class="block form-section" id="formulario">
+    <div class="container">
+      <div class="form-wrap">
+        <h2>Solicita tu evaluación gratuita</h2>
+        <p class="sub">Déjanos tus datos y un asesor te contactará. Sin compromiso.</p>
+
+        <!-- ============================================================
+             WIDGET DE CAPTURA DE LEADS DE OPENSOLAR
+             Es el MISMO widget que ya usa luminapr.net, así los leads
+             siguen entrando a OpenSolar (y de ahí a HubSpot) igual que hoy.
+             No cambiar el ID salvo que OpenSolar te dé uno nuevo.
+             ============================================================ -->
+        <div id="lead-widget">
+          <script id="opensolar_lead_capture" type="text/javascript"
+            src="https://api.opensolar.com/api/lead_capture_widget/37f44522505b47079e01efd541348c31"></script>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="brand-name">LUMINA<span style="color:var(--gold)">PR</span></div>
+    <p style="margin-top:8px">Soluciones solares para hogares y negocios en Puerto Rico.</p>
+    <p style="margin-top:6px">Copyright © 2025 Grupo Atabaya LLC · Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- CTA fija en móvil -->
+  <div class="mobile-cta">
+    <a href="#formulario" class="btn">Solicita tu evaluación gratuita →</a>
+  </div>
+</body>
+</html>
