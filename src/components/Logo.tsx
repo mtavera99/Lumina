@@ -1,0 +1,18 @@
+export function Logo({ size = 40 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" className="brand-logo" aria-hidden>
+      <rect width="64" height="64" rx="14" fill="#0A2342" />
+      <circle cx="32" cy="32" r="11" fill="#C9A84C" />
+      <g stroke="#C9A84C" strokeWidth="3" strokeLinecap="round">
+        <line x1="32" y1="8" x2="32" y2="15" />
+        <line x1="32" y1="49" x2="32" y2="56" />
+        <line x1="8" y1="32" x2="15" y2="32" />
+        <line x1="49" y1="32" x2="56" y2="32" />
+        <line x1="15" y1="15" x2="20" y2="20" />
+        <line x1="44" y1="44" x2="49" y2="49" />
+        <line x1="49" y1="15" x2="44" y2="20" />
+        <line x1="20" y1="44" x2="15" y2="49" />
+      </g>
+    </svg>
+  )
+}
