@@ -905,3 +905,72 @@ th {
 .checklist-row:last-of-type { border-bottom: none; }
 .checklist-row input { width: 18px; height: 18px; accent-color: var(--green); margin-top: 1px; flex-shrink: 0; }
 .checklist-row .done { text-decoration: line-through; color: var(--text-soft); }
+
+
+/* ---------- Metrics / live dashboard ---------- */
+.metrics-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+
+.conn-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.conn-badge.on { background: var(--green-bg); color: var(--green); }
+.conn-badge.demo { background: var(--amber-bg); color: var(--amber); }
+
+.conn-panel { padding: 24px; margin-bottom: 24px; }
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+/* KPI cards */
+.kpi-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.kpi-card {
+  padding: 16px 18px;
+  border-left: 4px solid var(--border);
+}
+.kpi-card.kpi-good { border-left-color: var(--green); }
+.kpi-card.kpi-warning { border-left-color: var(--amber); }
+.kpi-card.kpi-bad { border-left-color: var(--red); }
+.kpi-card.kpi-info { border-left-color: var(--navy-700); }
+
+.kpi-top { display: flex; justify-content: space-between; align-items: center; }
+.kpi-label { font-size: 12.5px; color: var(--text-muted); font-weight: 600; }
+.kpi-dot { font-size: 11px; }
+.kpi-value { font-size: 26px; font-weight: 800; color: var(--navy); margin-top: 6px; line-height: 1; }
+.kpi-target { font-size: 11.5px; color: var(--text-soft); margin-top: 6px; }
+
+/* Alerts */
+.alert-card { padding: 16px 18px; border-left: 4px solid var(--border); }
+.alert-card.kpi-bad { border-left-color: var(--red); background: #fdf4f4; }
+.alert-card.kpi-warning { border-left-color: var(--amber); background: #fdf9f0; }
+.alert-head { display: flex; gap: 12px; align-items: flex-start; }
+.alert-dot { font-size: 14px; margin-top: 2px; }
+.alert-head b { color: var(--navy); font-size: 15px; }
+.alert-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-left: 6px;
+  color: var(--text-soft);
+}
+.alert-target { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.alert-solutions {
+  margin: 12px 0 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+.alert-solutions li { font-size: 13.5px; color: var(--text); }
