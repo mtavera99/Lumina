@@ -491,3 +491,158 @@ export const LAUNCH_CHECKLIST = [
   'Publico de remarketing creado (visitantes que no convirtieron)',
   'Plan de respuesta a leads en < 10 minutos definido con el equipo',
 ]
+
+
+// ============================================================
+//  Parrilla de contenido organico (redes sociales)
+//  Frecuencia: 2 publicaciones/semana (martes y jueves) en FB e IG.
+//  Historias con mayor frecuencia si hay material de campo.
+// ============================================================
+
+export type OrganicPillar = 'Educacion' | 'Confianza' | 'Prueba social' | 'Conversion'
+
+export interface ContentPost {
+  id: string
+  week: number
+  day: string
+  platform: string
+  pillar: OrganicPillar
+  format: string
+  title: string
+  caption: string
+  hashtags: string[]
+  cta: string
+}
+
+export const PILLAR_COLORS: Record<OrganicPillar, string> = {
+  Educacion: '#143B6B',
+  Confianza: '#C9A84C',
+  'Prueba social': '#1F9D63',
+  Conversion: '#0A2342',
+}
+
+export const HASHTAGS = [
+  '#EnergiaSolar', '#PanelesSolares', '#PuertoRico', '#AhorroDeEnergia',
+  '#IndependenciaEnergetica', '#AdiosLUMA', '#EnergiaLimpia', '#SolarPR',
+  '#LuminaSolar', '#Sostenibilidad', '#EnergiaRenovable', '#HogarInteligente',
+]
+
+export const CONTENT_CALENDAR: ContentPost[] = [
+  // -------------------- SEMANA 1 --------------------
+  {
+    id: 's1-mar',
+    week: 1,
+    day: 'Martes',
+    platform: 'Facebook + Instagram',
+    pillar: 'Educacion',
+    format: 'Carrusel (5 laminas)',
+    title: '5 mitos sobre la energia solar en Puerto Rico',
+    caption:
+      'Antes de decidir, aclaremos lo que muchos creen (y no es cierto) 👇\n\n1. "Es solo para ricos" → hoy se financia desde $150/mes.\n2. "Si llueve no sirve" → sigue generando con luz difusa.\n3. "Se apaga en un apagon" → con bateria, tu casa sigue.\n4. "El mantenimiento es carisimo" → es minimo.\n5. "No vale la pena" → tu factura dice lo contrario.\n\nGuarda este post y compartelo con quien todavia lo duda. 🌞',
+    hashtags: ['#EnergiaSolar', '#PuertoRico', '#PanelesSolares', '#AdiosLUMA'],
+    cta: 'Solicita tu evaluacion gratuita (link en bio)',
+  },
+  {
+    id: 's1-jue',
+    week: 1,
+    day: 'Jueves',
+    platform: 'Facebook + Instagram',
+    pillar: 'Confianza',
+    format: 'Reel (detras de camaras)',
+    title: 'Un dia con nuestro equipo de instalacion',
+    caption:
+      'Asi trabajamos en Lumina 🔧\n\nCada instalacion la hace un equipo tecnico certificado, con seguridad y cuidado. Antes de subir al techo, ya diseñamos el sistema pensado para TU hogar.\n\nNo empezamos vendiendote. Empezamos explicandote. Esa es la diferencia.',
+    hashtags: ['#LuminaSolar', '#PanelesSolares', '#PuertoRico', '#EnergiaLimpia'],
+    cta: 'Escribenos para tu evaluacion gratuita',
+  },
+  // -------------------- SEMANA 2 --------------------
+  {
+    id: 's2-mar',
+    week: 2,
+    day: 'Martes',
+    platform: 'Facebook + Instagram',
+    pillar: 'Educacion',
+    format: 'Reel (educativo)',
+    title: 'Que pasa con tus paneles cuando se va la luz?',
+    caption:
+      'La pregunta del millon ⚡\n\nUnos paneles SIN bateria se apagan durante un apagon. La bateria es la que guarda tu energia para que la nevera, los abanicos y el internet sigan funcionando aunque LUMA falle.\n\nPor eso te explicamos cuando tiene sentido incluirla segun tu caso. Ni mas, ni menos: lo correcto para tu hogar.',
+    hashtags: ['#IndependenciaEnergetica', '#EnergiaSolar', '#PuertoRico', '#AdiosLUMA'],
+    cta: 'Pregunta sin compromiso (link en bio)',
+  },
+  {
+    id: 's2-jue',
+    week: 2,
+    day: 'Jueves',
+    platform: 'Facebook + Instagram',
+    pillar: 'Prueba social',
+    format: 'Video testimonio',
+    title: 'La historia de una familia que ya no le teme al apagon',
+    caption:
+      'Empezaron con la misma duda que tu: "sera para mi?" 💬\n\nHoy tienen su factura bajo control y respaldo cuando se va la luz. Escucha lo que cuentan sobre el proceso con Lumina, de principio a fin.\n\nGracias por confiar en nosotros. 🙌',
+    hashtags: ['#LuminaSolar', '#PuertoRico', '#EnergiaSolar', '#Testimonio'],
+    cta: 'Da el primer paso: evaluacion gratuita',
+  },
+  // -------------------- SEMANA 3 --------------------
+  {
+    id: 's3-mar',
+    week: 3,
+    day: 'Martes',
+    platform: 'Facebook + Instagram',
+    pillar: 'Conversion',
+    format: 'Carrusel (precios)',
+    title: 'Cuanto cuesta? Te lo mostramos claro',
+    caption:
+      'La pregunta #1 que nos hacen 👀\n\nEn vez de un numero gigante que asusta, mira las cuotas reales:\n\n• 5kW + bateria → desde $150/mes\n• 10kW + bateria → desde $250/mes\n• 15kW + bateria → desde $369/mes\n\nEn muchos casos, parecido o menos de lo que ya pagas de luz. La diferencia: al final el sistema es tuyo.',
+    hashtags: ['#EnergiaSolar', '#AhorroDeEnergia', '#PanelesSolares', '#PuertoRico'],
+    cta: 'Calcula tu opcion: evaluacion gratuita',
+  },
+  {
+    id: 's3-jue',
+    week: 3,
+    day: 'Jueves',
+    platform: 'Facebook + Instagram',
+    pillar: 'Educacion',
+    format: 'Carrusel (proceso)',
+    title: 'Que incluye tu evaluacion solar gratuita',
+    caption:
+      'Antes de instalar nada, hacemos esto contigo (gratis y sin compromiso) ✅\n\n✔ Revisamos tu factura real\n✔ Analizamos tu consumo\n✔ Recomendacion del sistema\n✔ Estimacion de tu ahorro\n✔ Opciones de financiamiento\n✔ Orientacion sobre baterias\n\nAsi decides informado, no a ciegas.',
+    hashtags: ['#LuminaSolar', '#EnergiaSolar', '#PuertoRico', '#EnergiaLimpia'],
+    cta: 'Agenda tu evaluacion (link en bio)',
+  },
+  // -------------------- SEMANA 4 --------------------
+  {
+    id: 's4-mar',
+    week: 4,
+    day: 'Martes',
+    platform: 'Facebook + Instagram',
+    pillar: 'Prueba social',
+    format: 'Carrusel (caso de exito)',
+    title: 'Antes y despues: la factura de la familia Rivera',
+    caption:
+      'De pagar cientos de dolares a LUMA, a producir su propia energia 📉\n\nMira como cambio el consumo de este hogar despues de instalar con Lumina. Numeros reales, tranquilidad real.\n\nTu hogar podria ser el proximo. 🌞',
+    hashtags: ['#AhorroDeEnergia', '#EnergiaSolar', '#PuertoRico', '#LuminaSolar'],
+    cta: 'Conoce cuanto podrias ahorrar',
+  },
+  {
+    id: 's4-jue',
+    week: 4,
+    day: 'Jueves',
+    platform: 'Facebook + Instagram',
+    pillar: 'Conversion',
+    format: 'Reel (recordatorio)',
+    title: 'El proximo apagon va a llegar. Tu hogar va a estar listo?',
+    caption:
+      'No sabemos cuando, pero sabemos que va a pasar otra vez ⚡\n\nLas familias que ya dieron el paso con Lumina no pierden la comida, no se quedan sin internet y no dependen de que LUMA "resuelva".\n\nTu evaluacion gratuita sigue disponible. Damos el paso contigo, a tu ritmo.',
+    hashtags: ['#IndependenciaEnergetica', '#AdiosLUMA', '#EnergiaSolar', '#PuertoRico'],
+    cta: 'Solicita tu evaluacion gratuita hoy',
+  },
+]
+
+export const STORIES_IDEAS = [
+  'Encuesta: "Cuanto pagas de luz al mes?" (opciones de rango) para segmentar interes.',
+  'Caja de preguntas: "Que dudas tienes sobre la energia solar?" y respondelas en video.',
+  'Cuenta regresiva a un Live de preguntas y respuestas sobre financiamiento.',
+  'Repost de testimonios y mensajes de clientes satisfechos (con permiso).',
+  'Detras de camaras de una instalacion en tiempo real.',
+  'Antes/despues de una factura (con datos sensibles tapados).',
+]

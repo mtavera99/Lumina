@@ -4,13 +4,14 @@ import { PasswordGate } from './components/PasswordGate'
 import { Dashboard } from './sections/Dashboard'
 import { AdLibrary } from './sections/AdLibrary'
 import { ImagePrompts } from './sections/ImagePrompts'
+import { ContentCalendar } from './sections/ContentCalendar'
 import { Calculator } from './sections/Calculator'
 import { LandingPage } from './sections/LandingPage'
 import { CampaignConfig } from './sections/CampaignConfig'
 import { BrandKit } from './sections/BrandKit'
 import { BRAND } from './data/campaign'
 
-type Route = 'dashboard' | 'ads' | 'prompts' | 'calculator' | 'landing' | 'config' | 'brand'
+type Route = 'dashboard' | 'ads' | 'prompts' | 'content' | 'calculator' | 'landing' | 'config' | 'brand'
 
 interface NavDef {
   key: Route
@@ -28,7 +29,8 @@ const UNLOCK_KEY = 'lumina_unlocked_v1'
 const NAV: NavDef[] = [
   { key: 'dashboard', label: 'Dashboard', icon: '📊', title: 'Dashboard de Campana', subtitle: 'Presupuesto, KPIs objetivo y arquitectura del funnel', locked: true },
   { key: 'ads', label: 'Anuncios', icon: '✍️', title: 'Biblioteca de Anuncios', subtitle: 'Creativos listos para pegar en Meta Ads Manager' },
-  { key: 'prompts', label: 'Prompts de Imagenes', icon: '🎨', title: 'Prompts de Imagenes', subtitle: 'Prompts para Nano Banana / Gemini y otras apps de imagen' },
+  { key: 'prompts', label: 'Prompts de Imagenes', icon: '🎨', title: 'Prompts de Imagenes', subtitle: 'Prompts para Nano Banana / Gemini y otras apps de imagen', locked: true },
+  { key: 'content', label: 'Parrilla de Contenido', icon: '📅', title: 'Parrilla de Contenido', subtitle: 'Calendario de publicaciones organicas para Facebook e Instagram' },
   { key: 'calculator', label: 'Calculadora', icon: '🧮', title: 'Calculadora de Ahorro Solar', subtitle: 'Estima sistema, cuota mensual y ahorro segun la factura' },
   { key: 'landing', label: 'Landing', icon: '🌞', title: 'Landing de Captacion', subtitle: 'Pagina de destino del anuncio + gestion de leads' },
   { key: 'config', label: 'Configuracion Meta', icon: '⚙️', title: 'Configuracion de la Campana', subtitle: 'Guia paso a paso para montar la campana en Meta', locked: true },
@@ -113,6 +115,7 @@ export default function App() {
               {route === 'dashboard' && <Dashboard onNavigateAds={() => setRoute('ads')} />}
               {route === 'ads' && <AdLibrary />}
               {route === 'prompts' && <ImagePrompts />}
+              {route === 'content' && <ContentCalendar />}
               {route === 'calculator' && <Calculator />}
               {route === 'landing' && <LandingPage />}
               {route === 'config' && <CampaignConfig />}
