@@ -282,3 +282,212 @@ export const PR_MUNICIPIOS = [
   'Mayaguez', 'Trujillo Alto', 'Toa Alta', 'Vega Baja', 'Humacao', 'Dorado', 'Manati',
   'Cayey', 'Fajardo', 'Aguadilla', 'Cidra', 'Otro',
 ]
+
+
+// ============================================================
+//  Prompts de imagenes (Nano Banana / Gemini / Midjourney)
+//  Basados en los creativos de la biblioteca de anuncios.
+// ============================================================
+
+export interface ImagePrompt {
+  id: string
+  adId: string // referencia al creativo de ADS
+  title: string
+  pillar: PillarKey
+  stage: FunnelStage
+  aspect: string // formato recomendado en Meta
+  prompt: string
+  tips: string
+}
+
+// Nota de arte: navy #0A2342 y oro #C9A84C como acentos. Fotografia realista,
+// luz calida de Puerto Rico, personas latinas/caribenas reales, sin texto dentro
+// de la imagen (el texto se anade como overlay en Meta o en Canva).
+export const IMAGE_PROMPTS: ImagePrompt[] = [
+  {
+    id: 'img-top-respaldo',
+    adId: 'top-respaldo',
+    title: 'Apagon vs. hogar iluminado',
+    pillar: 'respaldo',
+    stage: 'top',
+    aspect: '4:5 (feed) · 1080x1350',
+    prompt:
+      'Fotografia realista, hora azul en un vecindario residencial de Puerto Rico durante un apagon: casas vecinas a oscuras y, en el centro, una casa de familia con las luces calidas encendidas y una nevera visible funcionando por la ventana. Familia latina relajada en la sala. Nube de tormenta disipandose al fondo. Iluminacion calida y acogedora contrastando con el azul oscuro del entorno. Acentos de color azul marino profundo y dorado. Composicion con espacio negativo limpio en el tercio superior para colocar texto despues. Estilo editorial, alta calidad, luz natural caribena.',
+    tips: 'Deja el tercio superior despejado para el titular. Genera 3-4 variantes y elige la de mejor contraste luz/oscuridad.',
+  },
+  {
+    id: 'img-top-ahorro',
+    adId: 'top-ahorro',
+    title: 'Techo solar + factura que baja',
+    pillar: 'ahorro',
+    stage: 'top',
+    aspect: '1:1 (feed) · 1080x1080',
+    prompt:
+      'Fotografia aerea realista de una casa residencial tipica de Puerto Rico con paneles solares modernos en el techo, bajo un cielo despejado y sol brillante del Caribe. Palmeras alrededor, colores vibrantes de la vegetacion tropical. Sensacion de prosperidad y calma. Paleta con acentos azul marino y dorado calido del atardecer. Composicion equilibrada con cielo amplio arriba para texto. Nitida, luz dorada, aspecto premium y confiable.',
+    tips: 'El cielo amplio arriba es ideal para overlay del copy. Evita gente en esta toma para enfocar en el producto/beneficio.',
+  },
+  {
+    id: 'img-top-independencia',
+    adId: 'top-independencia',
+    title: 'Dueno tomando el control',
+    pillar: 'independencia',
+    stage: 'top',
+    aspect: '9:16 (Reels/Stories) · 1080x1920',
+    prompt:
+      'Retrato vertical realista de un propietario puertorriqueno de unos 45 anos, de pie con confianza frente a su casa con paneles solares al atardecer, brazos cruzados y sonrisa serena. Luz dorada de hora magica. Al fondo, su hogar bien iluminado. Ambiente de orgullo y control. Acentos azul marino y dorado. Encuadre vertical dejando espacio en la parte inferior para texto y boton de llamada a la accion. Fotografia documental, calida, autentica, sin poses artificiales.',
+    tips: 'Para Reels/Stories deja libre el 20% inferior (zona de CTA) y evita elementos importantes en los bordes que la interfaz tapa.',
+  },
+  {
+    id: 'img-top-financiamiento',
+    adId: 'top-financiamiento',
+    title: 'Desde $150/mes (concepto visual)',
+    pillar: 'financiamiento',
+    stage: 'top',
+    aspect: '1:1 (feed) · 1080x1080',
+    prompt:
+      'Fotografia realista y luminosa de una pareja joven puertorriquena feliz en la puerta de su casa con paneles solares, sosteniendo un cafe por la manana, ambiente relajado y accesible. Casa de clase media tipica de PR. Luz matutina suave y calida. Sensacion de que la energia solar es alcanzable y cotidiana. Acentos azul marino y dorado. Espacio limpio a un costado para colocar el precio y el texto. Estilo lifestyle, natural, cercano.',
+    tips: 'No pongas el precio dentro de la imagen generada: anadelo como overlay para poder hacer variantes de precio sin regenerar.',
+  },
+  {
+    id: 'img-mid-confianza',
+    adId: 'mid-confianza',
+    title: 'Equipo tecnico en instalacion',
+    pillar: 'confianza',
+    stage: 'mid',
+    aspect: '4:5 (feed) · 1080x1350',
+    prompt:
+      'Fotografia documental realista de un equipo de dos tecnicos profesionales instalando paneles solares en el techo de una casa en Puerto Rico, con casco y equipo de seguridad, trabajando con cuidado bajo cielo azul. Ambiente profesional, confiable y humano. Detalle de manos y herramientas. Luz natural diurna. Acentos azul marino y dorado en uniformes o detalles. Composicion con aire arriba para texto. Autentico, sin stock genrico, aspecto de marca seria.',
+    tips: 'Refuerza el pilar de confianza. Ideal tambien como foto real de tus instalaciones si las tienes: usa el prompt como guia de estilo.',
+  },
+  {
+    id: 'img-bottom-confianza',
+    adId: 'bottom-confianza',
+    title: 'Familia satisfecha (testimonio)',
+    pillar: 'confianza',
+    stage: 'bottom',
+    aspect: '1:1 (feed) · 1080x1080',
+    prompt:
+      'Retrato calido y realista de una familia puertorriquena de tres generaciones sonriendo frente a su casa con paneles solares, ambiente hogareno y feliz al atardecer. Sensacion de tranquilidad y seguridad. Luz dorada suave. Acentos azul marino y dorado. Composicion centrada con espacio arriba y abajo para nombre del cliente y texto de testimonio. Fotografia autentica, emotiva, alta calidad.',
+    tips: 'Para remarketing funciona mejor con cara humana y emocion. Combina con un testimonio real corto como overlay.',
+  },
+]
+
+// ============================================================
+//  Configuracion de la campana en Meta (paso a paso, optimizada)
+// ============================================================
+
+export interface ConfigStep {
+  detail: string
+  tip?: string
+}
+
+export interface ConfigPhase {
+  phase: string
+  icon: string
+  goal: string
+  steps: ConfigStep[]
+}
+
+export const CAMPAIGN_CONFIG: ConfigPhase[] = [
+  {
+    phase: '0. Preparacion (antes de abrir Meta)',
+    icon: '🧰',
+    goal: 'Tener todo listo para no improvisar dentro del administrador de anuncios.',
+    steps: [
+      { detail: 'Cuenta de Meta Business Suite creada y con acceso de administrador a la pagina de Facebook e Instagram de Lumina.' },
+      { detail: 'Cuenta publicitaria configurada con metodo de pago y moneda en USD.' },
+      { detail: 'Pixel de Meta instalado en la landing y evento "Lead" configurado.', tip: 'Sin el pixel + evento Lead, Meta no puede optimizar por conversiones. Es lo primero.' },
+      { detail: 'Landing publicada y probada en movil (la mayoria del trafico sera movil).' },
+      { detail: 'Creativos e imagenes listos (usa la Biblioteca de Anuncios y la seccion de Prompts de Imagenes).' },
+    ],
+  },
+  {
+    phase: '1. Objetivo de la campana',
+    icon: '🎯',
+    goal: 'Elegir el objetivo correcto: buscamos contactos, no solo alcance.',
+    steps: [
+      { detail: 'Crear campana nueva y elegir el objetivo "Clientes potenciales" (Leads).', tip: 'Es el objetivo disenado para captar datos de contacto de gente interesada.' },
+      { detail: 'Metodo de conversion recomendado: "Sitio web" apuntando a tu landing con el evento Lead. Alternativa a testear: "Formularios instantaneos" (Instant Forms) dentro de Meta.', tip: 'Sitio web da leads mas calificados; los formularios instantaneos dan mas volumen y CPL mas bajo. Puedes probar ambos.' },
+      { detail: 'Nombrar la campana con convencion clara, ej: "LUMINA | Leads | Validacion Mes 1".' },
+    ],
+  },
+  {
+    phase: '2. Presupuesto y estructura',
+    icon: '💵',
+    goal: 'Repartir los $2,000 del mes 1 por etapa del funnel.',
+    steps: [
+      { detail: 'Estructura: 1 Campana → 3 Conjuntos de anuncios (Awareness, Consideracion, Remarketing) → varios anuncios por conjunto.' },
+      { detail: 'Awareness 40% (~$800) · Consideracion 35% (~$700) · Remarketing 25% (~$500).', tip: 'Empieza con presupuesto por conjunto (ABO) para controlar el gasto de cada etapa mientras validas.' },
+      { detail: 'Presupuesto diario aproximado por conjunto: Awareness ~$27/dia, Consideracion ~$23/dia, Remarketing ~$17/dia (30 dias).' },
+      { detail: 'Cuando ya sepas que creativos/publicos ganan, migra a Advantage+ (CBO) para que Meta reparta solo.', tip: 'No uses CBO desde el dia 1: primero necesitas datos de que funciona.' },
+    ],
+  },
+  {
+    phase: '3. Publicos (conjuntos de anuncios)',
+    icon: '👥',
+    goal: 'Mostrar cada mensaje a la audiencia correcta del funnel.',
+    steps: [
+      { detail: 'Ubicacion: Puerto Rico. Puedes segmentar por municipios prioritarios donde ya instalas.' },
+      { detail: 'Edad 30-65, todos los generos. Enfoque en propietarios de vivienda.' },
+      { detail: 'AWARENESS (frio): intereses como energia solar, ahorro de energia, mejoras del hogar, sostenibilidad, propietarios de vivienda. Activa expansion de publico Advantage+.', tip: 'En frio, deja que Meta amplie el publico; da mejores resultados que segmentar demasiado.' },
+      { detail: 'CONSIDERACION: publico similar (Lookalike 1-3%) basado en visitantes de la landing o leads previos.' },
+      { detail: 'REMARKETING: visitantes de la landing ultimos 30 dias que NO enviaron el formulario, y personas que interactuaron con los anuncios/pagina.', tip: 'Este es el publico mas barato de convertir: no lo descuides.' },
+    ],
+  },
+  {
+    phase: '4. Optimizacion y entrega',
+    icon: '⚙️',
+    goal: 'Configurar como Meta gasta y aprende.',
+    steps: [
+      { detail: 'Evento de optimizacion: "Lead" (conversion en tu landing).' },
+      { detail: 'Ubicaciones: usa "Advantage+ (automaticas)" para que Meta encuentre lo mas barato.', tip: 'Manuales solo cuando ya tengas datos que justifiquen excluir alguna ubicacion.' },
+      { detail: 'Ventana de atribucion: 7 dias clic / 1 dia visualizacion (estandar).' },
+      { detail: 'Programacion: campana activa 24/7 durante la fase de validacion para recoger datos.' },
+    ],
+  },
+  {
+    phase: '5. Anuncios',
+    icon: '🖼️',
+    goal: 'Cargar los creativos con orden para poder medir que gana.',
+    steps: [
+      { detail: 'Carga 2-3 anuncios por conjunto, cada uno con un pilar distinto (respaldo, ahorro, financiamiento...).', tip: 'Usa las variantes A/B de la Biblioteca de Anuncios: mismo publico, distinto angulo.' },
+      { detail: 'Formatos: imagen 1:1 y 4:5 para feed, y video/imagen 9:16 para Reels y Stories.' },
+      { detail: 'Copia el titular, texto principal, descripcion y CTA desde la Biblioteca de Anuncios (boton copiar).' },
+      { detail: 'Enlaza a la landing con parametros UTM para medir en Meta y en tu analitica.', tip: 'Nunca lideres con el precio total; siempre con la cuota mensual (desde $150/mes).' },
+    ],
+  },
+  {
+    phase: '6. Lanzamiento y aprendizaje',
+    icon: '🚀',
+    goal: 'Publicar y NO tocar mientras Meta aprende.',
+    steps: [
+      { detail: 'Revisa el checklist de pre-lanzamiento (abajo) y publica.' },
+      { detail: 'Fase de aprendizaje: Meta necesita ~50 conversiones por conjunto por semana para estabilizar.', tip: 'No edites presupuestos ni publicos los primeros 3-4 dias: reinicia el aprendizaje.' },
+      { detail: 'Responde cada lead en menos de 10 minutos. Un lead contactado rapido vale hasta 5x mas.' },
+    ],
+  },
+  {
+    phase: '7. Optimizacion continua',
+    icon: '📈',
+    goal: 'Escalar lo que funciona, cortar lo que no.',
+    steps: [
+      { detail: 'A los 4-5 dias: pausa anuncios con CTR < 1% o CPL muy alto; sube presupuesto a los ganadores.' },
+      { detail: 'Vigila el CPL objetivo ($20-$40) y el % de leads calificados (>=60%).', tip: 'Un CPL bajo con leads malos no sirve. Mide calidad, no solo cantidad.' },
+      { detail: 'Escala presupuesto de a 20-30% cada 3-4 dias para no reiniciar el aprendizaje.' },
+      { detail: 'Refresca creativos cada 2-3 semanas para evitar fatiga de anuncio (frecuencia > 2-3).' },
+    ],
+  },
+]
+
+export const LAUNCH_CHECKLIST = [
+  'Pixel activo y evento "Lead" disparando correctamente (probado con el Test Events de Meta)',
+  'Landing carga rapido y el formulario funciona en movil',
+  'Metodo de pago verificado en la cuenta publicitaria',
+  'Presupuesto repartido 40/35/25 entre los 3 conjuntos',
+  '2-3 anuncios por conjunto, con pilares distintos',
+  'Formatos 1:1, 4:5 y 9:16 subidos',
+  'Copias pegadas desde la Biblioteca de Anuncios (cuota mensual, no precio total)',
+  'UTMs anadidos a los enlaces',
+  'Publico de remarketing creado (visitantes que no convirtieron)',
+  'Plan de respuesta a leads en < 10 minutos definido con el equipo',
+]
