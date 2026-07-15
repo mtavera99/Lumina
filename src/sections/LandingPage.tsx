@@ -8,6 +8,11 @@ const FINAL_DOMAIN = 'https://solar.luminapr.net'
 const PIXEL_ID = '2484699815368533'
 const OPENSOLAR_WIDGET = '37f44522505b47079e01efd541348c31'
 
+// Dónde llegan y se gestionan los leads
+const HUBSPOT_LEADS_URL = 'https://app.hubspot.com/contacts/5491692'
+const OPENSOLAR_LEADS_URL = 'https://app.opensolar.com/'
+const WHATSAPP_INBOX_URL = 'https://business.facebook.com/latest/inbox/'
+
 function StatusPill({ ok, children }: { ok: boolean; children: ReactNode }) {
   return <span className={`pill ${ok ? 'pill-green' : 'pill-amber'}`}>{children}</span>
 }
@@ -25,6 +30,29 @@ export function LandingPage() {
             Lleva el <b>píxel de Meta</b> para medir conversiones.
           </p>
         </div>
+      </div>
+
+      {/* Ver mis leads */}
+      <div className="section-title">Ver mis leads</div>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))' }}>
+        <a className="card" href={HUBSPOT_LEADS_URL} target="_blank" rel="noreferrer" style={{ padding: 20, textDecoration: 'none', display: 'block' }}>
+          <div style={{ fontSize: 26 }}>🟠</div>
+          <div style={{ fontWeight: 800, color: '#0A2342', marginTop: 6 }}>HubSpot → Contactos</div>
+          <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Tu CRM. Ordena por "Fecha de creación" para ver los leads más recientes.</div>
+          <div style={{ marginTop: 10, fontSize: 13, fontWeight: 700, color: '#143B6B' }}>Abrir HubSpot →</div>
+        </a>
+        <a className="card" href={OPENSOLAR_LEADS_URL} target="_blank" rel="noreferrer" style={{ padding: 20, textDecoration: 'none', display: 'block' }}>
+          <div style={{ fontSize: 26 }}>☀️</div>
+          <div style={{ fontWeight: 800, color: '#0A2342', marginTop: 6 }}>OpenSolar → Leads</div>
+          <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Donde caen primero los leads del formulario, antes de sincronizar a HubSpot.</div>
+          <div style={{ marginTop: 10, fontSize: 13, fontWeight: 700, color: '#143B6B' }}>Abrir OpenSolar →</div>
+        </a>
+        <a className="card" href={WHATSAPP_INBOX_URL} target="_blank" rel="noreferrer" style={{ padding: 20, textDecoration: 'none', display: 'block' }}>
+          <div style={{ fontSize: 26 }}>💬</div>
+          <div style={{ fontWeight: 800, color: '#0A2342', marginTop: 6 }}>Bandeja WhatsApp / Meta</div>
+          <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Mensajes por WhatsApp o desde los anuncios (Meta Business Suite).</div>
+          <div style={{ marginTop: 10, fontSize: 13, fontWeight: 700, color: '#143B6B' }}>Abrir bandeja →</div>
+        </a>
       </div>
 
       {/* Ficha técnica */}
