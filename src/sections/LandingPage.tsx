@@ -13,6 +13,10 @@ const HUBSPOT_LEADS_URL = 'https://app.hubspot.com/contacts/5491692'
 const OPENSOLAR_LEADS_URL = 'https://app.opensolar.com/'
 const WHATSAPP_INBOX_URL = 'https://business.facebook.com/latest/inbox/'
 
+// Formulario de respaldo (Netlify Forms) — leads que TÚ controlas
+const BACKUP_FORM_URL = 'https://luminapr-solar.netlify.app/registro.html'
+const NETLIFY_FORMS_URL = 'https://app.netlify.com/'
+
 function StatusPill({ ok, children }: { ok: boolean; children: ReactNode }) {
   return <span className={`pill ${ok ? 'pill-green' : 'pill-amber'}`}>{children}</span>
 }
@@ -53,6 +57,23 @@ export function LandingPage() {
           <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Mensajes por WhatsApp o desde los anuncios (Meta Business Suite).</div>
           <div style={{ marginTop: 10, fontSize: 13, fontWeight: 700, color: '#143B6B' }}>Abrir bandeja →</div>
         </a>
+        <a className="card" href={NETLIFY_FORMS_URL} target="_blank" rel="noreferrer" style={{ padding: 20, textDecoration: 'none', display: 'block', borderColor: 'rgba(31,157,99,.5)' }}>
+          <div style={{ fontSize: 26 }}>🛟</div>
+          <div style={{ fontWeight: 800, color: '#0A2342', marginTop: 6 }}>Netlify → Leads de respaldo</div>
+          <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Copia de respaldo que TÚ controlas. En tu proyecto → pestaña "Forms" → "leads-respaldo".</div>
+          <div style={{ marginTop: 10, fontSize: 13, fontWeight: 700, color: '#1f9d63' }}>Abrir Netlify →</div>
+        </a>
+      </div>
+
+      <div className="callout" style={{ marginTop: 18, background: 'var(--green-bg)', borderColor: 'rgba(31,157,99,.3)' }}>
+        <div className="ico">🛟</div>
+        <div>
+          <h4 style={{ color: 'var(--green)' }}>Formulario de respaldo (mientras se conecta HubSpot)</h4>
+          <p>
+            Creé un formulario propio que controlas tú: <a href={BACKUP_FORM_URL} target="_blank" rel="noreferrer" style={{ color: '#143B6B', fontWeight: 700 }}>luminapr-solar.netlify.app/registro.html</a>.
+            Cada lead queda guardado en <b>Netlify → Forms → "leads-respaldo"</b> (con opción de aviso por correo y exportar a CSV), así no pierdes ninguno aunque HubSpot aún no esté vinculado. Al enviarse, además dispara el evento <b>Lead</b> del píxel.
+          </p>
+        </div>
       </div>
 
       {/* Ficha técnica */}
