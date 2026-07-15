@@ -34,7 +34,7 @@ const NAV: NavDef[] = [
   { key: 'prompts', label: 'Prompts de Imagenes', icon: '🎨', title: 'Prompts de Imagenes', subtitle: 'Prompts para Nano Banana / Gemini y otras apps de imagen', locked: true },
   { key: 'content', label: 'Parrilla de Contenido', icon: '📅', title: 'Parrilla de Contenido', subtitle: 'Calendario de publicaciones organicas para Facebook e Instagram' },
   { key: 'calculator', label: 'Calculadora', icon: '🧮', title: 'Calculadora de Ahorro Solar', subtitle: 'Estima sistema, cuota mensual y ahorro segun la factura' },
-  { key: 'landing', label: 'Landing', icon: '🌞', title: 'Landing de Captacion', subtitle: 'Pagina de destino del anuncio + gestion de leads' },
+  { key: 'landing', label: 'Landing', icon: '🌞', title: 'Landing de Captacion', subtitle: 'La landing en vivo de la campana (OpenSolar + pixel de Meta)' },
   { key: 'config', label: 'Configuracion Meta', icon: '⚙️', title: 'Configuracion de la Campana', subtitle: 'Guia paso a paso para montar la campana en Meta', locked: true },
   { key: 'brand', label: 'Brand Kit', icon: '🎨', title: 'Brand Kit', subtitle: 'Marca, financiamiento, CTAs y posicionamiento' },
 ]
