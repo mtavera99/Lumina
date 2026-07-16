@@ -1,0 +1,4 @@
+# Configuración de Netlify para el sitio de la landing de Lumina
+[build]
+  publish = "landing"
+  functions = "netlify/functions"

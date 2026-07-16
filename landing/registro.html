@@ -59,6 +59,13 @@
   </style>
 </head>
 <body>
+  <!-- Form oculto para que Netlify registre "leads-respaldo" (usado como respaldo por la función) -->
+  <form name="leads-respaldo" netlify netlify-honeypot="bot-field" hidden>
+    <input name="nombre" /><input name="telefono" /><input name="email" />
+    <input name="municipio" /><input name="vivienda" /><input name="factura" />
+    <input name="interes_bateria" /><input name="interes_financiamiento" />
+  </form>
+
   <div class="hero">
     <div class="brand">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#0A2342"/><circle cx="32" cy="32" r="11" fill="#C9A84C"/><g stroke="#C9A84C" stroke-width="3" stroke-linecap="round"><line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/><line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/><line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/><line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/></g></svg>
@@ -82,9 +89,7 @@
            activar notificación por correo. Al enviar, redirige a
            gracias.html (dispara el evento Lead del pixel de Meta).
            ============================================================ -->
-      <form name="leads-respaldo" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/gracias.html">
-        <input type="hidden" name="form-name" value="leads-respaldo" />
-        <p hidden><label>No llenar: <input name="bot-field" /></label></p>
+      <form method="POST" action="/.netlify/functions/lead">
 
         <label>Nombre completo *</label>
         <input type="text" name="nombre" required placeholder="Tu nombre" />
