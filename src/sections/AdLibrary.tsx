@@ -151,7 +151,7 @@ export function AdLibrary() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '4px 0 18px' }}>
+      <div className="results-toolbar">
         <span style={{ fontSize: 13.5, color: '#5c6b83', fontWeight: 600 }}>
           {filtered.length} {filtered.length === 1 ? 'anuncio' : 'anuncios'}
         </span>

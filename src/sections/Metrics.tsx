@@ -103,7 +103,7 @@ export function Metrics() {
     <div>
       {/* Barra de estado */}
       <div className="metrics-topbar card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <div className="metrics-status-row">
           <span className={`conn-badge ${connected ? 'on' : 'demo'}`}>
             {connected ? '● Conectado a Meta' : '● Modo demostracion'}
           </span>
@@ -112,7 +112,7 @@ export function Metrics() {
           </span>
           <span style={{ fontSize: 12, color: '#8a97ac' }}>Rango: {config.datePreset}</span>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="mobile-action-row">
           <button className="btn btn-ghost btn-sm" onClick={load} disabled={loading}>
             ↻ Refrescar
           </button>
@@ -167,7 +167,7 @@ export function Metrics() {
 
           <div className="field">
             <label>Modo</label>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div className="choice-row">
               <button className={`chip ${config.mode === 'demo' ? 'active' : ''}`} onClick={() => applyConfig({ mode: 'demo' })}>
                 Demostracion
               </button>
@@ -236,7 +236,7 @@ export function Metrics() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 8, marginTop: 18 }}>
+          <div className="mobile-action-row" style={{ marginTop: 18 }}>
             <button className="btn btn-primary" onClick={persist}>Guardar y aplicar</button>
             <button className="btn btn-ghost" onClick={() => { setConfig({ ...DEFAULT_CONFIG }); setBusiness({ ...DEFAULT_BUSINESS }) }}>
               Restablecer

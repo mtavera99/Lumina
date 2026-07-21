@@ -60,7 +60,7 @@ export function ImagePrompts() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(360px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,360px),1fr))' }}>
         {filtered.map((p) => {
           const ad = ADS.find((a) => a.id === p.adId)
           return (

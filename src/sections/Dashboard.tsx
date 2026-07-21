@@ -12,7 +12,7 @@ export function Dashboard({ onNavigateAds }: { onNavigateAds: () => void }) {
           {BRAND.tagline}
         </div>
         <p style={{ color: 'rgba(255,255,255,0.75)', maxWidth: 640, fontSize: 14.5 }}>{BRAND.valueProp}</p>
-        <div style={{ display: 'flex', gap: 10, marginTop: 20, flexWrap: 'wrap' }}>
+        <div className="mobile-action-row" style={{ marginTop: 20 }}>
           <button className="btn btn-primary" onClick={onNavigateAds}>
             ✍️ Ver creativos listos para Meta
           </button>
@@ -33,7 +33,7 @@ export function Dashboard({ onNavigateAds }: { onNavigateAds: () => void }) {
         ))}
       </div>
       <div className="card" style={{ padding: 20, marginTop: 18 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 600 }}>
+        <div className="budget-summary" style={{ fontSize: 13, fontWeight: 600 }}>
           <span>Distribucion del presupuesto total</span>
           <span style={{ color: '#0A2342', fontWeight: 800 }}>${BUDGET.total.toLocaleString()} USD</span>
         </div>
@@ -58,7 +58,7 @@ export function Dashboard({ onNavigateAds }: { onNavigateAds: () => void }) {
 
       {/* Pilares */}
       <div className="section-title">Los 5 pilares del mensaje</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,200px),1fr))' }}>
         {PILLARS.map((p) => (
           <div key={p.key} className="card" style={{ padding: 18 }}>
             <div style={{ fontSize: 26 }}>{p.icon}</div>

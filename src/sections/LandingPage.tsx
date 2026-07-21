@@ -38,7 +38,7 @@ export function LandingPage() {
 
       {/* Ver mis leads */}
       <div className="section-title">Ver mis leads</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,240px),1fr))' }}>
         <a className="card" href={HUBSPOT_LEADS_URL} target="_blank" rel="noreferrer" style={{ padding: 20, textDecoration: 'none', display: 'block' }}>
           <div style={{ fontSize: 26 }}>🟠</div>
           <div style={{ fontWeight: 800, color: '#0A2342', marginTop: 6 }}>HubSpot → Contactos</div>
@@ -78,7 +78,7 @@ export function LandingPage() {
 
       {/* Ficha técnica */}
       <div className="section-title">Ficha técnica</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,240px),1fr))' }}>
         <div className="card" style={{ padding: 18 }}>
           <div className="ad-field-label">URL en vivo</div>
           <a href={LIVE_URL} target="_blank" rel="noreferrer" style={{ color: '#143B6B', fontWeight: 700, fontSize: 14, wordBreak: 'break-all' }}>
@@ -105,7 +105,7 @@ export function LandingPage() {
 
       {/* Eventos del píxel */}
       <div className="section-title">Eventos del píxel</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,220px),1fr))' }}>
         <div className="card" style={{ padding: 18 }}>
           <div style={{ fontWeight: 700, color: '#0A2342' }}>PageView</div>
           <div style={{ fontSize: 13, color: '#5c6b83', marginTop: 4 }}>Se dispara en cada visita a la landing.</div>
@@ -119,7 +119,7 @@ export function LandingPage() {
       </div>
 
       {/* Botones */}
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', margin: '22px 0' }}>
+      <div className="mobile-action-row landing-actions" style={{ margin: '22px 0' }}>
         <a className="btn btn-primary" href={LIVE_URL} target="_blank" rel="noreferrer">🌐 Abrir landing en vivo</a>
         <a className="btn btn-ghost" href={THANKS_URL} target="_blank" rel="noreferrer">Ver página de gracias</a>
         <a className="btn btn-ghost" href={FINAL_DOMAIN} target="_blank" rel="noreferrer">Probar dominio final</a>
@@ -128,17 +128,18 @@ export function LandingPage() {
       {/* Vista previa embebida (la landing real) */}
       <div className="section-title">Vista previa</div>
       <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
+        <div className="landing-preview-bar" style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
           <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#ff5f57' }} />
           <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#febc2e' }} />
           <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#28c840' }} />
-          <span style={{ marginLeft: 10, fontSize: 12.5, color: '#5c6b83' }}>{LIVE_URL}</span>
+          <span className="landing-preview-url" style={{ marginLeft: 10, fontSize: 12.5, color: '#5c6b83' }}>{LIVE_URL}</span>
         </div>
         <iframe
           title="Landing Lumina en vivo"
           src={LIVE_URL}
           loading="lazy"
-          style={{ width: '100%', height: 720, border: 0, display: 'block' }}
+          className="landing-preview-frame"
+          style={{ width: '100%', border: 0, display: 'block' }}
         />
       </div>
 
