@@ -83,6 +83,28 @@ export interface IntelligenceServiceStatus {
   persistentStorage: boolean
 }
 
+export interface ContextSyncResult {
+  reports: number
+  meetings: number
+  total: number
+  warnings: string[]
+  syncedAt: string
+}
+
+export interface AgentCitation {
+  id: string
+  title: string
+  date: string | null
+  type: 'read_ai' | 'calendar'
+  url: string | null
+}
+
+export interface AgentAnswer {
+  conversationId: string
+  answer: string
+  citations: AgentCitation[]
+}
+
 export const googleWorkspaceConfig = {
   clientId: GOOGLE_CLIENT_ID,
   allowedEmail: ALLOWED_EMAIL,
@@ -374,12 +396,36 @@ export async function syncGoogleWorkspace(session: GoogleSession): Promise<Works
   return cachedWorkspace
 }
 
+async function intelligenceRequest<T>(session: GoogleSession, method: 'GET' | 'POST', payload?: unknown): Promise<T> {
+  if (!INTELLIGENCE_API_URL) throw new Error('El backend privado de Lumina Intelligence no esta configurado.')
+  const response = await fetch(INTELLIGENCE_API_URL, {
+    method,
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+      ...(payload ? { 'Content-Type': 'application/json' } : {}),
+    },
+    ...(payload ? { body: JSON.stringify(payload) } : {}),
+  })
+  const body = await response.json().catch(() => null) as (T & { error?: string }) | null
+  if (!response.ok) throw new Error(body?.error || `El backend privado respondio ${response.status}.`)
+  if (!body) throw new Error('El backend privado devolvio una respuesta vacia.')
+  return body
+}
+
 export async function fetchIntelligenceStatus(session: GoogleSession): Promise<IntelligenceServiceStatus | null> {
   if (!INTELLIGENCE_API_URL) return null
-  const response = await fetch(INTELLIGENCE_API_URL, {
-    headers: { Authorization: `Bearer ${session.accessToken}` },
-  })
-  const body = await response.json().catch(() => null) as { services?: IntelligenceServiceStatus; error?: string } | null
-  if (!response.ok) throw new Error(body?.error || `El backend privado respondio ${response.status}.`)
-  return body?.services ?? null
+  const body = await intelligenceRequest<{ services: IntelligenceServiceStatus }>(session, 'GET')
+  return body.services
+}
+
+export function syncIntelligenceContext(session: GoogleSession): Promise<ContextSyncResult> {
+  return intelligenceRequest<ContextSyncResult>(session, 'POST', { action: 'sync' })
+}
+
+export function askLuminaAgent(
+  session: GoogleSession,
+  message: string,
+  conversationId?: string,
+): Promise<AgentAnswer> {
+  return intelligenceRequest<AgentAnswer>(session, 'POST', { action: 'chat', message, conversationId })
 }
