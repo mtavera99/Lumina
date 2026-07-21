@@ -974,3 +974,142 @@ th {
   gap: 6px;
 }
 .alert-solutions li { font-size: 13.5px; color: var(--text); }
+
+
+/* ---------- Lumina Intelligence ---------- */
+.intelligence { display: grid; gap: 22px; }
+.intelligence .section-title { margin-bottom: -8px; }
+
+.intelligence-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 30px;
+  align-items: center;
+  padding: 28px;
+  background: linear-gradient(135deg, var(--navy) 0%, #123b69 100%);
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+.intelligence-hero::after {
+  content: '';
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  right: -90px;
+  top: -150px;
+  pointer-events: none;
+}
+.intelligence-hero h2 { font-size: 26px; line-height: 1.2; margin: 12px 0 8px; }
+.intelligence-hero p { max-width: 700px; color: rgba(255, 255, 255, 0.75); font-size: 14px; }
+.intelligence-hero-action { display: grid; gap: 12px; position: relative; z-index: 1; }
+.intelligence-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.intelligence-hero .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, 0.25); }
+.intelligence-hero .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.signed-user { display: flex; align-items: center; gap: 10px; }
+.signed-user img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--gold); }
+.signed-user b, .signed-user span { display: block; }
+.signed-user b { font-size: 14px; }
+.signed-user span { font-size: 12px; color: rgba(255, 255, 255, 0.65); }
+
+.intelligence-setup { margin: 0; }
+.intelligence-error { background: #fdecec; border-color: #f3caca; }
+.intelligence-error h4, .intelligence-error p { color: #8a3a3a; }
+
+.intelligence-connections { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.connection-card { padding: 18px; display: flex; gap: 13px; min-height: 136px; }
+.connection-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 35, 66, 0.07);
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.connection-card h3 { color: var(--navy); font-size: 14px; }
+.connection-card p { color: var(--text-muted); font-size: 12px; margin: 4px 0 10px; }
+.connection-state { font-size: 10.5px; font-weight: 700; }
+.connection-state.connected { color: var(--green); }
+.connection-state.ready { color: var(--navy-700); }
+.connection-state.pending { color: var(--amber); }
+
+.intelligence-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.intelligence-stats .stat-time { font-size: 18px; line-height: 1.25; }
+
+.intelligence-tabs { display: flex; border-bottom: 1px solid var(--border); gap: 4px; }
+.intelligence-tabs button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 16px;
+  border-bottom: 3px solid transparent;
+}
+.intelligence-tabs button:hover { color: var(--navy); }
+.intelligence-tabs button.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+.intelligence-toolbar { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; margin-bottom: 14px; }
+.intelligence-toolbar h3 { color: var(--navy); font-size: 17px; }
+.intelligence-toolbar p { color: var(--text-muted); font-size: 13px; }
+.intelligence-toolbar input {
+  width: min(380px, 100%);
+  padding: 10px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 13px;
+}
+.intelligence-toolbar input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12); }
+.intelligence-list { display: grid; gap: 12px; }
+.report-card { padding: 20px; }
+.report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 12px; }
+.report-head h3 { color: var(--navy); font-size: 15px; }
+.report-head span { display: block; color: var(--text-soft); font-size: 11.5px; margin-top: 3px; }
+.report-card > p { white-space: pre-line; color: var(--text-muted); font-size: 13px; line-height: 1.65; max-height: 180px; overflow-y: auto; }
+
+.meeting-card { padding: 16px 18px; display: grid; grid-template-columns: 190px minmax(0, 1fr) auto; gap: 18px; align-items: center; }
+.meeting-date span { display: block; color: var(--navy); font-size: 12.5px; font-weight: 700; }
+.meeting-date b { display: inline-block; color: var(--green); background: var(--green-bg); border-radius: 999px; padding: 3px 8px; margin-top: 5px; font-size: 10px; }
+.meeting-body h3 { color: var(--navy); font-size: 15px; }
+.meeting-body p { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+
+.intelligence-list-empty { padding: 34px; text-align: center; color: var(--text-muted); }
+.intelligence-list-empty span { display: block; font-size: 28px; margin-bottom: 8px; }
+.intelligence-list-empty p { font-size: 13px; }
+
+.agent-placeholder { padding: 32px; text-align: center; }
+.agent-icon { width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 16px; display: grid; place-items: center; background: var(--navy); color: var(--gold); font-size: 26px; }
+.agent-placeholder h3 { color: var(--navy); font-size: 19px; }
+.agent-placeholder > p { max-width: 680px; margin: 8px auto 18px; color: var(--text-muted); font-size: 13.5px; }
+.agent-suggestions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 18px; }
+.agent-suggestions span { background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; font-size: 12px; color: var(--text-muted); }
+.agent-input { display: flex; gap: 8px; max-width: 700px; margin: 0 auto; }
+.agent-input input { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; font: inherit; }
+
+.intelligence-empty { padding: 42px 30px; text-align: center; }
+.intelligence-empty > div { font-size: 36px; }
+.intelligence-empty h3 { color: var(--navy); margin: 8px 0 5px; }
+.intelligence-empty p { max-width: 620px; margin: 0 auto; color: var(--text-muted); font-size: 13.5px; }
+.intelligence-privacy { display: flex; gap: 10px; align-items: flex-start; padding: 4px 8px; color: var(--text-soft); font-size: 11.5px; }
+
+@media (max-width: 1050px) {
+  .intelligence-connections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .intelligence-hero { grid-template-columns: 1fr; padding: 22px; }
+  .intelligence-hero h2 { font-size: 22px; }
+  .intelligence-connections, .intelligence-stats { grid-template-columns: 1fr; }
+  .intelligence-toolbar { align-items: stretch; flex-direction: column; }
+  .intelligence-toolbar input { width: 100%; }
+  .meeting-card { grid-template-columns: 1fr; gap: 8px; }
+  .report-head { flex-direction: column; }
+  .agent-input { flex-direction: column; }
+}

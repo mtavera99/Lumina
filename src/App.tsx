@@ -10,9 +10,10 @@ import { Calculator } from './sections/Calculator'
 import { LandingPage } from './sections/LandingPage'
 import { CampaignConfig } from './sections/CampaignConfig'
 import { BrandKit } from './sections/BrandKit'
+import { Intelligence } from './sections/Intelligence'
 import { BRAND } from './data/campaign'
 
-type Route = 'dashboard' | 'metrics' | 'ads' | 'prompts' | 'content' | 'calculator' | 'landing' | 'config' | 'brand'
+type Route = 'dashboard' | 'metrics' | 'intelligence' | 'ads' | 'prompts' | 'content' | 'calculator' | 'landing' | 'config' | 'brand'
 
 interface NavDef {
   key: Route
@@ -30,6 +31,7 @@ const UNLOCK_KEY = 'lumina_unlocked_v1'
 const NAV: NavDef[] = [
   { key: 'dashboard', label: 'Dashboard', icon: '📊', title: 'Dashboard de Campana', subtitle: 'Presupuesto, KPIs objetivo y arquitectura del funnel', locked: true },
   { key: 'metrics', label: 'Metricas en vivo', icon: '📈', title: 'Metricas en Tiempo Real', subtitle: 'Rendimiento de la campana, alertas de KPIs y soluciones', locked: true },
+  { key: 'intelligence', label: 'Lumina Intelligence', icon: '🧠', title: 'Lumina Intelligence', subtitle: 'Reuniones, contexto y automatizaciones privadas', locked: true },
   { key: 'ads', label: 'Anuncios', icon: '✍️', title: 'Biblioteca de Anuncios', subtitle: 'Creativos listos para pegar en Meta Ads Manager' },
   { key: 'prompts', label: 'Prompts de Imagenes', icon: '🎨', title: 'Prompts de Imagenes', subtitle: 'Prompts para Nano Banana / Gemini y otras apps de imagen', locked: true },
   { key: 'content', label: 'Parrilla de Contenido', icon: '📅', title: 'Parrilla de Contenido', subtitle: 'Calendario de publicaciones organicas para Facebook e Instagram' },
@@ -116,6 +118,7 @@ export default function App() {
             <>
               {route === 'dashboard' && <Dashboard onNavigateAds={() => setRoute('ads')} />}
               {route === 'metrics' && <Metrics />}
+              {route === 'intelligence' && <Intelligence />}
               {route === 'ads' && <AdLibrary />}
               {route === 'prompts' && <ImagePrompts />}
               {route === 'content' && <ContentCalendar />}
