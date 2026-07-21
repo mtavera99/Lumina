@@ -32,6 +32,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_INTELLIGENCE_API_URL: ${{ vars.VITE_INTELLIGENCE_API_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
