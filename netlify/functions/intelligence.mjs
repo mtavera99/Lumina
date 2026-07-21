@@ -28,24 +28,37 @@ function json(req, body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: headers(req) })
 }
 
+async function privateStorageHealth() {
+  const configured = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+  if (!configured) return { configured, tableAccessible: false, searchFunctionAccessible: false, ready: false }
+
+  try {
+    await supabase('lumina_sources?select=id&limit=1')
+  } catch {
+    return { configured, tableAccessible: false, searchFunctionAccessible: false, ready: false }
+  }
+
+  try {
+    await supabase('rpc/search_lumina_sources', {
+      method: 'POST',
+      body: JSON.stringify({ p_owner_email: ALLOWED_EMAIL, p_query: 'lumina-health-check', p_limit: 1 }),
+    })
+  } catch {
+    return { configured, tableAccessible: true, searchFunctionAccessible: false, ready: false }
+  }
+
+  return { configured, tableAccessible: true, searchFunctionAccessible: true, ready: true }
+}
+
 async function serviceStatus() {
-  const status = {
+  const storage = await privateStorageHealth()
+  return {
     google: Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID),
     readAiEmailImport: true,
     hubspot: Boolean(process.env.HUBSPOT_PRIVATE_APP_TOKEN),
     assistant: Boolean(process.env.GEMINI_API_KEY),
-    persistentStorage: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+    persistentStorage: storage.ready,
   }
-  if (status.persistentStorage) {
-    try {
-      await supabase('lumina_sources?select=id&limit=1')
-      await supabase('rpc/search_lumina_sources', {
-        method: 'POST',
-        body: JSON.stringify({ p_owner_email: ALLOWED_EMAIL, p_query: 'lumina-health-check', p_limit: 1 }),
-      })
-    } catch { status.persistentStorage = false }
-  }
-  return status
 }
 
 async function configurationHealth() {
@@ -55,14 +68,19 @@ async function configurationHealth() {
     supabaseUrl: Boolean(process.env.SUPABASE_URL),
     supabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
   }
-  const status = await serviceStatus()
+  const storage = await privateStorageHealth()
+  const assistant = configured.geminiApiKey
   return {
-    ok: configured.googleOAuthClientId && status.assistant && status.persistentStorage,
+    ok: configured.googleOAuthClientId && assistant && storage.ready,
     deployContext: process.env.CONTEXT || 'unknown',
     configured,
     services: {
-      assistant: status.assistant,
-      persistentStorage: status.persistentStorage,
+      assistant,
+      persistentStorage: storage.ready,
+    },
+    storage: {
+      tableAccessible: storage.tableAccessible,
+      searchFunctionAccessible: storage.searchFunctionAccessible,
     },
   }
 }
