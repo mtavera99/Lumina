@@ -48,6 +48,25 @@ async function serviceStatus() {
   return status
 }
 
+async function configurationHealth() {
+  const configured = {
+    googleOAuthClientId: Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID),
+    geminiApiKey: Boolean(process.env.GEMINI_API_KEY),
+    supabaseUrl: Boolean(process.env.SUPABASE_URL),
+    supabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+  }
+  const status = await serviceStatus()
+  return {
+    ok: configured.googleOAuthClientId && status.assistant && status.persistentStorage,
+    deployContext: process.env.CONTEXT || 'unknown',
+    configured,
+    services: {
+      assistant: status.assistant,
+      persistentStorage: status.persistentStorage,
+    },
+  }
+}
+
 async function authorize(req) {
   const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID
   if (!clientId) return { error: 'El cliente OAuth del backend no esta configurado.', status: 503 }
@@ -406,6 +425,11 @@ export default async (req) => {
   const origin = req.headers.get('origin')
   if (origin && !configuredOrigins().includes(origin)) return json(req, { error: 'Origen no autorizado.' }, 403)
   if (!['GET', 'POST'].includes(req.method)) return json(req, { error: 'Metodo no permitido.' }, 405)
+
+  const requestUrl = new URL(req.url)
+  if (req.method === 'GET' && requestUrl.searchParams.get('health') === 'configuration') {
+    return json(req, await configurationHealth())
+  }
 
   const auth = await authorize(req)
   if (auth.error) return json(req, { error: auth.error }, auth.status)
