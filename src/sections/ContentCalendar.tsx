@@ -108,7 +108,7 @@ export function ContentCalendar() {
       {weeks.map(([week, posts]) => (
         <div key={week}>
           <div className="section-title">Semana {week}</div>
-          <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))' }}>
+          <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,340px),1fr))' }}>
             {posts.map((p) => (
               <PostCard key={p.id} p={p} />
             ))}

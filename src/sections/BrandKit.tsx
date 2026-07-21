@@ -41,7 +41,7 @@ export function BrandKit() {
 
       {/* Diferenciadores */}
       <div className="section-title">Como se diferencia Lumina</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,220px),1fr))' }}>
         {DIFFERENTIATORS.map((d, i) => (
           <div key={d} className="card info-row">
             <div className="idx">{i + 1}</div>
@@ -54,7 +54,7 @@ export function BrandKit() {
 
       {/* Posicionamiento vs competencia */}
       <div className="section-title">Posicionamiento vs competencia</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))' }}>
         {COMPETITORS.map((c) => (
           <div key={c.name} className="card compare-card">
             <h4>{c.name}</h4>
@@ -115,7 +115,7 @@ export function BrandKit() {
 
       {/* Contenido organico */}
       <div className="section-title">Pilares de contenido organico</div>
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))' }}>
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,240px),1fr))' }}>
         {ORGANIC_PILLARS.map((p) => (
           <div key={p.title} className="card" style={{ padding: 18 }}>
             <div style={{ fontWeight: 800, color: '#0A2342' }}>{p.title}</div>

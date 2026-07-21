@@ -61,7 +61,7 @@ export function Calculator() {
 
           <div className="field">
             <label>Plazo de financiamiento</label>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div className="choice-row">
               <button className={`chip ${term === 20 ? 'active' : ''}`} onClick={() => setTerm(20)}>
                 20 anos · cuota mas baja
               </button>

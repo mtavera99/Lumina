@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Logo } from './components/Logo'
 import { PasswordGate } from './components/PasswordGate'
 import { Dashboard } from './sections/Dashboard'
@@ -43,10 +43,65 @@ const NAV: NavDef[] = [
 
 export default function App() {
   const [route, setRoute] = useState<Route>('ads')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [unlocked, setUnlocked] = useState<boolean>(
     () => sessionStorage.getItem(UNLOCK_KEY) === 'true',
   )
   const current = NAV.find((n) => n.key === route)!
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const sidebarRef = useRef<HTMLElement>(null)
+  const mainRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const mobileViewport = window.matchMedia('(max-width: 760px)')
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (!event.matches) setMobileNavOpen(false)
+    }
+    mobileViewport.addEventListener('change', closeOnDesktop)
+    return () => mobileViewport.removeEventListener('change', closeOnDesktop)
+  }, [])
+
+  useEffect(() => {
+    if (!mobileNavOpen || !window.matchMedia('(max-width: 760px)').matches) return
+
+    const sidebar = sidebarRef.current
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousOverflow = document.body.style.overflow
+    const focusableSelector = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const focusable = () => Array.from(sidebar?.querySelectorAll<HTMLElement>(focusableSelector) ?? [])
+
+    document.body.style.overflow = 'hidden'
+    mainRef.current?.setAttribute('inert', '')
+    focusable()[0]?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileNavOpen(false)
+        return
+      }
+      if (event.key !== 'Tab') return
+
+      const items = focusable()
+      if (!items.length) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = previousOverflow
+      mainRef.current?.removeAttribute('inert')
+      ;(previouslyFocused ?? menuButtonRef.current)?.focus()
+    }
+  }, [mobileNavOpen])
 
   const tryUnlock = (pw: string): boolean => {
     if (pw === ACCESS_PASSWORD) {
@@ -65,8 +120,16 @@ export default function App() {
   const isBlocked = !!current.locked && !unlocked
 
   return (
-    <div className="app">
-      <aside className="sidebar">
+    <div className={`app ${mobileNavOpen ? 'nav-open' : ''}`}>
+      <button type="button" className="sidebar-backdrop" aria-label="Cerrar menu" tabIndex={-1} onClick={() => setMobileNavOpen(false)} />
+      <aside
+        id="mobile-navigation"
+        ref={sidebarRef}
+        className="sidebar"
+        aria-label="Navegacion principal"
+        aria-modal={mobileNavOpen || undefined}
+        role={mobileNavOpen ? 'dialog' : undefined}
+      >
         <div className="brand">
           <Logo />
           <div>
@@ -75,13 +138,17 @@ export default function App() {
             </div>
             <div className="brand-sub">Campaign Studio</div>
           </div>
+          <button type="button" className="sidebar-close" aria-label="Cerrar menu" onClick={() => setMobileNavOpen(false)}>×</button>
         </div>
         <nav className="nav">
           {NAV.map((n) => (
             <button
               key={n.key}
               className={`nav-item ${route === n.key ? 'active' : ''}`}
-              onClick={() => setRoute(n.key)}
+              onClick={() => {
+                setRoute(n.key)
+                setMobileNavOpen(false)
+              }}
             >
               <span className="nav-ico">{n.icon}</span>
               <span className="label">{n.label}</span>
@@ -101,9 +168,20 @@ export default function App() {
         </div>
       </aside>
 
-      <div className="main">
+      <div ref={mainRef} className="main" aria-hidden={mobileNavOpen || undefined}>
         <header className="topbar">
-          <div>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="mobile-menu-btn"
+            aria-label="Abrir menu"
+            aria-controls="mobile-navigation"
+            aria-expanded={mobileNavOpen}
+            onClick={() => setMobileNavOpen(true)}
+          >
+            <span /> <span /> <span />
+          </button>
+          <div className="topbar-copy">
             <h1>
               {current.title} {current.locked && <span className="lock-badge">🔒 Solo Santiago Tavera</span>}
             </h1>
