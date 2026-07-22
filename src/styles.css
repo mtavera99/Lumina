@@ -1126,6 +1126,9 @@ th {
 .meeting-date b { display: inline-block; color: var(--green); background: var(--green-bg); border-radius: 999px; padding: 3px 8px; margin-top: 5px; font-size: 10px; }
 .meeting-body h3 { color: var(--navy); font-size: 15px; }
 .meeting-body p { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+.agenda-heading { font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--navy); margin: 6px 0 10px; text-transform: uppercase; }
+.agenda-heading-muted { color: var(--text-muted); margin-top: 18px; }
+.meeting-card-past { grid-template-columns: 190px minmax(0, 1fr); opacity: 0.72; }
 
 .intelligence-list-empty { padding: 34px; text-align: center; color: var(--text-muted); }
 .intelligence-list-empty span { display: block; font-size: 28px; margin-bottom: 8px; }
