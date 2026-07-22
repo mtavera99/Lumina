@@ -669,6 +669,12 @@ function hash(value) {
   return createHash('sha256').update(value).digest('hex')
 }
 
+// Los correos de "tu informe esta pendiente / registrate para acceder" NO contienen el resumen; son avisos.
+function isReadAiReminderEmail(text = '') {
+  const normalized = normalizedText(text)
+  return /(?:todavia te esta esperando|aun esta pendiente|registrate hoy para obtener acceso|un ultimo recordatorio|informe[\s\S]{0,40}pendiente|ver tu informe|your report is (?:still )?waiting|report is (?:still )?pending|sign up (?:today )?to (?:get|access)|register (?:today )?to (?:get|view|access)|claim your report)/.test(normalized)
+}
+
 async function gmailSources(token, ownerEmail, syncToken) {
   const queries = [
     'newer_than:2y {from:(read.ai) from:(read-ai)}',
@@ -701,6 +707,7 @@ async function gmailSources(token, ownerEmail, syncToken) {
     const parsedDate = message.internalDate ? new Date(Number(message.internalDate)) : new Date(header('date'))
     const date = Number.isNaN(parsedDate.getTime()) ? new Date().toISOString() : parsedDate.toISOString()
     const title = header('subject') || 'Reporte de reunion de Read AI'
+    if (isReadAiReminderEmail(`${title}\n${content}`)) return { trusted: true, source: null, emptyBody: false, failedParts: 0, reminder: true }
     return {
       trusted: true,
       emptyBody: false,
@@ -732,6 +739,7 @@ async function gmailSources(token, ownerEmail, syncToken) {
       emptyBodies: fulfilled.filter((result) => result.emptyBody).length,
       failedMessages: settled.filter((result) => result.status === 'rejected').length,
       attachmentFailures: fulfilled.reduce((total, result) => total + result.failedParts, 0),
+      reminders: fulfilled.filter((result) => result.reminder).length,
     },
   }
 }
@@ -910,7 +918,7 @@ async function syncContext(auth) {
     : { connected: false, sources: [], pages: 0, hasMore: false, historyComplete: false }
   const reportSync = reportsResult.status === 'fulfilled'
     ? reportsResult.value
-    : { sources: [], diagnostics: { matchedEmails: 0, trustedEmails: 0, importedReports: 0, emptyBodies: 0, failedMessages: 0, attachmentFailures: 0 } }
+    : { sources: [], diagnostics: { matchedEmails: 0, trustedEmails: 0, importedReports: 0, emptyBodies: 0, failedMessages: 0, attachmentFailures: 0, reminders: 0 } }
   const directReports = directSync.sources
   const emailReports = reportSync.sources
   const meetings = meetingsResult.status === 'fulfilled' ? meetingsResult.value : []
@@ -1289,7 +1297,7 @@ async function listMeetingReports(ownerEmail) {
         .filter((attendee) => attendee && !attendee.includes('@'))
         .slice(0, 12),
     }
-  }).filter((report) => report.content)
+  }).filter((report) => report.content && !isReadAiReminderEmail(`${report.title}\n${report.content}`))
   return { reports }
 }
 
