@@ -182,7 +182,9 @@ export function Intelligence() {
       setConversationId(result.conversationId)
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: 'assistant', content: result.answer, citations: result.citations }])
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'El agente no pudo responder.')
+      const reason = caught instanceof Error ? caught.message : 'El agente no pudo responder.'
+      setError(reason)
+      setMessages((current) => [...current, { id: crypto.randomUUID(), role: 'assistant', content: `No pude responder ahora mismo: ${reason}` }])
     } finally { setAgentLoading(false) }
   }
 
