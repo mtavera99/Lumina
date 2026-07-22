@@ -105,7 +105,7 @@ export function Metrics() {
       <div className="metrics-topbar card">
         <div className="metrics-status-row">
           <span className={`conn-badge ${connected ? 'on' : 'demo'}`}>
-            {connected ? '● Conectado a Meta' : '● Modo demostracion'}
+            {result?.source === 'manual' ? '● Datos manuales (reales)' : connected ? '● Conectado a Meta' : '● Modo demostracion'}
           </span>
           <span style={{ fontSize: 13, color: '#5c6b83' }}>
             {loading ? 'Actualizando…' : result ? `Actualizado hace ${secsAgo}s` : '—'}
@@ -171,11 +171,44 @@ export function Metrics() {
               <button className={`chip ${config.mode === 'demo' ? 'active' : ''}`} onClick={() => applyConfig({ mode: 'demo' })}>
                 Demostracion
               </button>
+              <button className={`chip ${config.mode === 'manual' ? 'active' : ''}`} onClick={() => applyConfig({ mode: 'manual' })}>
+                Manual (copiar de Meta)
+              </button>
               <button className={`chip ${config.mode === 'live' ? 'active' : ''}`} onClick={() => applyConfig({ mode: 'live' })}>
-                Conectar a Meta
+                Conectar a Meta (API)
               </button>
             </div>
           </div>
+
+          {config.mode === 'manual' && (
+            <div className="field">
+              <label>Numeros de tu campana (copialos del Administrador de Anuncios de Meta)</label>
+              <p style={{ fontSize: 12, color: '#8a97ac', marginBottom: 10 }}>
+                Escribe lo que ves en Meta para el rango elegido. Lumina calcula solo el CTR, CPC, CPM y CPL, y el agente
+                podra responderte sobre la campana con estos numeros.
+              </p>
+              <div className="biz-grid">
+                {(
+                  [
+                    ['spend', 'Gasto ($)'],
+                    ['impressions', 'Impresiones'],
+                    ['reach', 'Alcance'],
+                    ['clicks', 'Clics'],
+                    ['leads', 'Resultados / Leads'],
+                  ] as [keyof typeof config.manual, string][]
+                ).map(([k, label]) => (
+                  <div className="field" key={k} style={{ marginBottom: 0 }}>
+                    <label>{label}</label>
+                    <input
+                      type="number"
+                      value={config.manual[k]}
+                      onChange={(e) => applyConfig({ manual: { ...config.manual, [k]: Number(e.target.value) } })}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="field">
             <label>URL del proxy (recomendado)</label>

@@ -117,7 +117,7 @@ export interface AgentCitation {
 }
 
 export interface CampaignSnapshot {
-  source: 'demo' | 'proxy' | 'meta'
+  source: 'demo' | 'proxy' | 'meta' | 'manual'
   datePreset: string
   spend: number
   impressions: number

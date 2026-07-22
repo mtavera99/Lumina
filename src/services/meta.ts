@@ -24,7 +24,15 @@ export const META_INSIGHTS_FIELDS = [
   'cost_per_action_type',
 ].join(',')
 
-export type ConnectionMode = 'demo' | 'live'
+export type ConnectionMode = 'demo' | 'live' | 'manual'
+
+export interface ManualMetrics {
+  spend: number
+  impressions: number
+  reach: number
+  clicks: number
+  leads: number
+}
 
 export interface MetaConfig {
   mode: ConnectionMode
@@ -35,8 +43,18 @@ export interface MetaConfig {
   // publicitaria (formato act_XXXXXXXXX) y token de acceso.
   accountId: string
   accessToken: string
+  // Modo manual: numeros que el usuario copia del Administrador de Anuncios.
+  manual: ManualMetrics
   // Rango: today | yesterday | last_7d | last_14d | last_30d | this_month
   datePreset: string
+}
+
+export const DEFAULT_MANUAL: ManualMetrics = {
+  spend: 0,
+  impressions: 0,
+  reach: 0,
+  clicks: 0,
+  leads: 0,
 }
 
 export const DEFAULT_CONFIG: MetaConfig = {
@@ -44,6 +62,7 @@ export const DEFAULT_CONFIG: MetaConfig = {
   proxyUrl: '',
   accountId: '',
   accessToken: '',
+  manual: { ...DEFAULT_MANUAL },
   datePreset: 'last_7d',
 }
 
@@ -86,9 +105,33 @@ export interface Insights {
 
 export interface InsightsResult {
   data: Insights
-  source: 'demo' | 'proxy' | 'meta'
+  source: 'demo' | 'proxy' | 'meta' | 'manual'
   fetchedAt: number
   warning?: string
+}
+
+// Convierte los 5 numeros que el usuario copia del Administrador de Anuncios
+// en el set completo de metricas (calcula CTR, CPC, CPM, CPL y frecuencia).
+export function manualInsights(manual: ManualMetrics, business: Partial<typeof DEMO_BUSINESS> = {}): Insights {
+  const spend = Number(manual.spend) || 0
+  const impressions = Number(manual.impressions) || 0
+  const reach = Number(manual.reach) || 0
+  const clicks = Number(manual.clicks) || 0
+  const leads = Number(manual.leads) || 0
+  const b = { ...DEMO_BUSINESS, ...business }
+  return {
+    spend,
+    impressions,
+    reach,
+    frequency: reach ? impressions / reach : 0,
+    clicks,
+    ctr: impressions ? (clicks / impressions) * 100 : 0,
+    cpc: clicks ? spend / clicks : 0,
+    cpm: impressions ? (spend / impressions) * 1000 : 0,
+    leads,
+    cpl: leads ? spend / leads : 0,
+    ...b,
+  }
 }
 
 // -------------------- DEMO --------------------
@@ -196,6 +239,11 @@ export async function fetchInsights(cfg: MetaConfig, business?: Partial<typeof D
   // Modo demo: datos simulados con pequenas variaciones (sensacion "en vivo").
   if (cfg.mode === 'demo') {
     return { data: demoInsights(business), source: 'demo', fetchedAt: Date.now() }
+  }
+
+  // Modo manual: numeros reales que el usuario copio del Administrador de Anuncios.
+  if (cfg.mode === 'manual') {
+    return { data: manualInsights(cfg.manual || DEFAULT_MANUAL, business), source: 'manual', fetchedAt: Date.now() }
   }
 
   // 1) Opcion recomendada: proxy serverless propio.

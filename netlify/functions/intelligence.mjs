@@ -527,7 +527,7 @@ function campaignContext(campaign) {
   const int = (value) => Math.round(num(value)).toLocaleString('en-US')
   const dec = (value, digits = 2) => num(value).toFixed(digits)
   const preset = typeof campaign.datePreset === 'string' ? campaign.datePreset : 'rango configurado'
-  const isReal = campaign.source === 'meta' || campaign.source === 'proxy'
+  const isReal = ['meta', 'proxy', 'manual'].includes(campaign.source)
   const lines = [
     `Rango: ${preset}`,
     `Gasto: ${money(campaign.spend)}`,
