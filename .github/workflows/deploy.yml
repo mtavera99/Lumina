@@ -35,7 +35,7 @@ jobs:
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
           # Temporary secure backend while Netlify production deploys are paused.
-          VITE_INTELLIGENCE_API_URL: https://deploy-preview-14--luminapr-solar.netlify.app/.netlify/functions/intelligence
+          VITE_INTELLIGENCE_API_URL: https://deploy-preview-15--luminapr-solar.netlify.app/.netlify/functions/intelligence
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
