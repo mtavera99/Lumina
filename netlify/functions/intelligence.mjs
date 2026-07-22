@@ -28,24 +28,87 @@ function json(req, body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: headers(req) })
 }
 
+function classifySupabaseHealthError(error) {
+  const status = Number.isInteger(error?.status) ? error.status : null
+  const code = typeof error?.code === 'string' ? error.code : null
+  let category = 'request_failed'
+
+  if (status === 401 || status === 403) category = 'authorization_failed'
+  else if (status === 404 || code === 'PGRST205' || code === 'PGRST202') category = 'schema_missing'
+  else if (status === null) category = 'network_or_url_failed'
+
+  return { category, status, code }
+}
+
+async function privateStorageHealth() {
+  const configured = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+  if (!configured) return { configured, tableAccessible: false, searchFunctionAccessible: false, ready: false }
+
+  try {
+    await supabase('lumina_sources?select=id&limit=1')
+  } catch (error) {
+    return {
+      configured,
+      tableAccessible: false,
+      searchFunctionAccessible: false,
+      ready: false,
+      tableError: classifySupabaseHealthError(error),
+    }
+  }
+
+  try {
+    await supabase('rpc/search_lumina_sources', {
+      method: 'POST',
+      body: JSON.stringify({ p_owner_email: ALLOWED_EMAIL, p_query: 'lumina-health-check', p_limit: 1 }),
+    })
+  } catch (error) {
+    return {
+      configured,
+      tableAccessible: true,
+      searchFunctionAccessible: false,
+      ready: false,
+      searchFunctionError: classifySupabaseHealthError(error),
+    }
+  }
+
+  return { configured, tableAccessible: true, searchFunctionAccessible: true, ready: true }
+}
+
 async function serviceStatus() {
-  const status = {
+  const storage = await privateStorageHealth()
+  return {
     google: Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID),
     readAiEmailImport: true,
     hubspot: Boolean(process.env.HUBSPOT_PRIVATE_APP_TOKEN),
     assistant: Boolean(process.env.GEMINI_API_KEY),
-    persistentStorage: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+    persistentStorage: storage.ready,
   }
-  if (status.persistentStorage) {
-    try {
-      await supabase('lumina_sources?select=id&limit=1')
-      await supabase('rpc/search_lumina_sources', {
-        method: 'POST',
-        body: JSON.stringify({ p_owner_email: ALLOWED_EMAIL, p_query: 'lumina-health-check', p_limit: 1 }),
-      })
-    } catch { status.persistentStorage = false }
+}
+
+async function configurationHealth() {
+  const configured = {
+    googleOAuthClientId: Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID),
+    geminiApiKey: Boolean(process.env.GEMINI_API_KEY),
+    supabaseUrl: Boolean(process.env.SUPABASE_URL),
+    supabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
   }
-  return status
+  const storage = await privateStorageHealth()
+  const assistant = configured.geminiApiKey
+  return {
+    ok: configured.googleOAuthClientId && assistant && storage.ready,
+    deployContext: process.env.CONTEXT || 'unknown',
+    configured,
+    services: {
+      assistant,
+      persistentStorage: storage.ready,
+    },
+    storage: {
+      tableAccessible: storage.tableAccessible,
+      searchFunctionAccessible: storage.searchFunctionAccessible,
+      ...(storage.tableError ? { tableError: storage.tableError } : {}),
+      ...(storage.searchFunctionError ? { searchFunctionError: storage.searchFunctionError } : {}),
+    },
+  }
 }
 
 async function authorize(req) {
@@ -82,7 +145,12 @@ async function supabase(path, options = {}) {
     },
   })
   const body = response.status === 204 ? null : await response.json().catch(() => null)
-  if (!response.ok) throw new Error(body?.message || body?.hint || `Supabase respondio ${response.status}.`)
+  if (!response.ok) {
+    const error = new Error(body?.message || body?.hint || `Supabase respondio ${response.status}.`)
+    error.status = response.status
+    error.code = typeof body?.code === 'string' ? body.code : null
+    throw error
+  }
   return body
 }
 
@@ -406,6 +474,11 @@ export default async (req) => {
   const origin = req.headers.get('origin')
   if (origin && !configuredOrigins().includes(origin)) return json(req, { error: 'Origen no autorizado.' }, 403)
   if (!['GET', 'POST'].includes(req.method)) return json(req, { error: 'Metodo no permitido.' }, 405)
+
+  const requestUrl = new URL(req.url)
+  if (req.method === 'GET' && requestUrl.searchParams.get('health') === 'configuration') {
+    return json(req, await configurationHealth())
+  }
 
   const auth = await authorize(req)
   if (auth.error) return json(req, { error: auth.error }, auth.status)
