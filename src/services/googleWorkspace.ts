@@ -131,6 +131,15 @@ export interface CampaignSnapshot {
   cpl: number
 }
 
+export interface MeetingReport {
+  id: string
+  title: string
+  date: string | null
+  content: string
+  source: 'read_ai_api' | 'gmail'
+  attendees: string[]
+}
+
 export interface AgentAnswer {
   conversationId: string
   answer: string
@@ -495,6 +504,10 @@ export function startReadAiConnection(session: GoogleSession): Promise<{ authori
 
 export function disconnectReadAiConnection(session: GoogleSession, purgeMemory = false): Promise<{ disconnected: boolean; purged: boolean }> {
   return intelligenceRequest<{ disconnected: boolean; purged: boolean }>(session, 'POST', { action: 'read-ai-disconnect', purgeMemory })
+}
+
+export function fetchMeetingReports(session: GoogleSession): Promise<{ reports: MeetingReport[] }> {
+  return intelligenceRequest<{ reports: MeetingReport[] }>(session, 'POST', { action: 'reports' })
 }
 
 export function askLuminaAgent(
