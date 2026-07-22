@@ -385,8 +385,8 @@ function trustedMeetingUrl(value?: string): string | undefined {
 }
 
 async function fetchCalendarMeetings(accessToken: string): Promise<CalendarMeeting[]> {
-  const timeMin = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-  const timeMax = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString()
+  const timeMin = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
+  const timeMax = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
   const events: GoogleCalendarEvent[] = []
   let pageToken = ''
 

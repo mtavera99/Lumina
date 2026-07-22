@@ -37,6 +37,10 @@ function formatDate(value: string | null): string {
 }
 
 function isUpcoming(value: string): boolean { return Boolean(value) && Date.parse(value) >= Date.now() }
+function isAllDay(value: string): boolean { return /^\d{4}-\d{2}-\d{2}$/.test(value) }
+function isListableMeeting(meeting: { startsAt: string; status: string }): boolean {
+  return Boolean(meeting.startsAt) && meeting.status !== 'cancelled' && !isAllDay(meeting.startsAt)
+}
 
 export function Intelligence() {
   const cached = getCachedGoogleWorkspace()
@@ -60,7 +64,13 @@ export function Intelligence() {
     if (!normalized) return workspace?.reports ?? []
     return (workspace?.reports ?? []).filter((report) => `${report.subject} ${report.sender} ${report.preview}`.toLowerCase().includes(normalized))
   }, [query, workspace])
-  const upcoming = useMemo(() => (workspace?.calendar ?? []).filter((meeting) => isUpcoming(meeting.startsAt)), [workspace])
+  const upcoming = useMemo(() => (workspace?.calendar ?? [])
+    .filter((meeting) => isListableMeeting(meeting) && isUpcoming(meeting.startsAt))
+    .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt)), [workspace])
+  const recentMeetings = useMemo(() => (workspace?.calendar ?? [])
+    .filter((meeting) => isListableMeeting(meeting) && !isUpcoming(meeting.startsAt))
+    .sort((a, b) => Date.parse(b.startsAt) - Date.parse(a.startsAt))
+    .slice(0, 8), [workspace])
   const agentReady = Boolean(session && serviceStatus?.assistant && serviceStatus?.persistentStorage)
 
   useEffect(() => {
@@ -214,7 +224,11 @@ export function Intelligence() {
 
         {view === 'resumenes' && <section><div className="intelligence-toolbar"><div><h3>Reportes disponibles</h3><p>Read AI directo alimenta al agente; Gmail se muestra como respaldo.</p></div><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar tema, persona o decision…" /></div><div className="intelligence-list">{filteredReports.map((report) => <article className="card report-card" key={report.id}><div className="report-head"><div><h3>{report.subject}</h3><span>{formatDate(report.receivedAt)} · {report.sender}</span></div>{report.reportUrl && <a className="btn btn-ghost btn-sm" href={report.reportUrl} target="_blank" rel="noreferrer">Abrir en Read AI ↗</a>}</div><p>{report.preview}</p></article>)}{!filteredReports.length && <EmptyState icon="📭" text={query ? 'No encontramos reportes con esa busqueda.' : 'No encontramos correos verificados de Read AI.'} />}</div></section>}
 
-        {view === 'calendario' && <section><div className="intelligence-toolbar"><div><h3>Agenda conectada</h3><p>Reuniones recientes y proximas.</p></div></div><div className="intelligence-list">{workspace.calendar.map((meeting) => <article className="card meeting-card" key={meeting.id}><div className="meeting-date"><span>{formatDate(meeting.startsAt)}</span>{isUpcoming(meeting.startsAt) && <b>Proxima</b>}</div><div className="meeting-body"><h3>{meeting.title}</h3><p>{meeting.attendees.length ? meeting.attendees.join(' · ') : 'Sin participantes visibles'}</p></div>{meeting.meetingUrl && <a className="btn btn-navy btn-sm" href={meeting.meetingUrl} target="_blank" rel="noreferrer">Entrar ↗</a>}</article>)}{!workspace.calendar.length && <EmptyState icon="📅" text="No hay eventos visibles en este rango." />}</div></section>}
+        {view === 'calendario' && <section><div className="intelligence-toolbar"><div><h3>Agenda conectada</h3><p>Tus proximas reuniones, ordenadas de la mas cercana a la mas lejana.</p></div></div>
+          <h4 className="agenda-heading">Proximas reuniones ({upcoming.length})</h4>
+          <div className="intelligence-list">{upcoming.map((meeting) => <article className="card meeting-card" key={meeting.id}><div className="meeting-date"><span>{formatDate(meeting.startsAt)}</span><b>Proxima</b></div><div className="meeting-body"><h3>{meeting.title}</h3><p>{meeting.attendees.length ? meeting.attendees.join(' · ') : 'Sin participantes visibles'}</p></div>{meeting.meetingUrl && <a className="btn btn-navy btn-sm" href={meeting.meetingUrl} target="_blank" rel="noreferrer">Entrar ↗</a>}</article>)}{!upcoming.length && <EmptyState icon="📅" text="No hay reuniones proximas en los siguientes 90 dias." />}</div>
+          {recentMeetings.length > 0 && <><h4 className="agenda-heading agenda-heading-muted">Recientes</h4><div className="intelligence-list">{recentMeetings.map((meeting) => <article className="card meeting-card meeting-card-past" key={meeting.id}><div className="meeting-date"><span>{formatDate(meeting.startsAt)}</span></div><div className="meeting-body"><h3>{meeting.title}</h3><p>{meeting.attendees.length ? meeting.attendees.join(' · ') : 'Sin participantes visibles'}</p></div></article>)}</div></>}
+        </section>}
 
         {view === 'agente' && <section className="card agent-chat"><div className="agent-chat-head"><div className="agent-icon">✦</div><div><h3>Agente Lumina</h3><p>{agentReady ? 'Memoria privada y Gemini conectados.' : 'Pendiente de conectar Supabase, Gemini y Netlify.'}</p></div><span className={`connection-state ${agentReady ? 'connected' : 'pending'}`}>● {agentReady ? 'Disponible' : 'Configuracion pendiente'}</span></div><div className="agent-messages" aria-live="polite">{messages.map((message) => <div className={`agent-message ${message.role}`} key={message.id}><b>{message.role === 'assistant' ? 'Lumina' : 'Tu'}</b><p>{message.content}</p>{message.citations?.length ? <div className="agent-citations">{message.citations.map((citation) => citation.url ? <a key={citation.id} href={citation.url} target="_blank" rel="noreferrer">[{citation.id}] {citation.title} · {formatDate(citation.date)}</a> : <span key={citation.id}>[{citation.id}] {citation.title} · {formatDate(citation.date)}</span>)}</div> : null}</div>)}{agentLoading && <div className="agent-message assistant"><b>Lumina</b><p>Analizando reuniones y acuerdos…</p></div>}</div><div className="agent-suggestions">{SUGGESTIONS.map((suggestion) => <button key={suggestion} onClick={() => ask(suggestion)} disabled={!agentReady || agentLoading}>{suggestion}</button>)}</div><form className="agent-input" onSubmit={(event) => { event.preventDefault(); void ask() }}><input value={agentInput} onChange={(event) => setAgentInput(event.target.value)} disabled={!agentReady || agentLoading} maxLength={2000} placeholder={agentReady ? 'Pregunta sobre reuniones, decisiones o pendientes…' : 'Completa la conexion segura para activar el agente'} /><button className="btn btn-navy" disabled={!agentReady || agentLoading || !agentInput.trim()}>Enviar</button></form></section>}
       </> : <section className="card intelligence-empty"><div>🔐</div><h3>Tus reuniones aun no se han cargado</h3><p>Conecta {googleWorkspaceConfig.allowedEmail}. La aplicacion nunca solicita ni guarda tu contrasena.</p></section>}
