@@ -78,6 +78,7 @@ export interface WorkspaceSync {
 export interface IntelligenceServiceStatus {
   google: boolean
   readAiEmailImport: boolean
+  readAiDirect: boolean
   hubspot: boolean
   assistant: boolean
   persistentStorage: boolean
@@ -85,8 +86,24 @@ export interface IntelligenceServiceStatus {
 
 export interface ContextSyncResult {
   reports: number
+  storedReports: number
   meetings: number
   total: number
+  readAi: {
+    matchedEmails: number
+    trustedEmails: number
+    importedReports: number
+    emptyBodies: number
+    failedMessages: number
+    attachmentFailures: number
+  }
+  readAiDirect: {
+    connected: boolean
+    processedMeetings: number
+    pages: number
+    hasMore: boolean
+    historyComplete: boolean
+  }
   warnings: string[]
   syncedAt: string
 }
@@ -110,6 +127,7 @@ export const googleWorkspaceConfig = {
   allowedEmail: ALLOWED_EMAIL,
   configured: Boolean(GOOGLE_CLIENT_ID),
   apiConfigured: Boolean(INTELLIGENCE_API_URL),
+  apiOrigin: INTELLIGENCE_API_URL ? new URL(INTELLIGENCE_API_URL).origin : '',
 }
 
 export function getCachedGoogleWorkspace(): { session: GoogleSession | null; workspace: WorkspaceSync | null } {
@@ -224,31 +242,42 @@ function decodeBase64Url(value: string): string {
 
 interface GmailPart {
   mimeType?: string
-  body?: { data?: string }
+  body?: { data?: string; attachmentId?: string }
   parts?: GmailPart[]
 }
 
-function findMimePart(part: GmailPart | undefined, mimeType: string): GmailPart | undefined {
-  if (!part) return undefined
-  if (part.mimeType === mimeType && part.body?.data) return part
-  for (const child of part.parts ?? []) {
-    const found = findMimePart(child, mimeType)
-    if (found) return found
-  }
-  return undefined
+function collectMimeParts(part: GmailPart | undefined, matches: GmailPart[] = []): GmailPart[] {
+  if (!part) return matches
+  if (['text/plain', 'text/html'].includes(part.mimeType ?? '') && (part.body?.data || part.body?.attachmentId)) matches.push(part)
+  for (const child of part.parts ?? []) collectMimeParts(child, matches)
+  return matches
 }
 
-function collectMessageBody(part?: GmailPart): string {
-  const plain = findMimePart(part, 'text/plain')
-  if (plain?.body?.data) return decodeBase64Url(plain.body.data)
-
-  const html = findMimePart(part, 'text/html')
-  if (html?.body?.data) {
-    const documentBody = new DOMParser().parseFromString(decodeBase64Url(html.body.data), 'text/html').body
-    return documentBody.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+async function mimePartText(messageId: string, part: GmailPart, accessToken: string): Promise<string> {
+  let data = part.body?.data ?? ''
+  if (!data && part.body?.attachmentId) {
+    const attachment = await googleJson<{ data?: string }>(
+      `https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}/attachments/${encodeURIComponent(part.body.attachmentId)}`,
+      accessToken,
+    )
+    data = attachment.data ?? ''
   }
+  if (!data) return ''
+  const decoded = decodeBase64Url(data)
+  if (part.mimeType !== 'text/html') return decoded.replace(/\r/g, '').trim()
+  const documentBody = new DOMParser().parseFromString(decoded, 'text/html').body
+  return documentBody.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+}
 
-  return part?.body?.data ? decodeBase64Url(part.body.data) : ''
+async function collectMessageBody(messageId: string, part: GmailPart | undefined, accessToken: string, snippet = ''): Promise<string> {
+  const settled = await Promise.allSettled(collectMimeParts(part).map((candidate) => mimePartText(messageId, candidate, accessToken)))
+  const candidates = settled
+    .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
+    .map((result) => result.value)
+    .filter(Boolean)
+  if (part?.body?.data) candidates.push(decodeBase64Url(part.body.data).trim())
+  if (snippet) candidates.push(snippet.trim())
+  return [...new Set(candidates)].sort((a, b) => b.length - a.length)[0] ?? ''
 }
 
 function findReadReportUrl(text: string): string | undefined {
@@ -261,48 +290,71 @@ function safeIsoDate(timestamp?: string, fallback?: string): string {
   return Number.isNaN(preferred.getTime()) ? new Date().toISOString() : preferred.toISOString()
 }
 
-function isReadAiSender(sender: string): boolean {
-  const email = sender.match(/<([^>]+)>/)?.[1] || sender.match(/[\w.+-]+@[\w.-]+/)?.[0] || ''
-  return /@(?:[\w-]+\.)*read\.ai$/i.test(email.trim())
+function isReadAiSender(...values: string[]): boolean {
+  return values.some((value) => [...value.matchAll(/[\w.+-]+@[\w.-]+/g)]
+    .some(([email]) => /@(?:[\w-]+\.)*read\.ai$/i.test(email)))
+}
+
+function isAuthenticatedReadAiEmail(headers: { name: string; value: string }[]): boolean {
+  const values = (name: string) => headers
+    .filter((item) => item.name.toLowerCase() === name)
+    .map((item) => item.value)
+  if (!isReadAiSender(...values('from'))) return false
+  const clauses = values('authentication-results')
+    .filter((value) => /^\s*mx\.google\.com\s*;/i.test(value))
+    .flatMap((value) => value.split(';').slice(1))
+  return clauses.some((clause) => (
+    (/\bdmarc=pass\b/i.test(clause) && /\bheader\.from=(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+    || (/\bdkim=pass\b/i.test(clause) && /\bheader\.(?:d|i)=@?(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+    || (/\bspf=pass\b/i.test(clause) && /\bsmtp\.mailfrom=(?:[^\s;@]+@)?(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+  ))
 }
 
 async function fetchReadAiReports(accessToken: string): Promise<ReadAiReport[]> {
-  const query = encodeURIComponent('from:(read.ai) newer_than:1y')
-  const list = await googleJson<{ messages?: { id: string }[] }>(
-    `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${query}&maxResults=30`,
-    accessToken,
-  )
+  const queries = [
+    'newer_than:2y {from:(read.ai) from:(read-ai)}',
+    'newer_than:2y {subject:("Read AI") subject:("meeting report") subject:("reunion report")}',
+  ]
+  const references = new Map<string, { id: string }>()
+  for (const search of queries) {
+    const queryReferences = new Map<string, { id: string }>()
+    let pageToken = ''
+    do {
+      const params = new URLSearchParams({ q: search, maxResults: '100' })
+      if (pageToken) params.set('pageToken', pageToken)
+      const page = await googleJson<{ messages?: { id: string }[]; nextPageToken?: string }>(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages?${params}`,
+        accessToken,
+      )
+      for (const reference of page.messages ?? []) queryReferences.set(reference.id, reference)
+      pageToken = page.nextPageToken ?? ''
+    } while (pageToken && queryReferences.size < 250)
+    for (const reference of [...queryReferences.values()].slice(0, 250)) references.set(reference.id, reference)
+  }
 
-  const settled = await Promise.allSettled((list.messages ?? []).map(({ id }) =>
-    googleJson<{
+  const settled = await Promise.allSettled([...references.values()].map(async ({ id }) => {
+    const message = await googleJson<{
       id: string
       snippet?: string
       internalDate?: string
       payload?: GmailPart & { headers?: { name: string; value: string }[] }
-    }>(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, accessToken),
-  ))
+    }>(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, accessToken)
+    const headers = message.payload?.headers ?? []
+    const header = (name: string) => headers.find((item) => item.name.toLowerCase() === name)?.value ?? ''
+    if (!isAuthenticatedReadAiEmail(headers)) return null
+    const body = await collectMessageBody(message.id, message.payload, accessToken, message.snippet)
+    return {
+      id: message.id,
+      subject: header('subject') || 'Reporte de reunion de Read AI',
+      sender: header('from'),
+      receivedAt: safeIsoDate(message.internalDate, header('date')),
+      preview: (body || 'El correo no incluyo un resumen legible.').slice(0, 3000),
+      reportUrl: findReadReportUrl(body),
+    }
+  }))
 
   return settled
-    .filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof googleJson<{
-      id: string
-      snippet?: string
-      internalDate?: string
-      payload?: GmailPart & { headers?: { name: string; value: string }[] }
-    }>>>> => result.status === 'fulfilled')
-    .map(({ value: message }) => {
-      const headers = message.payload?.headers ?? []
-      const header = (name: string) => headers.find((item) => item.name.toLowerCase() === name)?.value ?? ''
-      const body = collectMessageBody(message.payload)
-      return {
-        id: message.id,
-        subject: header('subject') || 'Reporte de reunion de Read AI',
-        sender: header('from'),
-        receivedAt: safeIsoDate(message.internalDate, header('date')),
-        preview: (body || message.snippet || 'Sin resumen disponible en el correo.').slice(0, 1200),
-        reportUrl: findReadReportUrl(body),
-      }
-    })
-    .filter((message) => isReadAiSender(message.sender))
+    .flatMap((result) => result.status === 'fulfilled' && result.value ? [result.value] : [])
     .sort((a, b) => Date.parse(b.receivedAt) - Date.parse(a.receivedAt))
 }
 
@@ -420,6 +472,14 @@ export async function fetchIntelligenceStatus(session: GoogleSession): Promise<I
 
 export function syncIntelligenceContext(session: GoogleSession): Promise<ContextSyncResult> {
   return intelligenceRequest<ContextSyncResult>(session, 'POST', { action: 'sync' })
+}
+
+export function startReadAiConnection(session: GoogleSession): Promise<{ authorizationUrl: string }> {
+  return intelligenceRequest<{ authorizationUrl: string }>(session, 'POST', { action: 'read-ai-connect' })
+}
+
+export function disconnectReadAiConnection(session: GoogleSession, purgeMemory = false): Promise<{ disconnected: boolean; purged: boolean }> {
+  return intelligenceRequest<{ disconnected: boolean; purged: boolean }>(session, 'POST', { action: 'read-ai-disconnect', purgeMemory })
 }
 
 export function askLuminaAgent(

@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from 'node:crypto'
+import { createHash, randomBytes, randomUUID } from 'node:crypto'
 
 const ALLOWED_EMAIL = 'mtavera99@gmail.com'
 const REQUIRED_SCOPES = [
@@ -7,6 +7,11 @@ const REQUIRED_SCOPES = [
 ]
 const DEFAULT_ORIGINS = ['https://mtavera99.github.io', 'http://localhost:5173', 'http://127.0.0.1:5173']
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash'
+const READ_AI_API_BASE = 'https://api.read.ai'
+const READ_AI_AUTHORIZE_URL = 'https://authn.read.ai/oauth2/auth'
+const READ_AI_TOKEN_URL = 'https://authn.read.ai/oauth2/token'
+const READ_AI_REVOKE_URL = 'https://authn.read.ai/oauth2/revoke'
+const READ_AI_SCOPE = 'openid email offline_access profile meeting:read'
 
 function configuredOrigins() {
   return [...new Set([...DEFAULT_ORIGINS, ...(process.env.INTELLIGENCE_ALLOWED_ORIGINS || '').split(',').map((v) => v.trim()).filter(Boolean)])]
@@ -26,6 +31,20 @@ function headers(req) {
 
 function json(req, body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: headers(req) })
+}
+
+function oauthPopupResponse(appOrigin, ok, message) {
+  const safeOrigin = configuredOrigins().includes(appOrigin) ? appOrigin : configuredOrigins()[0]
+  const payload = JSON.stringify({ type: 'lumina-read-ai-oauth', ok, message })
+  return new Response(`<!doctype html><meta charset="utf-8"><title>Read AI · Lumina</title><style>body{font:16px system-ui;background:#071f3d;color:white;display:grid;place-items:center;min-height:100vh;margin:0}main{max-width:480px;padding:32px;text-align:center}p{line-height:1.5;color:#dce8f6}</style><main><h1>${ok ? 'Read AI conectado' : 'No se pudo conectar Read AI'}</h1><p>${ok ? 'La memoria directa de reuniones ya puede sincronizarse. Esta ventana se cerrara automaticamente.' : 'Regresa a Lumina e intenta nuevamente.'}</p></main><script>if(window.opener){window.opener.postMessage(${payload},${JSON.stringify(safeOrigin)});setTimeout(()=>window.close(),500)}</script>`, {
+    status: ok ? 200 : 400,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'",
+      'Referrer-Policy': 'no-referrer',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  })
 }
 
 function classifySupabaseHealthError(error) {
@@ -74,11 +93,15 @@ async function privateStorageHealth() {
   return { configured, tableAccessible: true, searchFunctionAccessible: true, ready: true }
 }
 
-async function serviceStatus() {
-  const storage = await privateStorageHealth()
+async function serviceStatus(ownerEmail) {
+  const [storage, readAiDirect] = await Promise.all([
+    privateStorageHealth(),
+    readAiDirectStatus(ownerEmail),
+  ])
   return {
     google: Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID),
     readAiEmailImport: true,
+    readAiDirect,
     hubspot: Boolean(process.env.HUBSPOT_PRIVATE_APP_TOKEN),
     assistant: Boolean(process.env.GEMINI_API_KEY),
     persistentStorage: storage.ready,
@@ -161,41 +184,294 @@ async function googleJson(url, token) {
   return body
 }
 
+async function readAiConnection(ownerEmail) {
+  const params = new URLSearchParams({ owner_email: `eq.${ownerEmail}`, select: '*', limit: '1' })
+  return (await supabase(`lumina_read_ai_connections?${params}`))[0] || null
+}
+
+async function readAiConnectionByState(state) {
+  const params = new URLSearchParams({ oauth_state_hash: `eq.${hash(state)}`, select: '*', limit: '1' })
+  return (await supabase(`lumina_read_ai_connections?${params}`))[0] || null
+}
+
+async function readAiFetchJson(url, options = {}) {
+  const response = await fetch(url, options)
+  const body = await response.json().catch(() => null)
+  if (!response.ok) throw new Error(body?.detail || body?.error_description || body?.error || `Read AI respondio ${response.status}.`)
+  return body
+}
+
+function readAiCallbackUrl(req) {
+  const callback = new URL(req.url)
+  callback.search = ''
+  callback.hash = ''
+  callback.searchParams.set('read_ai', 'callback')
+  return callback.toString()
+}
+
+function randomBase64Url(size = 32) {
+  return randomBytes(size).toString('base64url')
+}
+
+async function registerReadAiClient(callbackUrl) {
+  return readAiFetchJson(`${READ_AI_API_BASE}/oauth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_name: 'Lumina Intelligence',
+      redirect_uris: [callbackUrl],
+      grant_types: ['authorization_code', 'refresh_token'],
+      response_types: ['code'],
+      scope: READ_AI_SCOPE,
+      token_endpoint_auth_method: 'client_secret_basic',
+    }),
+  })
+}
+
+async function startReadAiOAuth(req, ownerEmail) {
+  const origin = req.headers.get('origin') || configuredOrigins()[0]
+  if (!configuredOrigins().includes(origin)) throw new Error('Origen no autorizado para conectar Read AI.')
+  const callbackUrl = readAiCallbackUrl(req)
+  let connection
+  try { connection = await readAiConnection(ownerEmail) }
+  catch (error) {
+    if (error?.status === 404 || error?.code === 'PGRST205') throw new Error('Falta aplicar la migracion 002_read_ai_oauth.sql en Supabase.')
+    throw error
+  }
+
+  if (!connection || connection.callback_url !== callbackUrl) {
+    const client = await registerReadAiClient(callbackUrl)
+    if (!client?.client_id || !client?.client_secret) throw new Error('Read AI no devolvio credenciales OAuth validas.')
+    const record = {
+      owner_email: ownerEmail,
+      client_id: client.client_id,
+      client_secret: client.client_secret,
+      callback_url: callbackUrl,
+      app_origin: origin,
+      access_token: null,
+      refresh_token: null,
+      token_expires_at: null,
+      connected_at: null,
+      updated_at: new Date().toISOString(),
+    }
+    await supabase('lumina_read_ai_connections?on_conflict=owner_email', {
+      method: 'POST',
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(record),
+    })
+    connection = record
+  }
+
+  const state = randomBase64Url(32)
+  const verifier = randomBase64Url(64)
+  const challenge = createHash('sha256').update(verifier).digest('base64url')
+  const oauthExpiresAt = new Date(Date.now() + 10 * 60000).toISOString()
+  const updateParams = new URLSearchParams({ owner_email: `eq.${ownerEmail}` })
+  await supabase(`lumina_read_ai_connections?${updateParams}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({
+      oauth_state_hash: hash(state),
+      pkce_verifier: verifier,
+      oauth_expires_at: oauthExpiresAt,
+      app_origin: origin,
+      updated_at: new Date().toISOString(),
+    }),
+  })
+
+  const authorization = new URL(READ_AI_AUTHORIZE_URL)
+  authorization.search = new URLSearchParams({
+    client_id: connection.client_id,
+    redirect_uri: callbackUrl,
+    response_type: 'code',
+    scope: READ_AI_SCOPE,
+    state,
+    code_challenge: challenge,
+    code_challenge_method: 'S256',
+  }).toString()
+  return { authorizationUrl: authorization.toString() }
+}
+
+async function exchangeReadAiToken(connection, values) {
+  const credentials = Buffer.from(`${connection.client_id}:${connection.client_secret}`).toString('base64')
+  return readAiFetchJson(READ_AI_TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(values),
+  })
+}
+
+async function completeReadAiOAuth(req) {
+  const requestUrl = new URL(req.url)
+  const state = requestUrl.searchParams.get('state') || ''
+  const code = requestUrl.searchParams.get('code') || ''
+  if (!state || !code) return oauthPopupResponse(configuredOrigins()[0], false, 'Read AI no devolvio la autorizacion requerida.')
+
+  let connection
+  try { connection = await readAiConnectionByState(state) }
+  catch { return oauthPopupResponse(configuredOrigins()[0], false, 'La memoria privada de Read AI no esta preparada.') }
+  if (!connection || !connection.pkce_verifier || !connection.oauth_expires_at || Date.parse(connection.oauth_expires_at) < Date.now()) {
+    return oauthPopupResponse(connection?.app_origin || configuredOrigins()[0], false, 'La solicitud de conexion vencio.')
+  }
+
+  try {
+    const tokens = await exchangeReadAiToken(connection, {
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: connection.callback_url,
+      code_verifier: connection.pkce_verifier,
+    })
+    if (!tokens.access_token || !tokens.refresh_token) throw new Error('Read AI no devolvio los tokens requeridos.')
+    const grantedScopes = new Set(String(tokens.scope || '').split(/\s+/).filter(Boolean))
+    if (tokens.scope && (!grantedScopes.has('meeting:read') || !grantedScopes.has('offline_access'))) {
+      return oauthPopupResponse(connection.app_origin, false, 'Read AI no concedio los permisos de solo lectura requeridos (meeting:read).')
+    }
+    const updateParams = new URLSearchParams({ owner_email: `eq.${connection.owner_email}` })
+    await supabase(`lumina_read_ai_connections?${updateParams}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
+        token_expires_at: new Date(Date.now() + Number(tokens.expires_in || 599) * 1000).toISOString(),
+        oauth_state_hash: null,
+        pkce_verifier: null,
+        oauth_expires_at: null,
+        connected_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }),
+    })
+    return oauthPopupResponse(connection.app_origin, true, 'Read AI conectado.')
+  } catch (error) {
+    console.error('Read AI OAuth:', error instanceof Error ? error.message : error)
+    return oauthPopupResponse(connection.app_origin, false, 'No se pudo completar la conexion con Read AI.')
+  }
+}
+
+async function readAiAccessToken(ownerEmail) {
+  const connection = await readAiConnection(ownerEmail)
+  if (!connection?.refresh_token) return null
+  if (connection.access_token && Date.parse(connection.token_expires_at || 0) > Date.now() + 60000) return connection.access_token
+  const tokens = await exchangeReadAiToken(connection, {
+    grant_type: 'refresh_token',
+    refresh_token: connection.refresh_token,
+  })
+  if (!tokens.access_token || !tokens.refresh_token) throw new Error('Read AI no pudo renovar la conexion.')
+  const updateParams = new URLSearchParams({ owner_email: `eq.${ownerEmail}` })
+  await supabase(`lumina_read_ai_connections?${updateParams}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      token_expires_at: new Date(Date.now() + Number(tokens.expires_in || 599) * 1000).toISOString(),
+      updated_at: new Date().toISOString(),
+    }),
+  })
+  return tokens.access_token
+}
+
+async function readAiDirectStatus(ownerEmail) {
+  try { return Boolean((await readAiConnection(ownerEmail))?.refresh_token) }
+  catch { return false }
+}
+
+async function disconnectReadAi(ownerEmail, { purgeMemory = false } = {}) {
+  const connection = await readAiConnection(ownerEmail)
+  if (!connection) return { disconnected: false, purged: false }
+  if (connection.refresh_token && connection.client_id && connection.client_secret) {
+    const credentials = Buffer.from(`${connection.client_id}:${connection.client_secret}`).toString('base64')
+    await fetch(READ_AI_REVOKE_URL, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${credentials}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ token: connection.refresh_token, token_type_hint: 'refresh_token' }),
+    }).catch(() => {})
+  }
+  const params = new URLSearchParams({ owner_email: `eq.${ownerEmail}` })
+  await supabase(`lumina_read_ai_connections?${params}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } })
+  let purged = false
+  if (purgeMemory) {
+    const purgeParams = new URLSearchParams({
+      owner_email: `eq.${ownerEmail}`,
+      source_type: 'eq.read_ai',
+      'metadata->>origin': 'eq.read_ai_api',
+    })
+    await supabase(`lumina_sources?${purgeParams}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } })
+    purged = true
+  }
+  return { disconnected: true, purged }
+}
+
 function decodeBase64Url(value = '') {
   try { return Buffer.from(value.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8') } catch { return '' }
 }
 
-function findMimePart(part, mimeType) {
-  if (!part) return null
-  if (part.mimeType === mimeType && part.body?.data) return part
-  for (const child of part.parts || []) {
-    const found = findMimePart(child, mimeType)
-    if (found) return found
-  }
-  return null
-}
-
-function htmlToText(html) {
-  return html
+function htmlToText(html = '') {
+  return String(html)
     .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/p>/gi, '\n')
+    .replace(/<\/(?:p|div|li|tr|h[1-6])>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>')
-    .replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim()
+    .replace(/&nbsp;|&#160;/gi, ' ').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'")
+    .replace(/[ \t]+/g, ' ').replace(/\n[ \t]+/g, '\n').replace(/\n{3,}/g, '\n\n').trim()
 }
 
-function messageText(payload) {
-  const plain = findMimePart(payload, 'text/plain')
-  if (plain?.body?.data) return decodeBase64Url(plain.body.data)
-  const html = findMimePart(payload, 'text/html')
-  if (html?.body?.data) return htmlToText(decodeBase64Url(html.body.data))
-  return payload?.body?.data ? decodeBase64Url(payload.body.data) : ''
+function collectMimeParts(part, matches = []) {
+  if (!part) return matches
+  if (['text/plain', 'text/html'].includes(part.mimeType) && (part.body?.data || part.body?.attachmentId)) matches.push(part)
+  for (const child of part.parts || []) collectMimeParts(child, matches)
+  return matches
 }
 
-function readAiSender(value = '') {
-  const email = value.match(/<([^>]+)>/)?.[1] || value.match(/[\w.+-]+@[\w.-]+/)?.[0] || ''
-  return /@(?:[\w-]+\.)*read\.ai$/i.test(email.trim())
+async function mimePartText(messageId, part, token) {
+  let data = part?.body?.data || ''
+  if (!data && part?.body?.attachmentId) {
+    const attachment = await googleJson(
+      `https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}/attachments/${encodeURIComponent(part.body.attachmentId)}`,
+      token,
+    )
+    data = attachment?.data || ''
+  }
+  if (!data) return ''
+  const decoded = decodeBase64Url(data)
+  return part.mimeType === 'text/html' ? htmlToText(decoded) : decoded.replace(/\r/g, '')
+}
+
+async function messageText(message, token) {
+  const parts = collectMimeParts(message.payload)
+  const settled = await Promise.allSettled(parts.map((part) => mimePartText(message.id, part, token)))
+  const candidates = settled
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value.trim())
+    .filter(Boolean)
+  if (message.payload?.body?.data) candidates.push(decodeBase64Url(message.payload.body.data).trim())
+  return {
+    content: [...new Set(candidates)].sort((a, b) => b.length - a.length)[0] || '',
+    failedParts: settled.filter((result) => result.status === 'rejected').length,
+  }
+}
+
+function readAiSender(...values) {
+  return values.some((value) => [...String(value || '').matchAll(/[\w.+-]+@[\w.-]+/g)]
+    .some(([email]) => /@(?:[\w-]+\.)*read\.ai$/i.test(email)))
+}
+
+function authenticatedReadAiSender(headers = []) {
+  const values = (name) => headers
+    .filter((item) => item.name?.toLowerCase() === name)
+    .map((item) => item.value || '')
+  if (!readAiSender(...values('from'))) return false
+  const clauses = values('authentication-results')
+    .filter((value) => /^\s*mx\.google\.com\s*;/i.test(value))
+    .flatMap((value) => value.split(';').slice(1))
+  return clauses.some((clause) => (
+    (/\bdmarc=pass\b/i.test(clause) && /\bheader\.from=(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+    || (/\bdkim=pass\b/i.test(clause) && /\bheader\.(?:d|i)=@?(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+    || (/\bspf=pass\b/i.test(clause) && /\bsmtp\.mailfrom=(?:[^\s;@]+@)?(?:[\w-]+\.)*read\.ai(?:\s|$)/i.test(clause))
+  ))
 }
 
 function readAiUrl(text = '') {
@@ -359,45 +635,168 @@ function hash(value) {
 }
 
 async function gmailSources(token, ownerEmail, syncToken) {
-  const query = encodeURIComponent('from:(read.ai) newer_than:1y')
-  const messageRefs = []
-  let pageToken = ''
-  do {
-    const page = await googleJson(
-      `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${query}&maxResults=50${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`,
-      token,
-    )
-    messageRefs.push(...(page.messages || []))
-    pageToken = page.nextPageToken || ''
-  } while (pageToken && messageRefs.length < 100)
+  const queries = [
+    'newer_than:2y {from:(read.ai) from:(read-ai)}',
+    'newer_than:2y {subject:("Read AI") subject:("meeting report") subject:("reunion report")}',
+  ]
+  const messageRefs = new Map()
+  for (const search of queries) {
+    const queryRefs = new Map()
+    let pageToken = ''
+    do {
+      const page = await googleJson(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(search)}&maxResults=100${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`,
+        token,
+      )
+      for (const reference of page.messages || []) queryRefs.set(reference.id, reference)
+      pageToken = page.nextPageToken || ''
+    } while (pageToken && queryRefs.size < 250)
+    for (const reference of [...queryRefs.values()].slice(0, 250)) messageRefs.set(reference.id, reference)
+  }
 
-  const settled = await Promise.allSettled(messageRefs.slice(0, 100).map(({ id }) =>
-    googleJson(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, token),
-  ))
-  return settled.flatMap((result) => {
-    if (result.status !== 'fulfilled') return []
-    const message = result.value
+  const settled = await Promise.allSettled([...messageRefs.values()].map(async ({ id }) => {
+    const message = await googleJson(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full`, token)
     const entries = message.payload?.headers || []
     const header = (name) => entries.find((item) => item.name?.toLowerCase() === name)?.value || ''
-    const sender = header('from')
-    if (!readAiSender(sender)) return []
-    const content = messageText(message.payload).slice(0, 30000)
-    const date = message.internalDate ? new Date(Number(message.internalDate)).toISOString() : new Date(header('date')).toISOString()
+    if (!authenticatedReadAiSender(entries)) return { trusted: false, source: null, emptyBody: false, failedParts: 0 }
+    const extracted = await messageText(message, token)
+    if (extracted.failedParts) return { trusted: true, source: null, emptyBody: false, failedParts: extracted.failedParts }
+    const content = extracted.content.slice(0, 50000)
+    if (!content) return { trusted: true, source: null, emptyBody: true, failedParts: 0 }
+    const parsedDate = message.internalDate ? new Date(Number(message.internalDate)) : new Date(header('date'))
+    const date = Number.isNaN(parsedDate.getTime()) ? new Date().toISOString() : parsedDate.toISOString()
     const title = header('subject') || 'Reporte de reunion de Read AI'
-    return [{
-      owner_email: ownerEmail,
-      source_type: 'read_ai',
-      source_id: message.id,
-      title,
-      content,
-      source_date: date,
-      source_url: readAiUrl(content) || null,
-      metadata: { sender, threadId: message.threadId || null },
-      content_hash: hash(`${title}\n${content}`),
-      sync_token: syncToken,
-      updated_at: new Date().toISOString(),
-    }]
-  })
+    return {
+      trusted: true,
+      emptyBody: false,
+      failedParts: extracted.failedParts,
+      source: {
+        owner_email: ownerEmail,
+        source_type: 'read_ai',
+        source_id: message.id,
+        title,
+        content,
+        source_date: date,
+        source_url: readAiUrl(content) || null,
+        metadata: { sender: header('from'), threadId: message.threadId || null, authenticatedSender: true },
+        content_hash: hash(`${title}\n${content}`),
+        sync_token: syncToken,
+        updated_at: new Date().toISOString(),
+      },
+    }
+  }))
+
+  const fulfilled = settled.filter((result) => result.status === 'fulfilled').map((result) => result.value)
+  const sources = fulfilled.flatMap((result) => result.source ? [result.source] : [])
+  return {
+    sources,
+    diagnostics: {
+      matchedEmails: messageRefs.size,
+      trustedEmails: fulfilled.filter((result) => result.trusted).length,
+      importedReports: sources.length,
+      emptyBodies: fulfilled.filter((result) => result.emptyBody).length,
+      failedMessages: settled.filter((result) => result.status === 'rejected').length,
+      attachmentFailures: fulfilled.reduce((total, result) => total + result.failedParts, 0),
+    },
+  }
+}
+
+function readAiValueText(value) {
+  if (value == null) return ''
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return String(value)
+  if (Array.isArray(value)) return value.map(readAiValueText).filter(Boolean).join('\n• ')
+  if (typeof value === 'object') {
+    if (typeof value.text === 'string') {
+      const speaker = value.speaker?.name || value.speaker_name || value.assignee?.name || value.owner?.name || ''
+      return speaker ? `${speaker}: ${value.text}` : value.text
+    }
+    const primary = value.summary || value.title || value.description || value.question || value.topic || value.task || value.action_item
+    const owner = value.assignee?.name || value.owner?.name || value.responsible?.name || ''
+    if (primary) return owner ? `${readAiValueText(primary)} — ${owner}` : readAiValueText(primary)
+    return Object.entries(value)
+      .filter(([key, item]) => !/(?:^id$|email|url|token|platform_id|time_ms)/i.test(key) && (typeof item === 'string' || typeof item === 'number'))
+      .map(([key, item]) => `${key}: ${item}`)
+      .join(' · ')
+  }
+  return ''
+}
+
+function readAiMeetingSource(meeting, ownerEmail, syncToken) {
+  const transcript = meeting.transcript?.text || readAiValueText(meeting.transcript?.turns || meeting.transcript)
+  const sections = [
+    ['Resumen confirmado', meeting.summary],
+    ['Capitulos', meeting.chapter_summaries],
+    ['Temas', meeting.topics],
+    ['Decisiones, tareas y responsables', meeting.action_items],
+    ['Preguntas clave', meeting.key_questions],
+    ['Transcripcion', transcript],
+  ]
+  const content = sections
+    .map(([label, value]) => {
+      const text = sanitizeAgentText(readAiValueText(value), true)
+      return text ? `${label}:\n• ${text}` : ''
+    })
+    .filter(Boolean)
+    .join('\n\n')
+    .slice(0, 60000)
+  const participantNames = (meeting.participants || []).map((participant) => participant?.name).filter(Boolean).slice(0, 50)
+  const startTime = Number(meeting.start_time_ms)
+  return {
+    owner_email: ownerEmail,
+    source_type: 'read_ai',
+    source_id: `api:${meeting.id}`,
+    title: sanitizeAgentText(meeting.title || 'Reunion de Read AI', true).slice(0, 300),
+    content: content || 'Read AI todavia no genero contenido expandido para esta reunion.',
+    source_date: Number.isFinite(startTime) ? new Date(startTime).toISOString() : null,
+    source_url: null,
+    metadata: {
+      origin: 'read_ai_api',
+      readAiMeetingId: meeting.id,
+      attendees: participantNames,
+      platform: meeting.platform || null,
+      folders: Array.isArray(meeting.folders) ? meeting.folders.slice(0, 20) : [],
+      hasSummary: Boolean(meeting.summary),
+      hasTranscript: Boolean(transcript),
+      hasActionItems: Boolean(meeting.action_items?.length),
+    },
+    content_hash: hash(`${meeting.title || ''}\n${content}`),
+    sync_token: syncToken,
+    updated_at: new Date().toISOString(),
+  }
+}
+
+async function readAiApiSources(ownerEmail, syncToken) {
+  const token = await readAiAccessToken(ownerEmail)
+  if (!token) return { connected: false, sources: [], pages: 0, hasMore: false, historyComplete: false }
+  const connection = await readAiConnection(ownerEmail)
+  const wasComplete = connection?.history_complete === true
+  let cursor = wasComplete ? '' : (connection?.sync_cursor || '')
+  const meetings = []
+  let pages = 0
+  let hasMore = false
+
+  do {
+    const params = new URLSearchParams({ limit: '10' })
+    for (const field of ['summary', 'chapter_summaries', 'action_items', 'key_questions', 'topics', 'transcript']) params.append('expand[]', field)
+    if (cursor) params.set('cursor', cursor)
+    const page = await readAiFetchJson(`${READ_AI_API_BASE}/v1/meetings?${params}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    })
+    const pageMeetings = Array.isArray(page?.data) ? page.data : []
+    meetings.push(...pageMeetings.filter((meeting) => meeting?.id && meeting?.end_time_ms))
+    pages += 1
+    hasMore = page?.has_more === true && pageMeetings.length > 0
+    cursor = hasMore ? String(pageMeetings.at(-1)?.id || '') : ''
+  } while (hasMore && cursor && pages < 5)
+
+  return {
+    connected: true,
+    sources: meetings.map((meeting) => readAiMeetingSource(meeting, ownerEmail, syncToken)),
+    pages,
+    hasMore,
+    historyComplete: wasComplete || !hasMore,
+    checkpoint: wasComplete ? null : { syncCursor: hasMore ? cursor : null, historyComplete: !hasMore },
+  }
 }
 
 async function calendarSources(token, ownerEmail, syncToken) {
@@ -463,19 +862,36 @@ async function removeStaleSources(ownerEmail, sourceType, syncToken) {
 
 async function syncContext(auth) {
   const syncToken = randomUUID()
-  const [reportsResult, meetingsResult] = await Promise.allSettled([
+  const [directResult, reportsResult, meetingsResult] = await Promise.allSettled([
+    readAiApiSources(auth.email, syncToken),
     gmailSources(auth.token, auth.email, syncToken),
     calendarSources(auth.token, auth.email, syncToken),
   ])
-  if (reportsResult.status === 'rejected' && meetingsResult.status === 'rejected') {
-    throw new Error('No se pudo sincronizar Gmail ni Calendar.')
+  if (directResult.status === 'rejected' && reportsResult.status === 'rejected' && meetingsResult.status === 'rejected') {
+    throw new Error('No se pudo sincronizar Read AI, Gmail ni Calendar.')
   }
-  const reports = reportsResult.status === 'fulfilled' ? reportsResult.value : []
+  const directSync = directResult.status === 'fulfilled'
+    ? directResult.value
+    : { connected: false, sources: [], pages: 0, hasMore: false, historyComplete: false }
+  const reportSync = reportsResult.status === 'fulfilled'
+    ? reportsResult.value
+    : { sources: [], diagnostics: { matchedEmails: 0, trustedEmails: 0, importedReports: 0, emptyBodies: 0, failedMessages: 0, attachmentFailures: 0 } }
+  const directReports = directSync.sources
+  const emailReports = reportSync.sources
   const meetings = meetingsResult.status === 'fulfilled' ? meetingsResult.value : []
   const warnings = []
+  if (directResult.status === 'rejected') warnings.push(`Read AI directo: ${directResult.reason instanceof Error ? directResult.reason.message : 'no disponible'}`)
   if (reportsResult.status === 'rejected') warnings.push(`Gmail: ${reportsResult.reason instanceof Error ? reportsResult.reason.message : 'no disponible'}`)
   if (meetingsResult.status === 'rejected') warnings.push(`Calendar: ${meetingsResult.reason instanceof Error ? meetingsResult.reason.message : 'no disponible'}`)
-  const sources = [...reports, ...meetings]
+  if (reportsResult.status === 'fulfilled' && !reportSync.diagnostics.matchedEmails && !directSync.connected) {
+    warnings.push('Gmail no encontro correos de Read AI en los ultimos 2 anos; la memoria existente no fue eliminada.')
+  } else if (reportsResult.status === 'fulfilled' && !reportSync.diagnostics.trustedEmails && !directSync.connected) {
+    warnings.push('Gmail encontro candidatos, pero ninguno provenia de un remitente autenticado de read.ai; la memoria existente no fue eliminada.')
+  }
+  if (reportSync.diagnostics.emptyBodies) warnings.push(`${reportSync.diagnostics.emptyBodies} correo(s) de Read AI no incluyeron un resumen legible y no reemplazaron la memoria existente.`)
+  if (reportSync.diagnostics.attachmentFailures) warnings.push(`${reportSync.diagnostics.attachmentFailures} parte(s) adjunta(s) de Read AI no pudieron descargarse.`)
+  if (reportSync.diagnostics.failedMessages) warnings.push(`${reportSync.diagnostics.failedMessages} correo(s) de Read AI no pudieron descargarse.`)
+  const sources = [...directReports, ...emailReports, ...meetings]
   if (sources.length) {
     await supabase('lumina_sources?on_conflict=owner_email,source_type,source_id', {
       method: 'POST',
@@ -483,9 +899,44 @@ async function syncContext(auth) {
       body: JSON.stringify(sources),
     })
   }
-  if (reportsResult.status === 'fulfilled') await removeStaleSources(auth.email, 'read_ai', syncToken)
+  // El cursor del backfill solo avanza despues de persistir el lote, para no saltar reuniones si el upsert falla.
+  if (directSync.checkpoint) {
+    const cursorParams = new URLSearchParams({ owner_email: `eq.${auth.email}` })
+    await supabase(`lumina_read_ai_connections?${cursorParams}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        sync_cursor: directSync.checkpoint.syncCursor,
+        history_complete: directSync.checkpoint.historyComplete,
+        updated_at: new Date().toISOString(),
+      }),
+    })
+  }
+  // Read AI funciona como memoria historica: una sincronizacion parcial nunca borra reportes previos.
   if (meetingsResult.status === 'fulfilled') await removeStaleSources(auth.email, 'calendar', syncToken)
-  return { reports: reports.length, meetings: meetings.length, total: sources.length, warnings, syncedAt: new Date().toISOString() }
+  const storedReportParams = new URLSearchParams({
+    owner_email: `eq.${auth.email}`,
+    source_type: 'eq.read_ai',
+    select: 'id',
+    limit: '1000',
+  })
+  const storedReports = (await supabase(`lumina_sources?${storedReportParams}`)).length
+  return {
+    reports: directReports.length + emailReports.length,
+    storedReports,
+    meetings: meetings.length,
+    total: sources.length,
+    readAi: reportSync.diagnostics,
+    readAiDirect: {
+      connected: directSync.connected,
+      processedMeetings: directReports.length,
+      pages: directSync.pages,
+      hasMore: directSync.hasMore,
+      historyComplete: directSync.historyComplete,
+    },
+    warnings,
+    syncedAt: new Date().toISOString(),
+  }
 }
 
 const SOURCE_SELECT = 'id,source_type,source_id,title,content,source_date,source_url,metadata'
@@ -495,7 +946,11 @@ function sourceHaystack(source) {
 }
 
 function uniqueSources(sources) {
-  return [...new Map(sources.filter(Boolean).map((source) => [source.id, source])).values()]
+  const unique = new Map()
+  for (const source of sources.filter(Boolean)) {
+    if (!unique.has(source.id)) unique.set(source.id, source)
+  }
+  return [...unique.values()]
 }
 
 async function searchSources(ownerEmail, query, limit = 15) {
@@ -535,6 +990,18 @@ function isEligibleMeeting(source) {
   return true
 }
 
+async function storedDirectReadAiSources(ownerEmail, limit = 8) {
+  const params = new URLSearchParams({
+    owner_email: `eq.${ownerEmail}`,
+    source_type: 'eq.read_ai',
+    'metadata->>origin': 'eq.read_ai_api',
+    select: SOURCE_SELECT,
+    order: 'source_date.desc.nullslast',
+    limit: String(limit),
+  })
+  return supabase(`lumina_sources?${params}`)
+}
+
 async function storedSourcesByType(ownerEmail, sourceType, beforeDate, limit = 100) {
   const params = new URLSearchParams({
     owner_email: `eq.${ownerEmail}`,
@@ -547,11 +1014,15 @@ async function storedSourcesByType(ownerEmail, sourceType, beforeDate, limit = 1
   return supabase(`lumina_sources?${params}`)
 }
 
+function isDirectReadAiSource(source) {
+  return source?.source_type === 'read_ai' && source?.metadata?.origin === 'read_ai_api'
+}
+
 function meetingSourceScore(source, target, meetingTitle) {
   const haystackTokens = new Set(meaningfulTokens(sourceHaystack(source)))
   const targetTokens = meaningfulTokens(target)
   const topicTokens = meaningfulTokens(meetingTitle)
-  let score = 0
+  let score = isDirectReadAiSource(source) ? 20 : 0
   if (targetTokens.length && targetTokens.every((token) => haystackTokens.has(token))) score += 40
   score += topicTokens.filter((token) => haystackTokens.has(token)).length * 8
   if (source.source_type === 'calendar' && attendeeMatchesTarget(source, target)) score += 60
@@ -599,14 +1070,27 @@ async function meetingPreparationSources(ownerEmail, query) {
 async function relevantSources(ownerEmail, query) {
   if (isMeetingPreparationRequest(query)) return meetingPreparationSources(ownerEmail, query)
 
-  const matches = await searchSources(ownerEmail, query, 10)
-  const recentParams = new URLSearchParams({
-    owner_email: `eq.${ownerEmail}`,
-    select: SOURCE_SELECT,
-    order: 'source_date.desc.nullslast', limit: '3',
-  })
-  const recent = await supabase(`lumina_sources?${recentParams}`)
-  return uniqueSources([...matches, ...recent]).slice(0, 10)
+  const [matches, recentDirectReports, recentReports, recentCalendar] = await Promise.all([
+    searchSources(ownerEmail, query, 15),
+    storedDirectReadAiSources(ownerEmail, 8),
+    storedSourcesByType(ownerEmail, 'read_ai', null, 8),
+    storedSourcesByType(ownerEmail, 'calendar', null, 4),
+  ])
+  const matchingReports = matches.filter((source) => source.source_type === 'read_ai')
+  const matchingCalendar = matches.filter((source) => source.source_type === 'calendar')
+  const directMatchingReports = matchingReports.filter(isDirectReadAiSource)
+  const emailMatchingReports = matchingReports.filter((source) => !isDirectReadAiSource(source))
+  const directRecentReports = uniqueSources(recentDirectReports).filter(isDirectReadAiSource)
+  const emailRecentReports = recentReports.filter((source) => !isDirectReadAiSource(source))
+  // Read AI directo es la memoria principal; Gmail queda como respaldo y Calendar solo prueba que la cita existio.
+  return uniqueSources([
+    ...directMatchingReports.map((source) => ({ ...source, contextRole: 'coincidencia_read_ai_directa' })),
+    ...emailMatchingReports.map((source) => ({ ...source, contextRole: 'coincidencia_read_ai_email' })),
+    ...directRecentReports.map((source) => ({ ...source, contextRole: 'reporte_read_ai_directo_reciente' })),
+    ...emailRecentReports.map((source) => ({ ...source, contextRole: 'reporte_read_ai_email_reciente' })),
+    ...matchingCalendar.map((source) => ({ ...source, contextRole: 'coincidencia_calendar' })),
+    ...recentCalendar.map((source) => ({ ...source, contextRole: 'calendar_reciente' })),
+  ]).slice(0, 12)
 }
 
 async function conversation(ownerEmail, requestedId) {
@@ -659,7 +1143,12 @@ async function askGemini(message, history, sources) {
     .filter((item) => item.parts[0].text)
   const taskInstructions = preparingMeeting
     ? `MODO PREPARACION DE REUNION${target ? ` con ${target}` : ''}:\n- Identifica primero la fuente marcada como proxima_reunion. Si no existe, indica claramente que no encontraste una proxima reunion coincidente.\n- No copies la invitacion. Resume solo fecha/hora, titulo y participantes por nombre; no muestres correos ni telefonos.\n- Usa antecedentes de Read AI y reuniones anteriores para separar hechos confirmados de recomendaciones. Si no hay antecedentes pertinentes, dilo.\n- Entrega un briefing con estas secciones: Proxima reunion, Contexto confirmado, Pendientes o decisiones previas, Agenda sugerida, Preguntas clave y Preparacion antes de entrar.\n- La agenda y las preguntas son sugerencias; no las presentes como acuerdos ya tomados.\n- Usa encabezados simples terminados en dos puntos y listas con viñetas; no uses tablas.`
-    : 'Responde directamente la pregunta, priorizando acuerdos, decisiones y pendientes respaldados por las fuentes.'
+    : `MODO MEMORIA DE REUNIONES:
+- Para preguntas sobre lo hablado, acordado, decidido o pendiente, usa primero fuentes read_ai y sintetiza sus resumenes.
+- Las fuentes con rol coincidencia_read_ai_directa son la evidencia principal. Las de Read AI por email son respaldo. Las de rol reporte_read_ai_directo_reciente se usan para una sintesis reciente solo si no hay coincidencias y debes aclarar ese alcance.
+- Calendar solo confirma que una reunion estaba programada, su fecha y participantes; nunca lo uses como prueba de lo que se discutio.
+- Si hay fuentes read_ai, no digas que solo tienes invitaciones de Calendar.
+- Organiza la respuesta por temas, decisiones, pendientes y responsables cuando esos datos existan.`
   const systemInstruction = [
     'Eres el Agente Lumina, asistente ejecutivo privado de Santiago Tavera para Lumina PR.',
     'Responde en espanol claro, conciso y accionable. Usa solo las fuentes proporcionadas para afirmar hechos sobre reuniones, acuerdos o personas.',
@@ -750,13 +1239,16 @@ export default async (req) => {
   if (!['GET', 'POST'].includes(req.method)) return json(req, { error: 'Metodo no permitido.' }, 405)
 
   const requestUrl = new URL(req.url)
+  if (req.method === 'GET' && requestUrl.searchParams.get('read_ai') === 'callback') {
+    return completeReadAiOAuth(req)
+  }
   if (req.method === 'GET' && requestUrl.searchParams.get('health') === 'configuration') {
     return json(req, await configurationHealth())
   }
 
   const auth = await authorize(req)
   if (auth.error) return json(req, { error: auth.error }, auth.status)
-  if (req.method === 'GET') return json(req, { account: auth.email, services: await serviceStatus() })
+  if (req.method === 'GET') return json(req, { account: auth.email, services: await serviceStatus(auth.email) })
 
   let payload
   try { payload = await req.json() } catch { return json(req, { error: 'El cuerpo JSON no es valido.' }, 400) }
@@ -764,6 +1256,8 @@ export default async (req) => {
 
   try {
     if (payload.action === 'sync') return json(req, await syncContext(auth))
+    if (payload.action === 'read-ai-connect') return json(req, await startReadAiOAuth(req, auth.email))
+    if (payload.action === 'read-ai-disconnect') return json(req, await disconnectReadAi(auth.email, { purgeMemory: payload.purgeMemory === true }))
     if (payload.action === 'chat') return json(req, await chat(auth, payload))
     if (payload.action === 'hubspot-search') return json(req, await searchHubSpot(payload.query))
     return json(req, { error: 'Accion no reconocida.' }, 400)
