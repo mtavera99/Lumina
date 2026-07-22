@@ -514,6 +514,11 @@ function formatSourceDate(value) {
   return Number.isNaN(date.getTime()) ? String(value) : PUERTO_RICO_DATE.format(date)
 }
 
+function needsMeetingMemory(query = '') {
+  const normalized = normalizedText(query)
+  return /\b(?:acordamos|acordado|acuerdo|hablamos|hablado|discutimos|dijimos|decidimos|decision|decisiones|pendiente|pendientes|tarea|tareas|accion|acciones|compromiso|compromisos|minuta|minutas|resumen|resumenes|siguientes\s+pasos|proximos\s+pasos|se\s+dijo|quedamos|quedo\s+pendiente)\b/.test(normalized)
+}
+
 function isMeetingPreparationRequest(query = '') {
   const normalized = normalizedText(query)
   return /\b(?:prepara(?:r|me)?|preparacion|briefing)\b/.test(normalized)
@@ -1216,11 +1221,13 @@ async function chat(auth, payload) {
   const conversationId = await conversation(auth.email, typeof payload.conversationId === 'string' ? payload.conversationId : undefined)
   const history = payload.conversationId ? await recentMessages(auth.email, conversationId) : []
   const sources = await relevantSources(auth.email, message)
-  if (!sources.length) {
+  const hasMeetingMemory = sources.some((source) => source.source_type === 'read_ai')
+  const needsMemory = needsMeetingMemory(message)
+  if (!sources.length || (needsMemory && !hasMeetingMemory && !isMeetingPreparationRequest(message))) {
     const readAiConnected = await readAiDirectStatus(auth.email)
     const answer = readAiConnected
       ? 'Read AI ya esta conectado, pero todavia no hay reuniones con contenido en tu memoria privada. Pulsa "Sincronizar" y vuelve a preguntar; si acabas de conectar, la primera sincronizacion puede tardar unos segundos.'
-      : 'Todavia no tengo tus reuniones en la memoria privada, por eso no puedo responder con datos reales. Pulsa "Conectar Read AI", autoriza el acceso de solo lectura y luego "Sincronizar". Despues podre responder sobre acuerdos, decisiones y pendientes concretos.'
+      : 'Todavia no tengo minutas ni resumenes de tus reuniones, solo veo invitaciones de calendario, y eso no me dice que se hablo, acordo o quedo pendiente. Pulsa "Conectar Read AI", autoriza el acceso de solo lectura y luego "Sincronizar". Despues podre responder sobre acuerdos, decisiones y pendientes concretos.'
     await saveTurn(auth.email, conversationId, message.slice(0, 90), message, answer, [])
     return { conversationId, answer, citations: [] }
   }
