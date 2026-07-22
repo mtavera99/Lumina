@@ -116,6 +116,21 @@ export interface AgentCitation {
   url: string | null
 }
 
+export interface CampaignSnapshot {
+  source: 'demo' | 'proxy' | 'meta'
+  datePreset: string
+  spend: number
+  impressions: number
+  reach: number
+  frequency: number
+  clicks: number
+  ctr: number
+  cpc: number
+  cpm: number
+  leads: number
+  cpl: number
+}
+
 export interface AgentAnswer {
   conversationId: string
   answer: string
@@ -486,6 +501,7 @@ export function askLuminaAgent(
   session: GoogleSession,
   message: string,
   conversationId?: string,
+  campaign?: CampaignSnapshot | null,
 ): Promise<AgentAnswer> {
-  return intelligenceRequest<AgentAnswer>(session, 'POST', { action: 'chat', message, conversationId })
+  return intelligenceRequest<AgentAnswer>(session, 'POST', { action: 'chat', message, conversationId, ...(campaign ? { campaign } : {}) })
 }

@@ -11,11 +11,13 @@ import {
   startReadAiConnection,
   disconnectReadAiConnection,
   type AgentCitation,
+  type CampaignSnapshot,
   type ContextSyncResult,
   type GoogleSession,
   type IntelligenceServiceStatus,
   type WorkspaceSync,
 } from '../services/googleWorkspace'
+import { fetchInsights, loadConfig as loadMetaConfig } from '../services/meta'
 
 type View = 'resumenes' | 'calendario' | 'agente'
 type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string; citations?: AgentCitation[] }
@@ -177,8 +179,18 @@ export function Intelligence() {
     if (!question) return
     setAgentInput(''); setAgentLoading(true); setError(null)
     setMessages((current) => [...current, { id: crypto.randomUUID(), role: 'user', content: question }])
+    let campaign: CampaignSnapshot | null = null
     try {
-      const result = await askLuminaAgent(session, question, conversationId)
+      const cfg = loadMetaConfig()
+      const { data, source } = await fetchInsights(cfg)
+      campaign = {
+        source, datePreset: cfg.datePreset,
+        spend: data.spend, impressions: data.impressions, reach: data.reach, frequency: data.frequency,
+        clicks: data.clicks, ctr: data.ctr, cpc: data.cpc, cpm: data.cpm, leads: data.leads, cpl: data.cpl,
+      }
+    } catch { /* Meta no disponible: el agente responde solo con reuniones */ }
+    try {
+      const result = await askLuminaAgent(session, question, conversationId, campaign)
       setConversationId(result.conversationId)
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: 'assistant', content: result.answer, citations: result.citations }])
     } catch (caught) {
