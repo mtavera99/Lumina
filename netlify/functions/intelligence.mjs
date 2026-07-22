@@ -1274,6 +1274,25 @@ async function askGemini(message, history, sources, campaign = null) {
   }
 }
 
+async function listMeetingReports(ownerEmail) {
+  const stored = await storedSourcesByType(ownerEmail, 'read_ai', null, 40)
+  const reports = stored.map((source) => {
+    const isDirect = source?.metadata?.origin === 'read_ai_api'
+    return {
+      id: source.id,
+      title: safeSourceTitle(source, true),
+      date: source.source_date,
+      content: sanitizeAgentText(source.content || '', true),
+      source: isDirect ? 'read_ai_api' : 'gmail',
+      attendees: (source?.metadata?.attendees || [])
+        .map((attendee) => String(attendee).trim())
+        .filter((attendee) => attendee && !attendee.includes('@'))
+        .slice(0, 12),
+    }
+  }).filter((report) => report.content)
+  return { reports }
+}
+
 async function chat(auth, payload) {
   const message = typeof payload.message === 'string' ? payload.message.trim() : ''
   if (!message || message.length > 2000) throw new Error('Escribe una pregunta de hasta 2,000 caracteres.')
@@ -1336,6 +1355,7 @@ export default async (req) => {
     if (payload.action === 'sync') return json(req, await syncContext(auth))
     if (payload.action === 'read-ai-connect') return json(req, await startReadAiOAuth(req, auth.email))
     if (payload.action === 'read-ai-disconnect') return json(req, await disconnectReadAi(auth.email, { purgeMemory: payload.purgeMemory === true }))
+    if (payload.action === 'reports') return json(req, await listMeetingReports(auth.email))
     if (payload.action === 'chat') return json(req, await chat(auth, payload))
     if (payload.action === 'hubspot-search') return json(req, await searchHubSpot(payload.query))
     return json(req, { error: 'Accion no reconocida.' }, 400)

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   askLuminaAgent,
   connectGoogleWorkspace,
@@ -10,8 +10,10 @@ import {
   syncIntelligenceContext,
   startReadAiConnection,
   disconnectReadAiConnection,
+  fetchMeetingReports,
   type AgentCitation,
   type CampaignSnapshot,
+  type MeetingReport,
   type ContextSyncResult,
   type GoogleSession,
   type IntelligenceServiceStatus,
@@ -50,6 +52,8 @@ export function Intelligence() {
   const [workspace, setWorkspace] = useState<WorkspaceSync | null>(cached.workspace)
   const [serviceStatus, setServiceStatus] = useState<IntelligenceServiceStatus | null>(null)
   const [privateSync, setPrivateSync] = useState<ContextSyncResult | null>(null)
+  const [meetingReports, setMeetingReports] = useState<MeetingReport[]>([])
+  const [expandedReport, setExpandedReport] = useState<string | null>(null)
   const [view, setView] = useState<View>('resumenes')
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
@@ -66,6 +70,11 @@ export function Intelligence() {
     if (!normalized) return workspace?.reports ?? []
     return (workspace?.reports ?? []).filter((report) => `${report.subject} ${report.sender} ${report.preview}`.toLowerCase().includes(normalized))
   }, [query, workspace])
+  const filteredMeetingReports = useMemo(() => {
+    const normalized = query.trim().toLowerCase()
+    if (!normalized) return meetingReports
+    return meetingReports.filter((report) => `${report.title} ${report.content} ${report.attendees.join(' ')}`.toLowerCase().includes(normalized))
+  }, [query, meetingReports])
   const upcoming = useMemo(() => (workspace?.calendar ?? [])
     .filter((meeting) => isListableMeeting(meeting) && isUpcoming(meeting.startsAt))
     .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt)), [workspace])
@@ -84,12 +93,26 @@ export function Intelligence() {
     return () => { active = false }
   }, [session, serviceStatus])
 
+  const loadMeetingReports = useCallback(async (activeSession: GoogleSession) => {
+    if (!googleWorkspaceConfig.apiConfigured) return
+    try {
+      const { reports } = await fetchMeetingReports(activeSession)
+      setMeetingReports(reports)
+    } catch { /* si falla, la pestana usa el respaldo de Gmail */ }
+  }, [])
+
+  useEffect(() => {
+    if (!session || !serviceStatus?.persistentStorage) return
+    void loadMeetingReports(session)
+  }, [session, serviceStatus?.persistentStorage, loadMeetingReports])
+
   const refreshPrivateContext = async (nextSession: GoogleSession) => {
     if (!googleWorkspaceConfig.apiConfigured) return
     setSyncingContext(true)
     try {
       const result = await syncIntelligenceContext(nextSession)
       setPrivateSync(result)
+      await loadMeetingReports(nextSession)
       if (result.warnings.length) setError(`Sincronizacion parcial: ${result.warnings.join(' · ')}`)
     } finally { setSyncingContext(false) }
   }
@@ -169,7 +192,7 @@ export function Intelligence() {
   const disconnect = () => {
     if (session && serviceStatus?.readAiDirect) disconnectReadAiConnection(session).catch(() => {})
     disconnectGoogleWorkspace(session)
-    setSession(null); setWorkspace(null); setServiceStatus(null); setPrivateSync(null); setQuery(''); setConversationId(undefined)
+    setSession(null); setWorkspace(null); setServiceStatus(null); setPrivateSync(null); setMeetingReports([]); setExpandedReport(null); setQuery(''); setConversationId(undefined)
     setAgentInput(''); setAgentLoading(false); setMessages(welcomeMessages())
   }
 
@@ -236,7 +259,38 @@ export function Intelligence() {
           <button className={view === 'agente' ? 'active' : ''} onClick={() => setView('agente')}>Agente Lumina</button>
         </div>
 
-        {view === 'resumenes' && <section><div className="intelligence-toolbar"><div><h3>Reportes disponibles</h3><p>Read AI directo alimenta al agente; Gmail se muestra como respaldo.</p></div><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar tema, persona o decision…" /></div><div className="intelligence-list">{filteredReports.map((report) => <article className="card report-card" key={report.id}><div className="report-head"><div><h3>{report.subject}</h3><span>{formatDate(report.receivedAt)} · {report.sender}</span></div>{report.reportUrl && <a className="btn btn-ghost btn-sm" href={report.reportUrl} target="_blank" rel="noreferrer">Abrir en Read AI ↗</a>}</div><p>{report.preview}</p></article>)}{!filteredReports.length && <EmptyState icon="📭" text={query ? 'No encontramos reportes con esa busqueda.' : 'No encontramos correos verificados de Read AI.'} />}</div></section>}
+        {view === 'resumenes' && <section>
+          <div className="intelligence-toolbar"><div><h3>Resumenes de reuniones</h3><p>Resumen, temas, decisiones y pendientes de tus ultimas reuniones. Toca una tarjeta para ver el detalle.</p></div><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar tema, persona o decision…" /></div>
+          {meetingReports.length > 0 ? (
+            <div className="intelligence-list">
+              {filteredMeetingReports.map((report) => {
+                const open = expandedReport === report.id
+                const preview = report.content.length > 240 ? `${report.content.slice(0, 240).trim()}…` : report.content
+                return (
+                  <article className={`card summary-card ${open ? 'open' : ''}`} key={report.id}>
+                    <button className="summary-head" onClick={() => setExpandedReport(open ? null : report.id)} aria-expanded={open}>
+                      <div>
+                        <h3>{report.title}</h3>
+                        <span>{formatDate(report.date)}{report.attendees.length ? ` · ${report.attendees.slice(0, 3).join(', ')}${report.attendees.length > 3 ? '…' : ''}` : ''}</span>
+                      </div>
+                      <div className="summary-head-right">
+                        <span className={`summary-src ${report.source === 'read_ai_api' ? 'live' : ''}`}>{report.source === 'read_ai_api' ? 'Read AI' : 'Gmail'}</span>
+                        <span className="summary-chevron">{open ? '▲' : '▼'}</span>
+                      </div>
+                    </button>
+                    <div className="summary-body">{open ? report.content : preview}</div>
+                  </article>
+                )
+              })}
+              {!filteredMeetingReports.length && <EmptyState icon="🔎" text="No encontramos resumenes con esa busqueda." />}
+            </div>
+          ) : (
+            <div className="intelligence-list">
+              {filteredReports.map((report) => <article className="card report-card" key={report.id}><div className="report-head"><div><h3>{report.subject}</h3><span>{formatDate(report.receivedAt)} · {report.sender}</span></div>{report.reportUrl && <a className="btn btn-ghost btn-sm" href={report.reportUrl} target="_blank" rel="noreferrer">Abrir en Read AI ↗</a>}</div><p>{report.preview}</p></article>)}
+              {!filteredReports.length && <EmptyState icon="📭" text={query ? 'No encontramos reportes con esa busqueda.' : 'Conecta Read AI y pulsa Sincronizar para ver aqui los resumenes de tus reuniones.'} />}
+            </div>
+          )}
+        </section>}
 
         {view === 'calendario' && <section><div className="intelligence-toolbar"><div><h3>Agenda conectada</h3><p>Tus proximas reuniones, ordenadas de la mas cercana a la mas lejana.</p></div></div>
           <h4 className="agenda-heading">Proximas reuniones ({upcoming.length})</h4>
