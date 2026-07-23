@@ -12,6 +12,9 @@ import { evaluateAll, STATUS_LABEL, type KpiResult, type KpiStatus } from '../da
 
 const REFRESH_MS = 60_000
 const BUSINESS_KEY = 'lumina_business_v1'
+// Proxy seguro de metricas (funcion serverless en Netlify). El token vive
+// en las variables de entorno de Netlify, nunca en el navegador.
+const LUMINA_PROXY_URL = 'https://luminapr-solar.netlify.app/.netlify/functions/meta-insights'
 
 type Business = Pick<Insights, 'qualifiedRate' | 'appointmentRate' | 'closeRate' | 'cpa' | 'avgResponseMin'>
 
@@ -214,9 +217,21 @@ export function Metrics() {
             <label>URL del proxy (recomendado)</label>
             <input
               value={config.proxyUrl}
-              placeholder="https://tu-proyecto.vercel.app/api/meta-insights"
+              placeholder="https://luminapr-solar.netlify.app/.netlify/functions/meta-insights"
               onChange={(e) => applyConfig({ proxyUrl: e.target.value })}
             />
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => applyConfig({ proxyUrl: LUMINA_PROXY_URL })}
+              >
+                Usar proxy de Lumina
+              </button>
+              <span style={{ fontSize: 12, color: '#8a97ac' }}>
+                Recomendado. El token se guarda en Netlify (META_ACCESS_TOKEN), no en el navegador.
+              </span>
+            </div>
           </div>
 
           <div className="form-row">
