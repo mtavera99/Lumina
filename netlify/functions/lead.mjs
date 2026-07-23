@@ -1,11 +1,43 @@
 // ============================================================
 //  Función "fan-out" de leads de Lumina
-//  Reparte UN envío a: HubSpot + OpenSolar (si hay token) + respaldo Netlify.
+//  Reparte UN envío a: HubSpot + OpenSolar (si hay token) + respaldo Netlify
+//  y envía el evento "Lead" a la Conversions API de Meta (CAPI) con
+//  deduplicación por event_id (mismo id que dispara el pixel del navegador).
 //  Con ?debug=1 devuelve el estado de cada destino (para diagnóstico).
 // ============================================================
 
+import crypto from 'node:crypto'
+
 const HUBSPOT_PORTAL_ID = '5491692'
 const HUBSPOT_FORM_ID = 'ccfc4878-7dd2-4b34-85f5-ae427106ba13'
+
+// Pixel de LuminaPR (mismo ID que en la landing). Se puede sobreescribir por env.
+const META_PIXEL_ID = process.env.META_PIXEL_ID || '2484699815368533'
+const META_API_VERSION = 'v21.0'
+
+// --- utilidades ---------------------------------------------------------
+
+// SHA-256 en minúsculas/hex, como exige Meta para los datos personales.
+function sha256(value) {
+  if (!value) return undefined
+  return crypto.createHash('sha256').update(String(value).trim().toLowerCase()).digest('hex')
+}
+
+// Teléfono: solo dígitos + código de país (PR/US = 1) para el hash.
+function hashPhone(phone) {
+  if (!phone) return undefined
+  let digits = String(phone).replace(/\D/g, '')
+  if (digits.length === 10) digits = '1' + digits // 787XXXXXXX -> 1787XXXXXXX
+  return digits ? crypto.createHash('sha256').update(digits).digest('hex') : undefined
+}
+
+function clientIp(req) {
+  return (
+    req.headers.get('x-nf-client-connection-ip') ||
+    (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() ||
+    ''
+  )
+}
 
 export default async (req) => {
   if (req.method !== 'POST') {
@@ -29,6 +61,11 @@ export default async (req) => {
     d = {}
   }
 
+  // event_id compartido entre el pixel del navegador y la CAPI (deduplicación).
+  // Si el navegador ya generó uno, lo respetamos; si no, lo creamos aquí.
+  const eventId = d.event_id || crypto.randomUUID()
+  const eventSourceUrl = d.landing_url || `${origin}/`
+
   const results = {}
 
   // -------- 1) HubSpot --------
@@ -45,7 +82,11 @@ export default async (req) => {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields, context: { pageName: 'Landing Lumina' } }),
+        body: JSON.stringify({
+          fields,
+          // pageUri incluye los UTMs: HubSpot los atribuye automáticamente.
+          context: { pageUri: eventSourceUrl, pageName: 'Landing Lumina' },
+        }),
       },
     )
     results.hubspot = { status: r.status, body: (await r.text()).slice(0, 400) }
@@ -88,12 +129,80 @@ export default async (req) => {
     results.respaldo = { error: String(e) }
   }
 
+  // -------- 4) Meta Conversions API (Lead, server-side) --------
+  const CAPI_TOKEN = process.env.META_CAPI_TOKEN
+  if (CAPI_TOKEN) {
+    try {
+      const userData = {
+        em: sha256(d.email) ? [sha256(d.email)] : undefined,
+        ph: hashPhone(d.telefono) ? [hashPhone(d.telefono)] : undefined,
+        fn: sha256(d.nombre) ? [sha256(d.nombre)] : undefined,
+        ct: sha256(d.municipio) ? [sha256(d.municipio)] : undefined,
+        country: [sha256('pr')],
+        client_ip_address: clientIp(req),
+        client_user_agent: req.headers.get('user-agent') || '',
+      }
+      if (d.fbc) userData.fbc = d.fbc
+      if (d.fbp) userData.fbp = d.fbp
+      // Limpiar claves vacías/undefined.
+      Object.keys(userData).forEach((k) => {
+        if (userData[k] === undefined || userData[k] === '') delete userData[k]
+      })
+
+      const payload = {
+        data: [
+          {
+            event_name: 'Lead',
+            event_time: Math.floor(Date.now() / 1000),
+            action_source: 'website',
+            event_source_url: eventSourceUrl,
+            event_id: eventId, // <-- deduplicación con el pixel del navegador
+            user_data: userData,
+            custom_data: {
+              utm_source: d.utm_source || '',
+              utm_medium: d.utm_medium || '',
+              utm_campaign: d.utm_campaign || '',
+              utm_content: d.utm_content || '',
+              utm_term: d.utm_term || '',
+              municipio: d.municipio || '',
+              factura: d.factura || '',
+              vivienda: d.vivienda || '',
+            },
+          },
+        ],
+      }
+      // Código de prueba opcional para "Probar eventos" en el Administrador de eventos.
+      if (process.env.META_TEST_EVENT_CODE) {
+        payload.test_event_code = process.env.META_TEST_EVENT_CODE
+      }
+
+      const r = await fetch(
+        `https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(CAPI_TOKEN)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        },
+      )
+      results.capi = { status: r.status, body: (await r.text()).slice(0, 400) }
+    } catch (e) {
+      results.capi = { error: String(e) }
+    }
+  } else {
+    results.capi = 'skipped (sin META_CAPI_TOKEN)'
+  }
+
   if (debug) {
-    return new Response(JSON.stringify(results, null, 2), {
+    return new Response(JSON.stringify({ eventId, ...results }, null, 2), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
   }
 
-  return new Response(null, { status: 302, headers: { Location: '/gracias.html' } })
+  // Pasamos el event_id a la página de gracias para que el pixel del
+  // navegador dispare "Lead" con el MISMO id y Meta deduplique.
+  return new Response(null, {
+    status: 302,
+    headers: { Location: `/gracias.html?eid=${encodeURIComponent(eventId)}` },
+  })
 }

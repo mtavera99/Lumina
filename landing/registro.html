@@ -69,6 +69,9 @@
     <input name="nombre" /><input name="telefono" /><input name="email" />
     <input name="municipio" /><input name="vivienda" /><input name="propiedad" /><input name="factura" />
     <input name="interes_bateria" /><input name="interes_financiamiento" />
+    <input name="utm_source" /><input name="utm_medium" /><input name="utm_campaign" />
+    <input name="utm_content" /><input name="utm_term" /><input name="fbclid" />
+    <input name="event_id" /><input name="landing_url" /><input name="referrer" />
   </form>
 
   <div class="hero">
@@ -94,7 +97,20 @@
            activar notificación por correo. Al enviar, redirige a
            gracias.html (dispara el evento Lead del pixel de Meta).
            ============================================================ -->
-      <form method="POST" action="/.netlify/functions/lead">
+      <form id="lead-form" method="POST" action="/.netlify/functions/lead">
+
+        <!-- Atribución (se rellenan por JS al cargar). Viajan al servidor para CRM + Conversions API. -->
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_content" />
+        <input type="hidden" name="utm_term" />
+        <input type="hidden" name="fbclid" />
+        <input type="hidden" name="fbc" />
+        <input type="hidden" name="fbp" />
+        <input type="hidden" name="event_id" />
+        <input type="hidden" name="referrer" />
+        <input type="hidden" name="landing_url" />
 
         <label>Nombre completo *</label>
         <input type="text" name="nombre" required placeholder="Tu nombre" />
@@ -151,5 +167,55 @@
       </form>
     </div>
   </div>
+
+  <!-- Atribución: captura UTMs + fbclid/fbc/fbp y event_id (dedup con Conversions API). -->
+  <script>
+    (function () {
+      var STORE_KEY = 'lumina_attrib';
+      var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+      function readCookie(name) {
+        var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return m ? decodeURIComponent(m.pop()) : '';
+      }
+      function uuid() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = (Math.random() * 16) | 0, v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+      var params = new URLSearchParams(window.location.search);
+      var attrib = {};
+      try { attrib = JSON.parse(sessionStorage.getItem(STORE_KEY)) || {}; } catch (e) { attrib = {}; }
+      UTM_KEYS.forEach(function (k) { var v = params.get(k); if (v && !attrib[k]) attrib[k] = v; });
+      var fbclid = params.get('fbclid');
+      if (fbclid && !attrib.fbclid) attrib.fbclid = fbclid;
+      if (!attrib.event_id) attrib.event_id = uuid();
+      if (!attrib.landing_url) attrib.landing_url = window.location.href;
+      if (!attrib.referrer) attrib.referrer = document.referrer || '';
+      try { sessionStorage.setItem(STORE_KEY, JSON.stringify(attrib)); } catch (e) {}
+      var form = document.getElementById('lead-form');
+      function fill() {
+        if (!form) return;
+        var fbp = readCookie('_fbp');
+        var fbc = readCookie('_fbc');
+        if (!fbc && attrib.fbclid) fbc = 'fb.1.' + Date.now() + '.' + attrib.fbclid;
+        var values = {
+          utm_source: attrib.utm_source || '', utm_medium: attrib.utm_medium || '',
+          utm_campaign: attrib.utm_campaign || '', utm_content: attrib.utm_content || '',
+          utm_term: attrib.utm_term || '', fbclid: attrib.fbclid || '',
+          fbc: fbc || '', fbp: fbp || '', event_id: attrib.event_id,
+          referrer: attrib.referrer || '', landing_url: attrib.landing_url || ''
+        };
+        Object.keys(values).forEach(function (name) {
+          var el = form.querySelector('input[name="' + name + '"]');
+          if (el) el.value = values[name];
+        });
+      }
+      fill();
+      if (form) form.addEventListener('submit', fill);
+      window.__luminaAttrib = attrib;
+    })();
+  </script>
 </body>
 </html>

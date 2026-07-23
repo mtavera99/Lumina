@@ -27,7 +27,16 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '2484699815368533');
     fbq('track', 'PageView');
-    fbq('track', 'Lead');   // <-- conversión: lead capturado
+    // Conversión: usamos el MISMO event_id que envió la Conversions API
+    // (llega como ?eid=...) para que Meta deduplique y no cuente doble.
+    (function () {
+      var eid = new URLSearchParams(window.location.search).get('eid');
+      if (eid) {
+        fbq('track', 'Lead', {}, { eventID: eid });
+      } else {
+        fbq('track', 'Lead'); // respaldo si no llegó el id
+      }
+    })();
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
