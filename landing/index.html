@@ -386,8 +386,9 @@
         <div class="form-badges">
           <span>✅ Gratis</span><span>🔒 Tus datos protegidos</span><span>⏱️ Respuesta rápida</span>
         </div>
-        <!-- Formulario fan-out: reparte a HubSpot + respaldo (+ OpenSolar con token) y dispara el evento Lead del pixel -->
-        <form class="lead-form" id="lead-form" method="POST" action="/.netlify/functions/lead">
+        <!-- Formulario 100% estático: envia directo a HubSpot desde el navegador y
+             dispara el evento Lead del pixel. No depende de ningun servidor/Netlify. -->
+        <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
           <!-- Atribución (se rellenan por JS al cargar). Viajan al servidor para CRM + Conversions API. -->
           <input type="hidden" name="utm_source" />
           <input type="hidden" name="utm_medium" />
@@ -404,46 +405,21 @@
             <input type="text" name="nombre" required placeholder="Tu nombre" />
           </label>
           <div class="fld-row">
-            <label class="fld">Teléfono *
+            <label class="fld">Teléfono / WhatsApp *
               <input type="tel" name="telefono" required placeholder="787-000-0000" />
             </label>
             <label class="fld">Correo electrónico *
               <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" />
             </label>
           </div>
-          <div class="fld-row">
-            <label class="fld">Municipio *
-              <select name="municipio" required>
-                <option value="">Selecciona</option>
-                <option>San Juan</option><option>Guaynabo</option><option>Bayamón</option>
-                <option>Caguas</option><option>Humacao</option><option>Carolina</option>
-                <option>Dorado</option><option>Trujillo Alto</option><option>Toa Alta</option>
-                <option>Otro</option>
-              </select>
-            </label>
-            <label class="fld">Tipo de vivienda *
-              <select name="vivienda" required>
-                <option value="">Selecciona</option>
-                <option>Casa</option><option>Apartamento</option><option>Comercial</option>
-              </select>
-            </label>
-          </div>
-          <div class="fld">¿La vivienda es propia o alquilada? *
-            <div class="radios">
-              <label class="rb"><input type="radio" name="propiedad" value="Propia" required /> Propia</label>
-              <label class="rb"><input type="radio" name="propiedad" value="Alquilada" /> Alquilada</label>
-            </div>
-          </div>
-          <label class="fld">Factura de luz mensual aproximada *
-            <select name="factura" required>
+          <label class="fld">Tipo de vivienda *
+            <select name="vivienda" required>
               <option value="">Selecciona</option>
-              <option>Menos de $100</option><option>$100 - $200</option>
-              <option>$200 - $350</option><option>$350 - $500</option><option>Más de $500</option>
+              <option>Casa</option><option>Apartamento</option><option>Comercial</option>
             </select>
           </label>
-          <label class="chk"><input type="checkbox" name="interes_bateria" value="Sí" /> Me interesa incluir batería de respaldo</label>
-          <label class="chk"><input type="checkbox" name="interes_financiamiento" value="Sí" /> Quiero conocer opciones de financiamiento</label>
           <button type="submit" class="btn" style="width:100%;margin-top:8px">Solicita tu evaluación gratuita <span class="arrow">→</span></button>
+          <p id="form-msg" style="text-align:center;margin-top:14px;font-size:14px;color:var(--muted);display:none"></p>
         </form>
       </div>
     </div>
@@ -550,11 +526,70 @@
           if (el) el.value = values[name];
         });
       }
-      // Rellenar al cargar y de nuevo al enviar (por si _fbp llegó tarde).
+      // Rellenar al cargar (por si se necesita) y antes de enviar.
       fill();
-      if (form) form.addEventListener('submit', fill);
 
-      // Propagar UTMs a los CTAs internos (#formulario) no aplica, pero exponemos util global.
+      // --- Envío SIN servidor (independiente de Netlify) ---
+      // Enviamos el lead directo a HubSpot desde el navegador, disparamos el
+      // evento Lead del pixel y redirigimos a gracias.html. Si HubSpot falla,
+      // igual se dispara el pixel y se redirige, para no perder la conversión
+      // ni dejar al usuario colgado.
+      var HUBSPOT_PORTAL = '5491692';
+      var HUBSPOT_FORM = 'ccfc4878-7dd2-4b34-85f5-ae427106ba13';
+      var msg = document.getElementById('form-msg');
+      var redirected = false;
+
+      function finish() {
+        if (redirected) return;
+        redirected = true;
+        // El evento Lead del pixel lo dispara gracias.html con este mismo event_id
+        // (evita contar doble). Aquí solo redirigimos.
+        window.location.href = 'gracias.html?eid=' + encodeURIComponent(attrib.event_id);
+      }
+
+      function val(name) {
+        var el = form.querySelector('[name="' + name + '"]');
+        return el ? el.value.trim() : '';
+      }
+
+      function sendToHubSpot(includeVivienda) {
+        var fields = [
+          { name: 'firstname', value: val('nombre') },
+          { name: 'email', value: val('email') },
+          { name: 'phone', value: val('telefono') },
+        ].filter(function (f) { return f.value; });
+        if (includeVivienda && val('vivienda')) {
+          fields.push({ name: 'tipo_de_vivienda', value: val('vivienda') });
+        }
+        return fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + HUBSPOT_PORTAL + '/' + HUBSPOT_FORM, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: fields,
+            context: { pageUri: attrib.landing_url || window.location.href, pageName: 'Landing Lumina' },
+          }),
+        }).then(function (r) {
+          // Si HubSpot rechaza por la propiedad personalizada, reintenta sin ella
+          // para no perder el lead (nombre, correo y teléfono siempre se guardan).
+          if (!r.ok && includeVivienda) return sendToHubSpot(false)
+          return r
+        })
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          if (redirected) return;
+          fill();
+          var btn = form.querySelector('button[type="submit"]');
+          if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.innerHTML = 'Enviando…'; }
+          if (msg) { msg.style.display = 'block'; msg.textContent = 'Enviando tu solicitud…'; }
+          sendToHubSpot(true).then(finish).catch(finish);
+          // Respaldo: si la red se cuelga, redirige de todos modos a los 4s.
+          setTimeout(finish, 4000);
+        });
+      }
+
       window.__luminaAttrib = attrib;
     })();
   </script>
