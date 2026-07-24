@@ -37,6 +37,17 @@ jobs:
           # Temporary secure backend while Netlify production deploys are paused.
           VITE_INTELLIGENCE_API_URL: https://deploy-preview-15--luminapr-solar.netlify.app/.netlify/functions/intelligence
 
+      - name: Assemble site (landing en la raiz + app interna en /studio)
+        run: |
+          mkdir -p site/studio site/assets
+          # Landing publica (destino del trafico de anuncios) en la raiz del dominio.
+          cp landing/index.html landing/gracias.html landing/registro.html site/
+          cp -r landing/assets/. site/assets/
+          # App interna (dashboard de marketing) bajo /studio.
+          cp -r dist/. site/studio/
+          # Dominio personalizado para GitHub Pages (se conserva en cada deploy).
+          echo "luminapr.net" > site/CNAME
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -45,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site
 
   deploy:
     needs: build
