@@ -172,21 +172,22 @@
     .hc-cta { width: 100%; font-size: 16.5px; padding: 16px 22px; }
     .hc-note { font-size: 11.5px; color: var(--muted); text-align: center; margin-top: 11px; line-height: 1.45; }
 
-    /* ----- Comparacion de propiedad (alquilar vs poseer) ----- */
-    .hc-own { border: 1px dashed var(--line); border-radius: 14px; padding: 13px 14px; margin-bottom: 15px; }
-    .hc-own-t { font-family: 'Poppins'; font-weight: 700; font-size: 13px; color: var(--navy);
-      line-height: 1.35; margin-bottom: 11px; }
-    .hc-own-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .hc-own-col { display: flex; flex-direction: column; gap: 2px; padding: 9px 10px; border-radius: 10px; }
-    .hc-own-col.bad { background: rgba(200,60,60,.07); }
-    .hc-own-col.good { background: rgba(31,157,99,.09); }
-    .hc-own-lbl { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
-    .hc-own-val { font-family: 'Poppins'; font-weight: 800; font-size: 18px; letter-spacing: -.5px; }
-    .hc-own-col.bad .hc-own-val { color: #B3413F; text-decoration: line-through; text-decoration-thickness: 1.5px; }
-    .hc-own-col.good .hc-own-val { color: #1F9D63; }
-    .hc-own-sub { font-size: 11px; color: var(--muted); line-height: 1.35; }
-    .hc-own-sub b { color: var(--navy); }
-    .hc-own-note { font-size: 11.5px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+    /* ----- Comparacion de propiedad (alquilar vs poseer) -----
+       Compacta: 2 lineas visibles + detalle desplegable, para que el CTA no
+       salga del primer viewport. */
+    .hc-own { border: 1px dashed var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 13px; }
+    .hc-own-sum { list-style: none; cursor: pointer; display: block; }
+    .hc-own-sum::-webkit-details-marker { display: none; }
+    .hc-own-t { display: block; font-family: 'Poppins'; font-weight: 700; font-size: 12.5px;
+      color: var(--navy); line-height: 1.3; }
+    .hc-own-line { display: block; font-size: 12px; color: var(--muted); line-height: 1.4; margin-top: 3px; }
+    .hc-own-line s { color: #B3413F; text-decoration-thickness: 1.5px; }
+    .hc-own-line b { color: #1F9D63; }
+    .hc-own-more { display: inline-block; font-size: 11px; font-weight: 700; color: var(--gold-deep); margin-top: 4px; }
+    .hc-own-more::after { content: ' ▾'; }
+    .hc-own[open] .hc-own-more::after { content: ' ▴'; }
+    .hc-own-note { font-size: 11.5px; color: var(--muted); margin-top: 8px; padding-top: 8px;
+      border-top: 1px dashed var(--line); line-height: 1.45; }
 
     /* ----- Paso 2: formulario dentro de la tarjeta ----- */
     .hc-back { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit;
@@ -349,16 +350,73 @@
       .hero .lead { font-size: 15.5px; }
       .benefits { margin: 16px 0 18px; gap: 10px; }
       .benefits li { font-size: 14.5px; }
-      /* Los numeros clave ya viven en la lista de beneficios; ocultarlos en movil
-         sube la calculadora al primer viewport. */
+      /* REORDEN EN MOVIL: gancho corto -> calculadora -> resto del argumento.
+         display:contents disuelve .hero-copy para que sus dos bloques y la
+         tarjeta sean hermanos directos del flex y se puedan reordenar. Asi la
+         calculadora y su boton entran en el primer viewport del telefono. */
+      .hero-grid { display: flex; flex-direction: column; }
+      .hero-copy { display: contents; }
+      .hero-hook { order: 1; }
+      .hero-card { order: 2; margin-top: 14px; }
+      .hero-rest { order: 3; margin-top: 24px; }
+      /* Los numeros clave ya viven en la lista de beneficios. */
       .hero-stats { display: none; }
-      .hero-card { margin-top: 20px; }
-      .hc-bill { font-size: 30px; }
-      .hc-res-val { font-size: 20px; }
+      /* Cabecera de la tarjeta compacta: cada pixel aqui es un pixel que gana
+         el boton para quedarse dentro del fold. */
+      .hc-head { padding: 14px 18px 13px; }
+      .hc-head h2 { font-size: 18px; }
+      .hc-head p { display: none; }
+      .hc-badge { font-size: 10.5px; padding: 4px 9px; margin-bottom: 7px; }
+      .hc-body { padding: 16px 18px 18px; }
+      .hc-bill { font-size: 28px; }
+      .hc-res-val { font-size: 19px; }
+      .hc-results { padding: 12px 13px; margin: 11px 0 12px; }
+      .hc-cta { font-size: 15.5px; padding: 14px 18px; }
+      /* En movil el boton sube por delante de la comparacion a 20 años: la
+         prioridad es que el CTA entre en el fold. La comparacion queda justo
+         debajo, como refuerzo para quien siga leyendo. */
+      #hc-step1 { display: flex; flex-direction: column; }
+      /* El selector de ID gana al display:none del atributo [hidden], asi que hay
+         que restaurarlo explicitamente o el paso 1 no se oculta en movil. */
+      #hc-step1[hidden] { display: none; }
+      /* Con el formulario abierto la barra fija es redundante y encima tapa el
+         boton de enviar en telefonos cortos: se oculta y se libera el padding. */
+      body.form-abierto { padding-bottom: 0; }
+      body.form-abierto .mobile-cta { display: none; }
+      body.form-abierto .wa-float { bottom: 16px; }
+      #hc-step1 .hc-cta { order: 1; }
+      #hc-step1 .hc-own { order: 2; margin: 12px 0 0; }
+      #hc-step1 .hc-note { order: 3; }
       .hero-bg img { object-position: 62% center; }
       .hero-bg::after { background:
         linear-gradient(180deg, rgba(5,16,30,.72) 0%, rgba(6,20,38,.86) 55%, rgba(6,20,38,.95) 100%),
         radial-gradient(600px 300px at 80% 0%, rgba(201,168,76,.2), transparent 60%); }
+    }
+    /* Telefonos cortos (iPhone SE y similares, 667px de alto): se recorta todo
+       lo prescindible sobre la tarjeta para que el boton siga en el fold. */
+    @media (max-width: 899px) and (max-height: 740px) {
+      .hero { padding: 14px 0 26px; }
+      .hero-hook .eyebrow { display: none; }
+      .hero h1 { font-size: 25px; margin: 0 0 9px; }
+      .hero-card { margin-top: 10px; }
+      .hc-head { padding: 11px 16px 10px; }
+      .hc-head h2 { font-size: 16.5px; }
+      .hc-body { padding: 13px 16px 15px; }
+      .hc-bill { font-size: 24px; }
+      .hc-billrow { margin: 3px 0 0; }
+      .hc-results { padding: 10px 12px; margin: 9px 0 10px; }
+      .hc-res-val { font-size: 17.5px; }
+      .hc-cta { font-size: 15px; padding: 13px 16px; }
+      /* Paso 2 tambien mas compacto, para que el boton de enviar entre en el fold. */
+      .hc-back { margin-bottom: 8px; }
+      .hc-recap { padding: 8px 11px; margin-bottom: 10px; font-size: 12px; }
+      #hc-step2 .lead-form .fld { margin-bottom: 8px; font-size: 12.5px; }
+      #hc-step2 .lead-form input, #hc-step2 .lead-form select { padding: 9px 11px; font-size: 14px; margin-top: 4px; }
+      /* En pantallas muy cortas el recap se sacrifica: el usuario acaba de ver
+         esos numeros en el paso 1, y asi el boton de enviar entra en el fold. */
+      .hc-recap { display: none; }
+      .hc-badges { margin-top: 9px; }
+      .hc-wa { margin-top: 10px; padding-top: 10px; }
     }
   </style>
 </head>
@@ -390,8 +448,13 @@
     </div>
     <div class="container hero-grid">
       <div class="hero-copy reveal in">
-        <span class="eyebrow on-dark">☀ Evaluación solar gratuita · Puerto Rico</span>
-        <h1>Deja de pagarle a LUMA lo que <span class="hl">tu techo puede producir</span>.</h1>
+        <!-- Gancho corto: en movil es lo unico que va ANTES de la calculadora. -->
+        <div class="hero-hook">
+          <span class="eyebrow on-dark">☀ Evaluación solar gratuita · Puerto Rico</span>
+          <h1>Deja de pagarle a LUMA lo que <span class="hl">tu techo puede producir</span>.</h1>
+        </div>
+        <!-- Resto del argumento: en movil baja DEBAJO de la calculadora. -->
+        <div class="hero-rest">
         <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar y cuánto cubre el incentivo del gobierno. Sin costo y sin compromiso.</p>
         <ul class="benefits">
           <li><span class="check">✓</span><span>Incentivos: hasta <b>$15,000</b> de PR + <b>30%</b> federal</span></li>
@@ -404,6 +467,7 @@
           <div class="hstat"><b>30%</b><small>Crédito federal</small></div>
           <div class="hstat"><b>24/7</b><small>Respaldo en apagones</small></div>
         </div>
+        </div><!-- /hero-rest -->
       </div>
 
       <!-- CALCULADORA + CAPTURA (visible sin scroll) -->
@@ -440,23 +504,17 @@
           </div>
 
           <!-- Comparacion de propiedad: la cuota no es un recibo, es un activo.
-               Cifras calculadas a 20 años (el termino real de la tabla de financiamiento). -->
-          <div class="hc-own">
-            <div class="hc-own-t">Con LUMA alquilas la luz. Con Lumina compras tu sistema.</div>
-            <div class="hc-own-grid">
-              <div class="hc-own-col bad">
-                <span class="hc-own-lbl">20 años con LUMA</span>
-                <span class="hc-own-val" id="calc-luma-total">$84,000</span>
-                <span class="hc-own-sub">y no te queda nada</span>
-              </div>
-              <div class="hc-own-col good">
-                <span class="hc-own-lbl">20 años con Lumina</span>
-                <span class="hc-own-val" id="calc-own-total">$60,000</span>
-                <span class="hc-own-sub">y el sistema es <b>tuyo</b></span>
-              </div>
-            </div>
+               Cifras a 20 años (termino real de la tabla de financiamiento).
+               Va comprimida a un resumen de 2 lineas para no empujar el CTA fuera
+               del primer viewport; el desglose queda en un <details> desplegable. -->
+          <details class="hc-own">
+            <summary class="hc-own-sum">
+              <span class="hc-own-t">Con LUMA alquilas la luz. Con Lumina compras tu sistema.</span>
+              <span class="hc-own-line" id="calc-own-line">20 años con LUMA: <s id="calc-luma-total">$84,000</s> · Con Lumina: <b id="calc-own-total">$60,000</b> y es tuyo</span>
+              <span class="hc-own-more">Ver comparación</span>
+            </summary>
             <p class="hc-own-note" id="calc-own-note">Cada mes le pagas a tu propio sistema, no a un recibo que nunca termina.</p>
-          </div>
+          </details>
 
           <button type="button" class="btn hc-cta" id="calc-cta">Recibir mi evaluación gratuita <span class="arrow">→</span></button>
           <p class="hc-note">Estimado orientativo. Se confirma en tu evaluación gratuita según tu consumo real.</p>
@@ -662,8 +720,11 @@
   </a>
 
   <!-- CTA fija en móvil -->
+  <!-- Barra fija en movil: garantiza un CTA siempre visible en cualquier alto de
+       pantalla. Si la calculadora ya esta a la vista, abre el formulario; si no,
+       lleva primero a la calculadora. -->
   <div class="mobile-cta">
-    <a href="#calculadora" class="btn">Calcular mi ahorro gratis <span class="arrow">→</span></a>
+    <a href="#calculadora" class="btn js-cta-smart">Calcular mi ahorro gratis <span class="arrow">→</span></a>
   </div>
 
   <script>
@@ -794,12 +855,16 @@
         if (step1 && step2) {
           step1.hidden = true;
           step2.hidden = false;
-          // Si el usuario ya habia bajado, la tarjeta puede quedar fuera de vista al
-          // cambiar de paso. Solo reencuadramos en ese caso; si ya esta visible no
-          // movemos nada para no provocar un salto innecesario.
+          document.body.classList.add('form-abierto');
+          // Al abrir el formulario alineamos la tarjeta al tope (descontando el
+          // header fijo). Asi los 4 campos y el boton de enviar caben en una sola
+          // pantalla, incluso en telefonos cortos.
           var card = document.getElementById('calculadora');
-          if (card && card.getBoundingClientRect().top < 0) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (card) {
+            var head = document.getElementById('site-header');
+            var offset = (head ? head.offsetHeight : 0) + 8;
+            var target = card.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
           }
           var first = step2.querySelector('input[name="nombre"]');
           if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
@@ -808,15 +873,40 @@
 
       if (back) {
         back.addEventListener('click', function () {
-          if (step1 && step2) { step2.hidden = true; step1.hidden = false; }
+          if (step1 && step2) {
+            step2.hidden = true;
+            step1.hidden = false;
+            document.body.classList.remove('form-abierto');
+          }
         });
       }
 
-      // El CTA del final de la pagina devuelve a la tarjeta y abre el paso del formulario.
+      // El CTA del final de la pagina devuelve a la tarjeta.
       Array.prototype.forEach.call(document.querySelectorAll('.js-to-calc'), function (a) {
         a.addEventListener('click', function () {
           var card = document.getElementById('calculadora');
           if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      });
+
+      // Barra fija de movil: en pantallas cortas el boton de la tarjeta puede
+      // quedar bajo el fold, asi que esta barra actua de CTA permanente. Si la
+      // calculadora ya se ve, abre el formulario directamente; si no, lleva a ella.
+      Array.prototype.forEach.call(document.querySelectorAll('.js-cta-smart'), function (a) {
+        a.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          var card = document.getElementById('calculadora');
+          if (!card) return;
+          var box = card.getBoundingClientRect();
+          var yaVisible = box.top < innerHeight * 0.6 && box.bottom > 0;
+          if (yaVisible && step2 && step2.hidden) {
+            cta.click();
+          } else if (step2 && !step2.hidden) {
+            var first = step2.querySelector('input[name="nombre"]');
+            if (first) first.focus();
+          } else {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
       });
     })();
