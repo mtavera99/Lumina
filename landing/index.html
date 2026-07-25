@@ -138,6 +138,37 @@
     .hstat b span { font-size: 14px; color: rgba(255,255,255,.72); font-weight: 600; }
     .hstat small { font-size: 12.5px; color: rgba(255,255,255,.72); display: block; margin-top: 5px; }
 
+    /* ---------- Hero card: calculadora + captura (above the fold) ---------- */
+    .hero-card {
+      background: #fff; border-radius: 20px; box-shadow: 0 28px 70px rgba(3,12,26,.45);
+      overflow: hidden; border: 1px solid rgba(255,255,255,.15);
+    }
+    .hc-head { background: linear-gradient(135deg, var(--navy), var(--navy-2)); padding: 20px 24px 18px; color: #fff; }
+    .hc-badge {
+      display: inline-block; font-family: 'Poppins'; font-weight: 700; font-size: 11.5px; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--navy); background: linear-gradient(135deg, var(--gold-2), var(--gold));
+      padding: 5px 11px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .hc-head h2 { font-size: 22px; line-height: 1.2; margin-bottom: 5px; }
+    .hc-head p { font-size: 13.5px; color: rgba(255,255,255,.8); }
+    .hc-body { padding: 22px 24px 24px; }
+    .hc-label { display: block; font-family: 'Poppins'; font-weight: 600; font-size: 13.5px; color: var(--navy); }
+    .hc-billrow { text-align: center; margin: 6px 0 2px; }
+    .hc-bill { font-family: 'Poppins'; font-weight: 800; font-size: 34px; color: var(--navy); letter-spacing: -1px; }
+    input[type="range"] { width: 100%; accent-color: var(--gold); height: 26px; cursor: pointer; }
+    .hc-scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: -4px; }
+    .hc-results { background: #f4f7fc; border: 1px solid var(--line); border-radius: 14px; padding: 15px 16px; margin: 14px 0 16px; }
+    .hc-res-main { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hc-res-item { display: flex; flex-direction: column; gap: 3px; }
+    .hc-res-lbl { font-size: 11.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+    .hc-res-val { font-family: 'Poppins'; font-weight: 800; font-size: 23px; color: var(--navy); letter-spacing: -.5px; }
+    .hc-res-val i { font-size: 13px; font-style: normal; font-weight: 600; color: var(--muted); }
+    .hc-res-val.hl { color: #1F9D63; }
+    .hc-sys { font-size: 12.5px; color: var(--navy); font-weight: 600; margin-top: 12px; padding-top: 11px; border-top: 1px dashed var(--line); }
+    .hc-incentive { font-size: 12.5px; color: var(--gold-deep); margin-top: 7px; line-height: 1.45; }
+    .hc-cta { width: 100%; font-size: 16.5px; padding: 16px 22px; }
+    .hc-note { font-size: 11.5px; color: var(--muted); text-align: center; margin-top: 11px; line-height: 1.45; }
+
     /* ---------- Trust bar ---------- */
     .trust { background: var(--white); border-bottom: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; z-index: 3; }
     .trust-inner { display: flex; flex-wrap: wrap; gap: 14px 40px; justify-content: center; padding: 22px; }
@@ -171,6 +202,16 @@
     .step-num { width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Poppins'; font-weight: 800; font-size: 19px; margin-bottom: 15px; box-shadow: 0 8px 18px rgba(10,35,66,.25); }
     .step h3 { color: var(--navy); font-size: 17px; margin-bottom: 6px; }
     .step p { color: var(--muted); font-size: 14.5px; }
+
+    /* ---------- Incentivos ---------- */
+    .inc-band { background: linear-gradient(180deg, #fffdf7, #fdf8ea); }
+    .inc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; }
+    .inc-card { background: #fff; border: 1px solid rgba(201,168,76,.35); border-radius: var(--radius); padding: 28px 24px; box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease; }
+    .inc-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .inc-amt { font-family: 'Poppins'; font-weight: 800; font-size: 30px; color: var(--gold-deep); letter-spacing: -1px; margin-bottom: 8px; }
+    .inc-card h3 { color: var(--navy); font-size: 18px; margin-bottom: 7px; }
+    .inc-card p { color: var(--muted); font-size: 14.5px; }
+    .inc-note { text-align: center; font-size: 12.5px; color: var(--muted); margin-top: 26px; max-width: 680px; margin-left: auto; margin-right: auto; }
 
     /* ---------- Financing ---------- */
     .fin { position: relative; color: #fff; overflow: hidden;
@@ -256,13 +297,27 @@
 
     /* ---------- Responsive ---------- */
     @media (min-width: 900px) {
-      .hero { padding: 120px 0 124px; min-height: 600px; display: flex; align-items: center; }
-      .hero h1 { font-size: 52px; }
+      .hero { padding: 72px 0 78px; min-height: 600px; display: flex; align-items: center; }
+      .hero h1 { font-size: 46px; }
+      .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+      .hero-copy { max-width: 100%; }
       .section-head h2 { font-size: 34px; }
       .mobile-cta { display: none; }
     }
     @media (max-width: 899px) {
       body { padding-bottom: 78px; }
+      /* En movil: titular corto, la calculadora entra de inmediato. */
+      .hero { padding: 26px 0 34px; }
+      .hero h1 { font-size: 29px; margin: 13px 0 11px; }
+      .hero .lead { font-size: 15.5px; }
+      .benefits { margin: 16px 0 18px; gap: 10px; }
+      .benefits li { font-size: 14.5px; }
+      /* Los numeros clave ya viven en la lista de beneficios; ocultarlos en movil
+         sube la calculadora al primer viewport. */
+      .hero-stats { display: none; }
+      .hero-card { margin-top: 20px; }
+      .hc-bill { font-size: 30px; }
+      .hc-res-val { font-size: 20px; }
       .hero-bg img { object-position: 62% center; }
       .hero-bg::after { background:
         linear-gradient(180deg, rgba(5,16,30,.72) 0%, rgba(6,20,38,.86) 55%, rgba(6,20,38,.95) 100%),
@@ -299,22 +354,54 @@
     <div class="container hero-grid">
       <div class="hero-copy reveal in">
         <span class="eyebrow on-dark">☀ Evaluación solar gratuita · Puerto Rico</span>
-        <h1>Tu hogar merece energía que <span class="hl">nunca te abandone</span>.</h1>
-        <p class="lead">Reduce tu factura de luz y protege tu casa de los apagones con un sistema solar residencial financiado. Sin pagar todo de contado y con acompañamiento completo.</p>
+        <h1>Deja de pagarle a LUMA lo que <span class="hl">tu techo puede producir</span>.</h1>
+        <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar y cuánto cubre el incentivo del gobierno. Sin costo y sin compromiso.</p>
         <ul class="benefits">
-          <li><span class="check">✓</span> Reduce tu factura desde el primer mes</li>
-          <li><span class="check">✓</span> Respaldo ante apagones con batería</li>
+          <li><span class="check">✓</span> Hasta <b>$15,000</b> del incentivo de Puerto Rico + <b>30%</b> de crédito federal</li>
+          <li><span class="check">✓</span> Respaldo con batería: sigue con luz en los apagones</li>
           <li><span class="check">✓</span> Financiamiento desde $150/mes, sin pagar de contado</li>
-          <li><span class="check">✓</span> Empresa 100% puertorriqueña, con acompañamiento completo</li>
+          <li><span class="check">✓</span> Empresa 100% puertorriqueña, acompañamiento completo</li>
         </ul>
-        <div class="hero-cta-row">
-          <a href="#formulario" class="btn">Solicita tu evaluación gratuita <span class="arrow">→</span></a>
-          <span class="hero-note">Sin compromiso · Respuesta rápida</span>
-        </div>
         <div class="hero-stats">
-          <div class="hstat"><b>$150<span>/mes</span></b><small>Financiamiento flexible</small></div>
-          <div class="hstat"><b>24/7</b><small>Respaldo ante apagones</small></div>
-          <div class="hstat"><b>100%</b><small>Puertorriqueña</small></div>
+          <div class="hstat"><b>$15,000</b><small>Incentivo de PR (hasta)</small></div>
+          <div class="hstat"><b>30%</b><small>Crédito federal</small></div>
+          <div class="hstat"><b>24/7</b><small>Respaldo en apagones</small></div>
+        </div>
+      </div>
+
+      <!-- CALCULADORA + CAPTURA (visible sin scroll) -->
+      <div class="hero-card reveal in" id="calculadora">
+        <div class="hc-head">
+          <span class="hc-badge">🧮 Calculadora de ahorro</span>
+          <h2>¿Cuánto puedes ahorrar?</h2>
+          <p>Mueve tu factura de luz y mira tu estimado al instante.</p>
+        </div>
+
+        <div class="hc-body">
+          <label class="hc-label" for="calc-bill">¿Cuánto pagas de luz al mes?</label>
+          <div class="hc-billrow">
+            <span class="hc-bill" id="calc-bill-out">$350</span>
+          </div>
+          <input type="range" id="calc-bill" min="80" max="600" step="10" value="350" aria-label="Factura mensual de luz" />
+          <div class="hc-scale"><span>$80</span><span>$600+</span></div>
+
+          <div class="hc-results" id="calc-results">
+            <div class="hc-res-main">
+              <div class="hc-res-item">
+                <span class="hc-res-lbl">Tu cuota estimada</span>
+                <span class="hc-res-val" id="calc-monthly">$250<i>/mes</i></span>
+              </div>
+              <div class="hc-res-item hc-save" id="calc-save-wrap">
+                <span class="hc-res-lbl">Ahorro estimado</span>
+                <span class="hc-res-val hl" id="calc-save">$0<i>/mes</i></span>
+              </div>
+            </div>
+            <div class="hc-sys" id="calc-system">Sistema sugerido: 10kW + batería</div>
+            <div class="hc-incentive" id="calc-incentive">Con el incentivo de PR podrías recibir hasta <b>$9,000</b> de vuelta.</div>
+          </div>
+
+          <button type="button" class="btn hc-cta" id="calc-cta">Recibir mi evaluación gratuita <span class="arrow">→</span></button>
+          <p class="hc-note">Estimado orientativo. Se confirma en tu evaluación gratuita según tu consumo real.</p>
         </div>
       </div>
     </div>
@@ -329,6 +416,35 @@
       <div class="trust-item"><span class="ico">🤝</span> Acompañamiento completo</div>
     </div>
   </div>
+
+  <!-- Incentivos -->
+  <section class="block inc-band">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Ayudas disponibles</span>
+        <h2>El gobierno cubre buena parte de tu sistema</h2>
+        <p>Entre el incentivo de Puerto Rico y el crédito federal, una parte importante de la inversión regresa a ti.</p>
+      </div>
+      <div class="inc-grid">
+        <div class="inc-card reveal">
+          <div class="inc-amt">hasta $15,000</div>
+          <h3>Incentivo de Puerto Rico</h3>
+          <p>Cubre el 30% del costo de equipo e instalación, con un máximo de $15,000, para dueños de vivienda que residen a tiempo completo en ella.</p>
+        </div>
+        <div class="inc-card reveal d1">
+          <div class="inc-amt">30%</div>
+          <h3>Crédito contributivo federal</h3>
+          <p>Como territorio de EE.UU., en Puerto Rico aplica el crédito federal del 30% sobre el costo del sistema.</p>
+        </div>
+        <div class="inc-card reveal d2">
+          <div class="inc-amt">$0</div>
+          <h3>Sin pagar de contado</h3>
+          <p>Con financiamiento desde $150/mes empiezas sin desembolso inicial, y en muchos casos la cuota es menor que tu factura de luz.</p>
+        </div>
+      </div>
+      <p class="inc-note">Los incentivos tienen fondos y requisitos limitados, y pueden cambiar. En tu evaluación gratuita confirmamos a cuáles calificas hoy.</p>
+    </div>
+  </section>
 
   <!-- Beneficios -->
   <section class="block">
@@ -417,6 +533,8 @@
           <input type="hidden" name="event_id" />
           <input type="hidden" name="referrer" />
           <input type="hidden" name="landing_url" />
+          <!-- Factura que el usuario selecciono en la calculadora (contexto para el asesor). -->
+          <input type="hidden" name="factura_estimada" />
           <label class="fld">Nombre completo *
             <input type="text" name="nombre" required placeholder="Tu nombre" />
           </label>
@@ -467,7 +585,7 @@
 
   <!-- CTA fija en móvil -->
   <div class="mobile-cta">
-    <a href="#formulario" class="btn">Solicita tu evaluación gratuita <span class="arrow">→</span></a>
+    <a href="#calculadora" class="btn">Calcular mi ahorro gratis <span class="arrow">→</span></a>
   </div>
 
   <script>
@@ -479,6 +597,91 @@
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal:not(.in)').forEach(function (el) { io.observe(el); });
+  </script>
+
+  <!-- ============================================================
+       CALCULADORA DE AHORRO (lead magnet)
+       Misma tabla de financiamiento que el Campaign Studio.
+       Da el valor ANTES de pedir datos: sube la conversion.
+       ============================================================ -->
+  <script>
+    (function () {
+      // Plazo 20 anos (cuota mas baja), igual que la recomendacion del studio.
+      var PLANS = [
+        { kw: 5,  system: '5kW + batería (8 placas)',   value: 18000, monthly: 150 },
+        { kw: 10, system: '10kW + batería (12 placas)', value: 30000, monthly: 250 },
+        { kw: 15, system: '15kW + batería (15 placas)', value: 45000, monthly: 369 }
+      ];
+      // Incentivo de Puerto Rico: 30% del costo, con tope de $15,000.
+      var PR_RATE = 0.30, PR_CAP = 15000;
+
+      var slider = document.getElementById('calc-bill');
+      var out = document.getElementById('calc-bill-out');
+      var elMonthly = document.getElementById('calc-monthly');
+      var elSave = document.getElementById('calc-save');
+      var elSaveWrap = document.getElementById('calc-save-wrap');
+      var elSystem = document.getElementById('calc-system');
+      var elIncentive = document.getElementById('calc-incentive');
+      var cta = document.getElementById('calc-cta');
+      if (!slider) return;
+
+      // El sistema mas grande cuya cuota deje al menos un 10% de margen frente a la
+      // factura actual, para que el ahorro sea real y no quede en cero justo en el
+      // limite. Si ninguno cabe (facturas bajas), se muestra el menor y el valor
+      // pasa a ser el respaldo, no el ahorro.
+      function recommend(bill) {
+        var fit = null;
+        for (var i = 0; i < PLANS.length; i++) {
+          if (PLANS[i].monthly <= bill * 0.9) fit = PLANS[i];
+        }
+        return fit || PLANS[0];
+      }
+      function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+      var currentBill = Number(slider.value);
+
+      function render() {
+        var bill = Number(slider.value);
+        currentBill = bill;
+        var plan = recommend(bill);
+        var saving = Math.max(bill - plan.monthly, 0);
+        var incentive = Math.min(plan.value * PR_RATE, PR_CAP);
+
+        out.textContent = money(bill);
+        elMonthly.innerHTML = money(plan.monthly) + '<i>/mes</i>';
+        elSystem.textContent = 'Sistema sugerido: ' + plan.system;
+
+        if (saving > 0) {
+          elSave.innerHTML = money(saving) + '<i>/mes</i>';
+          elSaveWrap.style.display = '';
+          elSave.classList.add('hl');
+        } else {
+          // Sin ahorro directo el valor es el respaldo, no el precio.
+          elSave.innerHTML = 'Respaldo 24/7';
+          elSave.classList.remove('hl');
+        }
+        elIncentive.innerHTML = 'Con el incentivo de PR podrías recibir hasta <b>' + money(incentive) +
+          '</b> de vuelta, más el 30% de crédito federal.';
+      }
+
+      slider.addEventListener('input', render);
+      render();
+
+      // El CTA lleva al formulario y pasa la factura estimada (contexto para el asesor).
+      cta.addEventListener('click', function () {
+        var form = document.getElementById('lead-form');
+        if (form) {
+          var hidden = form.querySelector('input[name="factura_estimada"]');
+          if (hidden) hidden.value = '$' + currentBill + '/mes';
+        }
+        if (window.fbq) {
+          // Senal de intencion intermedia (no es un Lead todavia).
+          try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
+        }
+        var target = document.getElementById('formulario');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
   </script>
 
   <!-- ============================================================
@@ -594,7 +797,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             fields: fields,
-            context: { pageUri: attrib.landing_url || window.location.href, pageName: 'Landing Lumina' },
+            context: {
+              pageUri: attrib.landing_url || window.location.href,
+              // pageName es texto libre: llevamos ahi la factura estimada de la
+              // calculadora para que el asesor tenga contexto sin depender de una
+              // propiedad personalizada de HubSpot.
+              pageName: 'Landing Lumina' + (val('factura_estimada') ? ' — factura ' + val('factura_estimada') : ''),
+            },
           }),
         }).then(function (r) {
           // Si HubSpot rechaza por la propiedad personalizada, reintenta sin ella
@@ -629,8 +838,10 @@
         btn.setAttribute('href', WA_URL);
         btn.setAttribute('target', '_blank');
         btn.addEventListener('click', function () {
+          // Evento propio: 'Contact' para WhatsApp. NO usamos 'Lead' para no
+          // contaminar la senal de optimizacion del formulario en Meta.
           if (window.fbq) {
-            try { fbq('track', 'Lead', { content_name: 'whatsapp' }, { eventID: uuid() }); } catch (e) {}
+            try { fbq('track', 'Contact', { content_name: 'whatsapp' }, { eventID: uuid() }); } catch (e) {}
           }
         });
       });
