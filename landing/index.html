@@ -124,7 +124,10 @@
     .hero h1 .hl { color: var(--gold-2); }
     .hero .lead { font-size: 17.5px; color: rgba(255,255,255,.9); max-width: 560px; }
     .benefits { list-style: none; margin: 26px 0 30px; display: grid; gap: 13px; max-width: 560px; }
-    .benefits li { display: flex; gap: 13px; align-items: center; font-size: 15.5px; color: rgba(255,255,255,.97); }
+    /* align-items:flex-start para que el check quede a la altura de la primera linea
+       cuando el texto ocupa dos renglones; line-height alinea con el circulo de 26px. */
+    .benefits li { display: flex; gap: 13px; align-items: flex-start; font-size: 15.5px; line-height: 1.5; color: rgba(255,255,255,.97); }
+    .benefits li > span:last-child { padding-top: 2px; }
     .check {
       flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
       background: linear-gradient(135deg, var(--gold-2), var(--gold)); color: var(--navy);
@@ -357,10 +360,10 @@
         <h1>Deja de pagarle a LUMA lo que <span class="hl">tu techo puede producir</span>.</h1>
         <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar y cuánto cubre el incentivo del gobierno. Sin costo y sin compromiso.</p>
         <ul class="benefits">
-          <li><span class="check">✓</span> Hasta <b>$15,000</b> del incentivo de Puerto Rico + <b>30%</b> de crédito federal</li>
-          <li><span class="check">✓</span> Respaldo con batería: sigue con luz en los apagones</li>
-          <li><span class="check">✓</span> Financiamiento desde $150/mes, sin pagar de contado</li>
-          <li><span class="check">✓</span> Empresa 100% puertorriqueña, acompañamiento completo</li>
+          <li><span class="check">✓</span><span>Incentivos: hasta <b>$15,000</b> de PR + <b>30%</b> federal</span></li>
+          <li><span class="check">✓</span><span>Respaldo con batería: sigue con luz en los apagones</span></li>
+          <li><span class="check">✓</span><span>Financiamiento desde $150/mes, sin pagar de contado</span></li>
+          <li><span class="check">✓</span><span>Empresa 100% puertorriqueña, acompañamiento completo</span></li>
         </ul>
         <div class="hero-stats">
           <div class="hstat"><b>$15,000</b><small>Incentivo de PR (hasta)</small></div>
