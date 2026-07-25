@@ -516,7 +516,8 @@
             <p class="hc-own-note" id="calc-own-note">Cada mes le pagas a tu propio sistema, no a un recibo que nunca termina.</p>
           </details>
 
-          <button type="button" class="btn hc-cta" id="calc-cta">Recibir mi evaluación gratuita <span class="arrow">→</span></button>
+          <!-- El texto se personaliza por JS con la cifra que el usuario acaba de ver. -->
+          <button type="button" class="btn hc-cta" id="calc-cta"><span id="calc-cta-text">Recibir mi evaluación gratuita</span> <span class="arrow">→</span></button>
           <p class="hc-note">Estimado orientativo. Se confirma en tu evaluación gratuita según tu consumo real.</p>
           </div><!-- /hc-step1 -->
 
@@ -782,6 +783,9 @@
       var elLumaTotal = document.getElementById('calc-luma-total');
       var elOwnTotal = document.getElementById('calc-own-total');
       var elOwnNote = document.getElementById('calc-own-note');
+      var elCtaText = document.getElementById('calc-cta-text');
+      // Valor de partida del slider: se lee del HTML para no duplicar la cifra.
+      var DEFAULT_BILL = Number(slider.value);
 
       var currentBill = Number(slider.value);
 
@@ -823,9 +827,36 @@
           elOwnNote.innerHTML = 'Le pagas a tu propio sistema, no a un recibo que nunca termina: ' +
             'te queda el equipo, la batería y respaldo en cada apagón.';
         }
+
+        // CTA personalizado con la cifra que el usuario acaba de ver. Un boton
+        // concreto ("Quiero ahorrar $150/mes") convierte mejor que uno generico.
+        // Texto medido para caber en UNA linea incluso a 375px de ancho: en dos
+        // lineas el boton crece 23px y se sale del fold en telefonos cortos.
+        if (elCtaText) {
+          elCtaText.textContent = saving > 0
+            ? 'Ahorrar ' + money(saving) + '/mes — es gratis'
+            : 'Respaldo 24/7 — es gratis';
+        }
       }
 
-      slider.addEventListener('input', render);
+      // MEDICION DEL EMBUDO. Sin esto no se puede saber cuanta gente calcula y
+      // se va sin dejar datos, que es justo el dato para decidir si conviene
+      // pedir los datos ANTES de mostrar el resultado.
+      //   PageView -> CalculadoraUsada -> FormularioAbierto -> Lead
+      var calcUsada = false;
+      function marcarUso() {
+        if (calcUsada) return;
+        calcUsada = true;
+        if (window.fbq) {
+          try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
+        }
+      }
+
+      slider.addEventListener('input', function () {
+        render();
+        // Solo cuenta como uso real si movio el slider de su valor inicial.
+        if (Number(slider.value) !== DEFAULT_BILL) marcarUso();
+      });
       render();
 
       // El CTA revela el formulario DENTRO de la misma tarjeta: el usuario no
@@ -848,9 +879,12 @@
             (saving > 0 ? ' · Ahorro estimado: <b>' + money(saving) + '/mes</b>' : ' · Con respaldo 24/7') +
             '<br>' + plan.system + ' — y el sistema queda tuyo.';
         }
+        // Si abre el formulario sin haber tocado el slider, igual cuenta como uso
+        // de la calculadora: vio el resultado por defecto y le sirvio.
+        marcarUso();
         if (window.fbq) {
-          // Senal de intencion intermedia (no es un Lead todavia).
-          try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
+          // Intencion: abrio el formulario. Todavia NO es un Lead.
+          try { fbq('trackCustom', 'FormularioAbierto', { factura: currentBill }); } catch (e) {}
         }
         if (step1 && step2) {
           step1.hidden = true;
