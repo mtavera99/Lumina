@@ -172,6 +172,40 @@
     .hc-cta { width: 100%; font-size: 16.5px; padding: 16px 22px; }
     .hc-note { font-size: 11.5px; color: var(--muted); text-align: center; margin-top: 11px; line-height: 1.45; }
 
+    /* ----- Comparacion de propiedad (alquilar vs poseer) ----- */
+    .hc-own { border: 1px dashed var(--line); border-radius: 14px; padding: 13px 14px; margin-bottom: 15px; }
+    .hc-own-t { font-family: 'Poppins'; font-weight: 700; font-size: 13px; color: var(--navy);
+      line-height: 1.35; margin-bottom: 11px; }
+    .hc-own-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hc-own-col { display: flex; flex-direction: column; gap: 2px; padding: 9px 10px; border-radius: 10px; }
+    .hc-own-col.bad { background: rgba(200,60,60,.07); }
+    .hc-own-col.good { background: rgba(31,157,99,.09); }
+    .hc-own-lbl { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+    .hc-own-val { font-family: 'Poppins'; font-weight: 800; font-size: 18px; letter-spacing: -.5px; }
+    .hc-own-col.bad .hc-own-val { color: #B3413F; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+    .hc-own-col.good .hc-own-val { color: #1F9D63; }
+    .hc-own-sub { font-size: 11px; color: var(--muted); line-height: 1.35; }
+    .hc-own-sub b { color: var(--navy); }
+    .hc-own-note { font-size: 11.5px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+
+    /* ----- Paso 2: formulario dentro de la tarjeta ----- */
+    .hc-back { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit;
+      font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 12px; }
+    .hc-back:hover { color: var(--navy); }
+    .hc-recap { background: #f4f7fc; border: 1px solid var(--line); border-radius: 12px;
+      padding: 11px 14px; margin-bottom: 15px; font-size: 13px; color: var(--navy); line-height: 1.5; }
+    .hc-recap b { color: #1F9D63; }
+    /* La tarjeta es estrecha: los campos van siempre en una columna. */
+    #hc-step2 .fld-row { grid-template-columns: 1fr; }
+    #hc-step2 .lead-form .fld { margin-bottom: 11px; font-size: 13px; }
+    #hc-step2 .lead-form input, #hc-step2 .lead-form select { padding: 11px 12px; font-size: 14.5px; }
+    .hc-badges { display: flex; justify-content: center; gap: 8px 14px; flex-wrap: wrap; margin-top: 13px; }
+    .hc-badges span { font-size: 11.5px; color: var(--navy); font-weight: 600; }
+    .hc-wa { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .hc-wa > span { font-size: 12.5px; color: var(--muted); }
+    .hc-wa .btn-wa { padding: 9px 16px; font-size: 13.5px; }
+
     /* ---------- Trust bar ---------- */
     .trust { background: var(--white); border-bottom: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; z-index: 3; }
     .trust-inner { display: flex; flex-wrap: wrap; gap: 14px 40px; justify-content: center; padding: 22px; }
@@ -381,6 +415,8 @@
         </div>
 
         <div class="hc-body">
+          <!-- PASO 1: calculadora -->
+          <div id="hc-step1">
           <label class="hc-label" for="calc-bill">¿Cuánto pagas de luz al mes?</label>
           <div class="hc-billrow">
             <span class="hc-bill" id="calc-bill-out">$350</span>
@@ -391,7 +427,7 @@
           <div class="hc-results" id="calc-results">
             <div class="hc-res-main">
               <div class="hc-res-item">
-                <span class="hc-res-lbl">Tu cuota estimada</span>
+                <span class="hc-res-lbl">Tu cuota — es tu sistema</span>
                 <span class="hc-res-val" id="calc-monthly">$250<i>/mes</i></span>
               </div>
               <div class="hc-res-item hc-save" id="calc-save-wrap">
@@ -403,8 +439,80 @@
             <div class="hc-incentive" id="calc-incentive">Con el incentivo de PR podrías recibir hasta <b>$9,000</b> de vuelta.</div>
           </div>
 
+          <!-- Comparacion de propiedad: la cuota no es un recibo, es un activo.
+               Cifras calculadas a 20 años (el termino real de la tabla de financiamiento). -->
+          <div class="hc-own">
+            <div class="hc-own-t">Con LUMA alquilas la luz. Con Lumina compras tu sistema.</div>
+            <div class="hc-own-grid">
+              <div class="hc-own-col bad">
+                <span class="hc-own-lbl">20 años con LUMA</span>
+                <span class="hc-own-val" id="calc-luma-total">$84,000</span>
+                <span class="hc-own-sub">y no te queda nada</span>
+              </div>
+              <div class="hc-own-col good">
+                <span class="hc-own-lbl">20 años con Lumina</span>
+                <span class="hc-own-val" id="calc-own-total">$60,000</span>
+                <span class="hc-own-sub">y el sistema es <b>tuyo</b></span>
+              </div>
+            </div>
+            <p class="hc-own-note" id="calc-own-note">Cada mes le pagas a tu propio sistema, no a un recibo que nunca termina.</p>
+          </div>
+
           <button type="button" class="btn hc-cta" id="calc-cta">Recibir mi evaluación gratuita <span class="arrow">→</span></button>
           <p class="hc-note">Estimado orientativo. Se confirma en tu evaluación gratuita según tu consumo real.</p>
+          </div><!-- /hc-step1 -->
+
+          <!-- PASO 2: el formulario vive DENTRO de la tarjeta, en el primer viewport.
+               No hay scroll entre ver el ahorro y dejar los datos. -->
+          <div id="hc-step2" hidden>
+            <button type="button" class="hc-back" id="hc-back">← Cambiar mi factura</button>
+            <div class="hc-recap" id="hc-recap"></div>
+            <!-- Formulario 100% estático: envia directo a HubSpot desde el navegador y
+                 dispara el evento Lead del pixel. No depende de ningun servidor/Netlify. -->
+            <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
+              <!-- Atribución (se rellenan por JS al cargar). Viajan al CRM. -->
+              <input type="hidden" name="utm_source" />
+              <input type="hidden" name="utm_medium" />
+              <input type="hidden" name="utm_campaign" />
+              <input type="hidden" name="utm_content" />
+              <input type="hidden" name="utm_term" />
+              <input type="hidden" name="fbclid" />
+              <input type="hidden" name="fbc" />
+              <input type="hidden" name="fbp" />
+              <input type="hidden" name="event_id" />
+              <input type="hidden" name="referrer" />
+              <input type="hidden" name="landing_url" />
+              <!-- Factura que el usuario selecciono en la calculadora (contexto para el asesor). -->
+              <input type="hidden" name="factura_estimada" />
+              <label class="fld">Nombre completo *
+                <input type="text" name="nombre" required placeholder="Tu nombre" />
+              </label>
+              <div class="fld-row">
+                <label class="fld">Teléfono / WhatsApp *
+                  <input type="tel" name="telefono" required placeholder="787-000-0000" />
+                </label>
+                <label class="fld">Correo electrónico *
+                  <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" />
+                </label>
+              </div>
+              <label class="fld">Tipo de vivienda *
+                <select name="vivienda" required>
+                  <option value="">Selecciona</option>
+                  <option>Casa</option><option>Apartamento</option><option>Comercial</option>
+                </select>
+              </label>
+              <button type="submit" class="btn" style="width:100%;margin-top:4px">Solicita mi evaluación gratuita <span class="arrow">→</span></button>
+              <p id="form-msg" style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--muted);display:none"></p>
+            </form>
+            <div class="hc-badges"><span>✅ Gratis</span><span>🔒 Datos protegidos</span><span>⏱️ Respuesta rápida</span></div>
+            <div class="hc-wa">
+              <span>¿Prefieres hablar directo?</span>
+              <a href="#" class="btn-wa js-wa" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+              </a>
+            </div>
+          </div><!-- /hc-step2 -->
         </div>
       </div>
     </div>
@@ -517,47 +625,14 @@
     <div class="container">
       <div class="form-wrap reveal">
         <h2>Solicita tu evaluación gratuita</h2>
-        <p class="sub">Déjanos tus datos y un asesor te contactará. Sin compromiso.</p>
+        <p class="sub">Calcula tu ahorro y déjanos tus datos. Sin costo y sin compromiso.</p>
         <div class="form-badges">
           <span>✅ Gratis</span><span>🔒 Tus datos protegidos</span><span>⏱️ Respuesta rápida</span>
         </div>
-        <!-- Formulario 100% estático: envia directo a HubSpot desde el navegador y
-             dispara el evento Lead del pixel. No depende de ningun servidor/Netlify. -->
-        <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
-          <!-- Atribución (se rellenan por JS al cargar). Viajan al servidor para CRM + Conversions API. -->
-          <input type="hidden" name="utm_source" />
-          <input type="hidden" name="utm_medium" />
-          <input type="hidden" name="utm_campaign" />
-          <input type="hidden" name="utm_content" />
-          <input type="hidden" name="utm_term" />
-          <input type="hidden" name="fbclid" />
-          <input type="hidden" name="fbc" />
-          <input type="hidden" name="fbp" />
-          <input type="hidden" name="event_id" />
-          <input type="hidden" name="referrer" />
-          <input type="hidden" name="landing_url" />
-          <!-- Factura que el usuario selecciono en la calculadora (contexto para el asesor). -->
-          <input type="hidden" name="factura_estimada" />
-          <label class="fld">Nombre completo *
-            <input type="text" name="nombre" required placeholder="Tu nombre" />
-          </label>
-          <div class="fld-row">
-            <label class="fld">Teléfono / WhatsApp *
-              <input type="tel" name="telefono" required placeholder="787-000-0000" />
-            </label>
-            <label class="fld">Correo electrónico *
-              <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" />
-            </label>
-          </div>
-          <label class="fld">Tipo de vivienda *
-            <select name="vivienda" required>
-              <option value="">Selecciona</option>
-              <option>Casa</option><option>Apartamento</option><option>Comercial</option>
-            </select>
-          </label>
-          <button type="submit" class="btn" style="width:100%;margin-top:8px">Solicita tu evaluación gratuita <span class="arrow">→</span></button>
-          <p id="form-msg" style="text-align:center;margin-top:14px;font-size:14px;color:var(--muted);display:none"></p>
-        </form>
+        <!-- El formulario unico vive en la tarjeta del hero (primer viewport). Aqui solo
+             hay un CTA que devuelve a esa tarjeta, para no duplicar el formulario ni
+             partir la medicion del evento Lead entre dos formularios. -->
+        <a href="#calculadora" class="btn js-to-calc" style="width:100%;text-align:center;justify-content:center">Calcular mi ahorro y solicitar evaluación <span class="arrow">→</span></a>
         <div class="wa-alt">
           <span class="wa-alt-line">¿Prefieres hablar directo con un asesor?</span>
           <a href="#" class="btn-wa js-wa" rel="noopener">
@@ -641,6 +716,12 @@
       }
       function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
 
+      // Termino real de la tabla de financiamiento portada desde la app (20 años, 7.95%).
+      var TERM_YEARS = 20;
+      var elLumaTotal = document.getElementById('calc-luma-total');
+      var elOwnTotal = document.getElementById('calc-own-total');
+      var elOwnNote = document.getElementById('calc-own-note');
+
       var currentBill = Number(slider.value);
 
       function render() {
@@ -665,24 +746,78 @@
         }
         elIncentive.innerHTML = 'Con el incentivo de PR podrías recibir hasta <b>' + money(incentive) +
           '</b> de vuelta, más el 30% de crédito federal.';
+
+        // Propiedad vs alquiler. TERM_YEARS es el termino real de la tabla (20 años).
+        // El total de LUMA usa la tarifa actual sin proyectar aumentos: es una
+        // estimacion conservadora, no infla la comparacion a nuestro favor.
+        var lumaTotal = bill * 12 * TERM_YEARS;
+        var ownTotal = plan.monthly * 12 * TERM_YEARS;
+        elLumaTotal.textContent = money(lumaTotal);
+        elOwnTotal.textContent = money(ownTotal);
+        if (ownTotal < lumaTotal) {
+          elOwnNote.innerHTML = 'Pagarías <b>' + money(lumaTotal - ownTotal) + ' menos</b> que a LUMA y al final el equipo es tuyo. ' +
+            'Después de pagarlo, sigue produciendo tu energía sin cuota.';
+        } else {
+          // Con facturas bajas el argumento no es el dinero, es lo que obtienes.
+          elOwnNote.innerHTML = 'Le pagas a tu propio sistema, no a un recibo que nunca termina: ' +
+            'te queda el equipo, la batería y respaldo en cada apagón.';
+        }
       }
 
       slider.addEventListener('input', render);
       render();
 
-      // El CTA lleva al formulario y pasa la factura estimada (contexto para el asesor).
+      // El CTA revela el formulario DENTRO de la misma tarjeta: el usuario no
+      // necesita hacer scroll entre ver su ahorro y dejar sus datos.
+      var step1 = document.getElementById('hc-step1');
+      var step2 = document.getElementById('hc-step2');
+      var back = document.getElementById('hc-back');
+      var recap = document.getElementById('hc-recap');
+
       cta.addEventListener('click', function () {
         var form = document.getElementById('lead-form');
         if (form) {
           var hidden = form.querySelector('input[name="factura_estimada"]');
           if (hidden) hidden.value = '$' + currentBill + '/mes';
         }
+        if (recap) {
+          var plan = recommend(currentBill);
+          var saving = Math.max(0, currentBill - plan.monthly);
+          recap.innerHTML = 'Factura actual: <b style="color:var(--navy)">' + money(currentBill) + '/mes</b>' +
+            (saving > 0 ? ' · Ahorro estimado: <b>' + money(saving) + '/mes</b>' : ' · Con respaldo 24/7') +
+            '<br>' + plan.system + ' — y el sistema queda tuyo.';
+        }
         if (window.fbq) {
           // Senal de intencion intermedia (no es un Lead todavia).
           try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
         }
-        var target = document.getElementById('formulario');
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (step1 && step2) {
+          step1.hidden = true;
+          step2.hidden = false;
+          // Si el usuario ya habia bajado, la tarjeta puede quedar fuera de vista al
+          // cambiar de paso. Solo reencuadramos en ese caso; si ya esta visible no
+          // movemos nada para no provocar un salto innecesario.
+          var card = document.getElementById('calculadora');
+          if (card && card.getBoundingClientRect().top < 0) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          var first = step2.querySelector('input[name="nombre"]');
+          if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
+        }
+      });
+
+      if (back) {
+        back.addEventListener('click', function () {
+          if (step1 && step2) { step2.hidden = true; step1.hidden = false; }
+        });
+      }
+
+      // El CTA del final de la pagina devuelve a la tarjeta y abre el paso del formulario.
+      Array.prototype.forEach.call(document.querySelectorAll('.js-to-calc'), function (a) {
+        a.addEventListener('click', function () {
+          var card = document.getElementById('calculadora');
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
       });
     })();
   </script>
