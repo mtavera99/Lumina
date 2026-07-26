@@ -848,7 +848,14 @@
         if (calcUsada) return;
         calcUsada = true;
         if (window.fbq) {
+          // Evento propio: para nuestro diagnostico del embudo.
           try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
+          // Evento ESTANDAR equivalente: los personalizados tardan en aparecer en
+          // el selector de conversiones de Meta, mientras que los estandar se
+          // pueden elegir al instante para optimizar el conjunto de anuncios.
+          // Ademas Meta tiene mucho mas historial de entrenamiento con ViewContent,
+          // asi que optimiza mejor que con un evento inventado por nosotros.
+          try { fbq('track', 'ViewContent', { content_name: 'calculadora', value: currentBill, currency: 'USD' }); } catch (e) {}
         }
       }
 
@@ -885,6 +892,9 @@
         if (window.fbq) {
           // Intencion: abrio el formulario. Todavia NO es un Lead.
           try { fbq('trackCustom', 'FormularioAbierto', { factura: currentBill }); } catch (e) {}
+          // Equivalente estandar, para poder optimizar por este escalon cuando
+          // haya volumen suficiente sin depender de conversiones personalizadas.
+          try { fbq('track', 'InitiateCheckout', { content_name: 'formulario', value: currentBill, currency: 'USD' }); } catch (e) {}
         }
         if (step1 && step2) {
           step1.hidden = true;
