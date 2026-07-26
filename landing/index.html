@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Energía Solar en Puerto Rico | Lumina — Evaluación Gratuita</title>
-  <meta name="description" content="Reduce tu factura de luz y protege tu hogar de los apagones con energía solar. Financiamiento desde $150/mes. Evaluación gratuita y sin compromiso con Lumina PR." />
+  <meta name="description" content="Inspección energética gratis en tu casa: revisamos tu consumo real y tu techo y te decimos qué necesitas. Sin costo y sin compromiso. Lumina PR, Grupo Atabaya." />
 
   <!-- Verificación de dominio de Meta (Business Manager de LuminaPR) -->
   <meta name="facebook-domain-verification" content="bz8ratl4kntenx5puq9sfv5azmysv9" />
 
   <meta property="og:title" content="Energía Solar en Puerto Rico | Lumina" />
-  <meta property="og:description" content="Reduce tu factura y protege tu hogar de los apagones. Financiamiento desde $150/mes. Evaluación gratuita." />
+  <meta property="og:description" content="Inspección energética gratis en tu casa. Sin costo y sin compromiso de compra." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://solar.luminapr.net/" />
 
@@ -175,31 +175,12 @@
     /* ----- Comparacion de propiedad (alquilar vs poseer) -----
        Compacta: 2 lineas visibles + detalle desplegable, para que el CTA no
        salga del primer viewport. */
-    .hc-own { border: 1px dashed var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 13px; }
-    .hc-own-sum { list-style: none; cursor: pointer; display: block; }
-    .hc-own-sum::-webkit-details-marker { display: none; }
-    .hc-own-t { display: block; font-family: 'Poppins'; font-weight: 700; font-size: 12.5px;
-      color: var(--navy); line-height: 1.3; }
-    .hc-own-line { display: block; font-size: 12px; color: var(--muted); line-height: 1.4; margin-top: 3px; }
-    .hc-own-line s { color: #B3413F; text-decoration-thickness: 1.5px; }
-    .hc-own-line b { color: #1F9D63; }
-    .hc-own-more { display: inline-block; font-size: 11px; font-weight: 700; color: var(--gold-deep); margin-top: 4px; }
-    .hc-own-more::after { content: ' ▾'; }
-    .hc-own[open] .hc-own-more::after { content: ' ▴'; }
-    .hc-own-note { font-size: 11.5px; color: var(--muted); margin-top: 8px; padding-top: 8px;
-      border-top: 1px dashed var(--line); line-height: 1.45; }
-
-    /* ----- Paso 2: formulario dentro de la tarjeta ----- */
-    .hc-back { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit;
-      font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 12px; }
-    .hc-back:hover { color: var(--navy); }
-    .hc-recap { background: #f4f7fc; border: 1px solid var(--line); border-radius: 12px;
-      padding: 11px 14px; margin-bottom: 15px; font-size: 13px; color: var(--navy); line-height: 1.5; }
-    .hc-recap b { color: #1F9D63; }
-    /* La tarjeta es estrecha: los campos van siempre en una columna. */
-    #hc-step2 .fld-row { grid-template-columns: 1fr; }
-    #hc-step2 .lead-form .fld { margin-bottom: 11px; font-size: 13px; }
-    #hc-step2 .lead-form input, #hc-step2 .lead-form select { padding: 11px 12px; font-size: 14.5px; }
+    /* El formulario vive dentro de la tarjeta del hero, que es estrecha:
+       los campos van siempre en una columna y con espaciado compacto para que
+       el boton de enviar quede lo mas alto posible. */
+    .hero-card .fld-row { grid-template-columns: 1fr; }
+    .hero-card .lead-form .fld { margin-bottom: 10px; font-size: 13px; }
+    .hero-card .lead-form input, .hero-card .lead-form select { padding: 10px 12px; font-size: 14.5px; margin-top: 4px; }
     .hc-badges { display: flex; justify-content: center; gap: 8px 14px; flex-wrap: wrap; margin-top: 13px; }
     .hc-badges span { font-size: 11.5px; color: var(--navy); font-weight: 600; }
     .hc-wa { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
@@ -363,30 +344,15 @@
       .hero-stats { display: none; }
       /* Cabecera de la tarjeta compacta: cada pixel aqui es un pixel que gana
          el boton para quedarse dentro del fold. */
-      .hc-head { padding: 14px 18px 13px; }
+      .hc-head { padding: 12px 16px 11px; }
       .hc-head h2 { font-size: 18px; }
       .hc-head p { display: none; }
       .hc-badge { font-size: 10.5px; padding: 4px 9px; margin-bottom: 7px; }
-      .hc-body { padding: 16px 18px 18px; }
+      .hc-body { padding: 14px 16px 16px; }
       .hc-bill { font-size: 28px; }
       .hc-res-val { font-size: 19px; }
       .hc-results { padding: 12px 13px; margin: 11px 0 12px; }
       .hc-cta { font-size: 15.5px; padding: 14px 18px; }
-      /* En movil el boton sube por delante de la comparacion a 20 años: la
-         prioridad es que el CTA entre en el fold. La comparacion queda justo
-         debajo, como refuerzo para quien siga leyendo. */
-      #hc-step1 { display: flex; flex-direction: column; }
-      /* El selector de ID gana al display:none del atributo [hidden], asi que hay
-         que restaurarlo explicitamente o el paso 1 no se oculta en movil. */
-      #hc-step1[hidden] { display: none; }
-      /* Con el formulario abierto la barra fija es redundante y encima tapa el
-         boton de enviar en telefonos cortos: se oculta y se libera el padding. */
-      body.form-abierto { padding-bottom: 0; }
-      body.form-abierto .mobile-cta { display: none; }
-      body.form-abierto .wa-float { bottom: 16px; }
-      #hc-step1 .hc-cta { order: 1; }
-      #hc-step1 .hc-own { order: 2; margin: 12px 0 0; }
-      #hc-step1 .hc-note { order: 3; }
       .hero-bg img { object-position: 62% center; }
       .hero-bg::after { background:
         linear-gradient(180deg, rgba(5,16,30,.72) 0%, rgba(6,20,38,.86) 55%, rgba(6,20,38,.95) 100%),
@@ -408,13 +374,8 @@
       .hc-res-val { font-size: 17.5px; }
       .hc-cta { font-size: 15px; padding: 13px 16px; }
       /* Paso 2 tambien mas compacto, para que el boton de enviar entre en el fold. */
-      .hc-back { margin-bottom: 8px; }
-      .hc-recap { padding: 8px 11px; margin-bottom: 10px; font-size: 12px; }
-      #hc-step2 .lead-form .fld { margin-bottom: 8px; font-size: 12.5px; }
-      #hc-step2 .lead-form input, #hc-step2 .lead-form select { padding: 9px 11px; font-size: 14px; margin-top: 4px; }
-      /* En pantallas muy cortas el recap se sacrifica: el usuario acaba de ver
-         esos numeros en el paso 1, y asi el boton de enviar entra en el fold. */
-      .hc-recap { display: none; }
+      .hero-card .lead-form .fld { margin-bottom: 7px; font-size: 12.5px; }
+      .hero-card .lead-form input, .hero-card .lead-form select { padding: 8px 11px; font-size: 14px; margin-top: 3px; }
       .hc-badges { margin-top: 9px; }
       .hc-wa { margin-top: 10px; padding-top: 10px; }
     }
@@ -450,128 +411,97 @@
       <div class="hero-copy reveal in">
         <!-- Gancho corto: en movil es lo unico que va ANTES de la calculadora. -->
         <div class="hero-hook">
-          <span class="eyebrow on-dark">☀ Evaluación solar gratuita · Puerto Rico</span>
-          <h1>Deja de pagarle a LUMA lo que <span class="hl">tu techo puede producir</span>.</h1>
+          <span class="eyebrow on-dark">📋 Inspección energética · Gratis</span>
+          <h1>Estamos en temporada de huracanes. <span class="hl">¿Tu casa está lista?</span></h1>
         </div>
-        <!-- Resto del argumento: en movil baja DEBAJO de la calculadora. -->
+        <!-- Resto del argumento: en movil baja DEBAJO de la tarjeta de agenda. -->
         <div class="hero-rest">
-        <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar cada mes y cuánto costaría tu sistema. Sin costo y sin compromiso.</p>
+        <p class="lead">Un especialista de Lumina va a tu casa, revisa tu consumo real y tu techo, y te dice exactamente qué necesitas. Sin costo y sin compromiso de compra.</p>
         <ul class="benefits">
-          <li><span class="check">✓</span><span>Tu cuota paga <b>tu propio sistema</b>, no un recibo eterno</span></li>
-          <li><span class="check">✓</span><span>Respaldo con batería: sigue con luz en los apagones</span></li>
-          <li><span class="check">✓</span><span>Financiamiento desde $150/mes, sin pagar de contado</span></li>
-          <li><span class="check">✓</span><span>Empresa 100% puertorriqueña, acompañamiento completo</span></li>
+          <li><span class="check">✓</span><span>Visita <b>en tu casa</b>, no una llamada de venta</span></li>
+          <li><span class="check">✓</span><span>Equipos con marca: Canadian Solar, Sol-Ark, Pytes</span></li>
+          <li><span class="check">✓</span><span>Nos encargamos de todos los trámites con LUMA</span></li>
+          <li><span class="check">✓</span><span>Sin pagar de contado. Decides tú, sin presión</span></li>
         </ul>
         <div class="hero-stats">
-          <div class="hstat"><b>$0</b><small>De contado</small></div>
-          <div class="hstat"><b>24/7</b><small>Respaldo en apagones</small></div>
-          <div class="hstat"><b>Tuyo</b><small>Al terminar de pagarlo</small></div>
+          <div class="hstat"><b>Gratis</b><small>La inspección completa</small></div>
+          <div class="hstat"><b>24/7</b><small>Respaldo con batería</small></div>
+          <div class="hstat"><b>Hasta 25</b><small>Años de garantía</small></div>
         </div>
         </div><!-- /hero-rest -->
       </div>
 
-      <!-- CALCULADORA + CAPTURA (visible sin scroll) -->
-      <div class="hero-card reveal in" id="calculadora">
+      <!-- AGENDA LA INSPECCION (visible sin scroll) -->
+      <div class="hero-card reveal in" id="agenda">
         <div class="hc-head">
-          <span class="hc-badge">🧮 Calculadora de ahorro</span>
-          <h2>¿Cuánto puedes ahorrar?</h2>
-          <p>Mueve tu factura de luz y mira tu estimado al instante.</p>
+          <span class="hc-badge">&#128203; Inspecci&oacute;n gratis</span>
+          <h2>Agenda tu inspecci&oacute;n</h2>
+          <p>Natana te contacta el mismo d&iacute;a para coordinar la visita.</p>
         </div>
 
         <div class="hc-body">
-          <!-- PASO 1: calculadora -->
-          <div id="hc-step1">
-          <label class="hc-label" for="calc-bill">¿Cuánto pagas de luz al mes?</label>
-          <div class="hc-billrow">
-            <span class="hc-bill" id="calc-bill-out">$350</span>
-          </div>
-          <input type="range" id="calc-bill" min="80" max="600" step="10" value="350" aria-label="Factura mensual de luz" />
-          <div class="hc-scale"><span>$80</span><span>$600+</span></div>
-
-          <div class="hc-results" id="calc-results">
-            <div class="hc-res-main">
-              <div class="hc-res-item">
-                <span class="hc-res-lbl">Tu cuota — es tu sistema</span>
-                <span class="hc-res-val" id="calc-monthly">$250<i>/mes</i></span>
-              </div>
-              <div class="hc-res-item hc-save" id="calc-save-wrap">
-                <span class="hc-res-lbl">Ahorro estimado</span>
-                <span class="hc-res-val hl" id="calc-save">$0<i>/mes</i></span>
-              </div>
-            </div>
-            <div class="hc-sys" id="calc-system">Sistema sugerido: 10kW + batería</div>
-            <div class="hc-incentive" id="calc-incentive">Financiamiento a 20 años, <b>sin pago inicial</b>.</div>
-          </div>
-
-          <!-- Comparacion de propiedad: la cuota no es un recibo, es un activo.
-               Cifras a 20 años (termino real de la tabla de financiamiento).
-               Va comprimida a un resumen de 2 lineas para no empujar el CTA fuera
-               del primer viewport; el desglose queda en un <details> desplegable. -->
-          <details class="hc-own">
-            <summary class="hc-own-sum">
-              <span class="hc-own-t">Con LUMA alquilas la luz. Con Lumina compras tu sistema.</span>
-              <span class="hc-own-line" id="calc-own-line">20 años con LUMA: <s id="calc-luma-total">$84,000</s> · Con Lumina: <b id="calc-own-total">$60,000</b> y es tuyo</span>
-              <span class="hc-own-more">Ver comparación</span>
-            </summary>
-            <p class="hc-own-note" id="calc-own-note">Cada mes le pagas a tu propio sistema, no a un recibo que nunca termina.</p>
-          </details>
-
-          <!-- El texto se personaliza por JS con la cifra que el usuario acaba de ver. -->
-          <button type="button" class="btn hc-cta" id="calc-cta"><span id="calc-cta-text">Recibir mi evaluación gratuita</span> <span class="arrow">→</span></button>
-          <p class="hc-note">Estimado orientativo. Se confirma en tu evaluación gratuita según tu consumo real.</p>
-          </div><!-- /hc-step1 -->
-
-          <!-- PASO 2: el formulario vive DENTRO de la tarjeta, en el primer viewport.
-               No hay scroll entre ver el ahorro y dejar los datos. -->
-          <div id="hc-step2" hidden>
-            <button type="button" class="hc-back" id="hc-back">← Cambiar mi factura</button>
-            <div class="hc-recap" id="hc-recap"></div>
-            <!-- Formulario 100% estático: envia directo a HubSpot desde el navegador y
-                 dispara el evento Lead del pixel. No depende de ningun servidor/Netlify. -->
-            <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
-              <!-- Atribución (se rellenan por JS al cargar). Viajan al CRM. -->
-              <input type="hidden" name="utm_source" />
-              <input type="hidden" name="utm_medium" />
-              <input type="hidden" name="utm_campaign" />
-              <input type="hidden" name="utm_content" />
-              <input type="hidden" name="utm_term" />
-              <input type="hidden" name="fbclid" />
-              <input type="hidden" name="fbc" />
-              <input type="hidden" name="fbp" />
-              <input type="hidden" name="event_id" />
-              <input type="hidden" name="referrer" />
-              <input type="hidden" name="landing_url" />
-              <!-- Factura que el usuario selecciono en la calculadora (contexto para el asesor). -->
-              <input type="hidden" name="factura_estimada" />
-              <label class="fld">Nombre completo *
-                <input type="text" name="nombre" required placeholder="Tu nombre" />
+          <!-- Aqui vivia una calculadora de ahorro. Se retiro a proposito: para la
+               factura tipica de Puerto Rico mostraba un ahorro de $40-100/mes, lo que
+               descalificaba al visitante antes de que hablara con nadie. La landing del
+               lider del mercado tampoco muestra precios ni ahorros; vende la visita.
+               El monto de la factura se pide como rango dentro del formulario: sirve
+               para calificar sin ensenar una cifra que desanime. -->
+          <!-- Formulario 100% estatico: envia directo a HubSpot desde el navegador y
+               dispara el evento Lead del pixel. No depende de ningun servidor. -->
+          <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
+            <!-- Atribucion (se rellenan por JS al cargar). Viajan al CRM. -->
+            <input type="hidden" name="utm_source" />
+            <input type="hidden" name="utm_medium" />
+            <input type="hidden" name="utm_campaign" />
+            <input type="hidden" name="utm_content" />
+            <input type="hidden" name="utm_term" />
+            <input type="hidden" name="fbclid" />
+            <input type="hidden" name="fbc" />
+            <input type="hidden" name="fbp" />
+            <input type="hidden" name="event_id" />
+            <input type="hidden" name="referrer" />
+            <input type="hidden" name="landing_url" />
+            <label class="fld">Nombre completo *
+              <input type="text" name="nombre" required placeholder="Tu nombre" />
+            </label>
+            <div class="fld-row">
+              <label class="fld">Tel&eacute;fono / WhatsApp *
+                <input type="tel" name="telefono" required placeholder="787-000-0000" />
               </label>
-              <div class="fld-row">
-                <label class="fld">Teléfono / WhatsApp *
-                  <input type="tel" name="telefono" required placeholder="787-000-0000" />
-                </label>
-                <label class="fld">Correo electrónico *
-                  <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" />
-                </label>
-              </div>
-              <label class="fld">Tipo de vivienda *
-                <select name="vivienda" required>
-                  <option value="">Selecciona</option>
-                  <option>Casa</option><option>Apartamento</option><option>Comercial</option>
-                </select>
+              <label class="fld">Correo electr&oacute;nico *
+                <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" />
               </label>
-              <button type="submit" class="btn" style="width:100%;margin-top:4px">Solicita mi evaluación gratuita <span class="arrow">→</span></button>
-              <p id="form-msg" style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--muted);display:none"></p>
-            </form>
-            <div class="hc-badges"><span>✅ Gratis</span><span>🔒 Datos protegidos</span><span>⏱️ Respuesta rápida</span></div>
-            <div class="hc-wa">
-              <span>¿Prefieres hablar directo?</span>
-              <a href="#" class="btn-wa js-wa" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                WhatsApp
-              </a>
             </div>
-          </div><!-- /hc-step2 -->
+            <label class="fld">&iquest;Cu&aacute;nto pagas de luz al mes? *
+              <select name="factura" id="fld-factura" required>
+                <option value="">Selecciona</option>
+                <option>Menos de $150</option>
+                <option>$150 &ndash; $250</option>
+                <option>$250 &ndash; $400</option>
+                <option>$400 &ndash; $600</option>
+                <option>M&aacute;s de $600</option>
+              </select>
+            </label>
+            <label class="fld">Tipo de vivienda *
+              <select name="vivienda" required>
+                <option value="">Selecciona</option>
+                <option>Casa propia</option>
+                <option>Casa alquilada</option>
+                <option>Apartamento</option>
+                <option>Comercial</option>
+              </select>
+            </label>
+            <button type="submit" class="btn" style="width:100%;margin-top:4px">Agendar inspecci&oacute;n gratis <span class="arrow">&rarr;</span></button>
+            <p id="form-msg" style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--muted);display:none"></p>
+          </form>
+          <div class="hc-badges"><span>&#9989; Gratis</span><span>&#128274; Datos protegidos</span><span>&#9201; Respuesta el mismo d&iacute;a</span></div>
+          <div class="hc-wa">
+            <span>&iquest;Prefieres escribir?</span>
+            <a href="#" class="btn-wa js-wa" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -580,10 +510,10 @@
   <!-- Trust bar -->
   <div class="trust">
     <div class="trust-inner">
-      <div class="trust-item"><span class="ico">🇵🇷</span> 100% puertorriqueña</div>
-      <div class="trust-item"><span class="ico">🔋</span> Respaldo ante apagones</div>
-      <div class="trust-item"><span class="ico">📅</span> Financiamiento flexible</div>
-      <div class="trust-item"><span class="ico">🤝</span> Acompañamiento completo</div>
+      <div class="trust-item"><span class="ico">🇵🇷</span> Grupo Atabaya · Caguas, PR</div>
+      <div class="trust-item"><span class="ico">✅</span> Instaladores certificados LUMA</div>
+      <div class="trust-item"><span class="ico">🔋</span> Canadian Solar · Sol-Ark · Pytes</div>
+      <div class="trust-item"><span class="ico">🛡️</span> Garantías de hasta 25 años</div>
     </div>
   </div>
 
@@ -609,7 +539,7 @@
         <div class="inc-card reveal">
           <div class="inc-amt">$0</div>
           <h3>Sin pagar de contado</h3>
-          <p>Con financiamiento desde $150/mes empiezas sin desembolso inicial, y en muchos casos la cuota es menor que tu factura de luz.</p>
+          <p>Empiezas sin desembolso inicial, con financiamiento a través de una cooperativa local. En muchos casos la cuota queda por debajo de lo que ya pagas de luz.</p>
         </div>
         <div class="inc-card reveal d1">
           <div class="inc-amt">24/7</div>
@@ -638,7 +568,7 @@
         <div class="card reveal"><div class="ic-wrap">🔋</div><h3>Respaldo</h3><p>Con batería, mantén funcionando lo esencial de tu hogar aunque se vaya la luz.</p></div>
         <div class="card reveal d1"><div class="ic-wrap">💰</div><h3>Ahorro</h3><p>Tu techo produce tu propia energía y tu factura baja desde el primer mes.</p></div>
         <div class="card reveal d2"><div class="ic-wrap">⚡</div><h3>Independencia</h3><p>Menos dependencia de LUMA y más control de la energía de tu casa.</p></div>
-        <div class="card reveal d3"><div class="ic-wrap">📅</div><h3>Financiamiento</h3><p>Desde $150/mes. En muchos casos, menos de lo que pagas hoy de luz.</p></div>
+        <div class="card reveal d3"><div class="ic-wrap">📅</div><h3>Financiamiento</h3><p>A través de cooperativa local, sin pago inicial y sujeto a aprobación de crédito.</p></div>
       </div>
     </div>
   </section>
@@ -648,43 +578,73 @@
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Sin compromiso</span>
-        <h2>Qué incluye tu evaluación gratuita</h2>
-        <p>Gratis y sin compromiso. Así tomas la decisión con toda la información.</p>
+        <h2>Qué pasa en la visita</h2>
+        <p>Un especialista va a tu casa. Dura menos de una hora y no tienes que comprar nada.</p>
       </div>
       <div class="steps-grid">
-        <div class="step reveal"><div class="step-num">1</div><h3>Revisamos tu factura</h3><p>Analizamos tu consumo real para dimensionar el sistema correcto.</p></div>
-        <div class="step reveal d1"><div class="step-num">2</div><h3>Diseñamos tu sistema</h3><p>Una recomendación pensada para tu hogar, con o sin batería.</p></div>
-        <div class="step reveal d2"><div class="step-num">3</div><h3>Te mostramos el ahorro</h3><p>Estimación de tu ahorro y las opciones de financiamiento.</p></div>
+        <div class="step reveal"><div class="step-num">1</div><h3>Revisamos tu consumo</h3><p>Analizamos tus facturas reales para dimensionar el sistema correcto, sin estimados al aire.</p></div>
+        <div class="step reveal d1"><div class="step-num">2</div><h3>Evaluamos tu techo</h3><p>Tipo de techo, orientación, sombra y condiciones eléctricas de tu casa.</p></div>
+        <div class="step reveal d2"><div class="step-num">3</div><h3>Te explicamos las opciones</h3><p>Qué sistema te sirve, cómo queda tu respaldo y qué opciones de financiamiento tienes.</p></div>
         <div class="step reveal d3"><div class="step-num">4</div><h3>Instalación y seguimiento</h3><p>Equipo certificado y acompañamiento de principio a fin.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- Financiamiento -->
-  <section class="block fin">
+  <!-- Equipos.
+       Sustituye a la seccion que mostraba cuotas de $150/$250/$369. Se retiraron
+       esas cifras porque provienen de una tabla al 7.95%, mientras que la propuesta
+       comercial real ofrece financiamiento "desde 4.95% mediante cooperativa local",
+       y los precios de sistema tampoco coinciden con la cotizacion real ($45,000 en
+       el repo frente a $52,897 en una propuesta de ~15kW). Publicar una cuota que
+       luego suba en la visita destruye la confianza en el cierre.
+       NO reponer cifras hasta confirmar tasa y precio con el equipo comercial.
+       La landing del lider del mercado tampoco muestra precios: vende la visita. -->
+  <section class="block alt" id="equipos">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow on-dark">Planes accesibles</span>
-        <h2>Energía solar desde $150 al mes</h2>
-        <p>Nunca lideramos con el precio total, sino con una cuota que encaja en tu presupuesto.</p>
+        <span class="eyebrow">Equipos</span>
+        <h2>Sabes exactamente qué te instalamos</h2>
+        <p>Marca por marca. Sin &laquo;o equivalente&raquo; sin explicar, sin letra chiquita.</p>
       </div>
-      <div class="fin-cards">
-        <div class="fin-card reveal"><div class="sys">5kW + batería</div><div class="price">$150<small>/mes</small></div><div class="msg">Respaldado por menos de $5/día</div></div>
-        <div class="fin-card featured reveal d1"><div class="fin-tag">Más elegido</div><div class="sys">10kW + batería</div><div class="price">$250<small>/mes</small></div><div class="msg">Potencia completa para tu familia</div></div>
-        <div class="fin-card reveal d2"><div class="sys">15kW + batería</div><div class="price">$369<small>/mes</small></div><div class="msg">Solución premium para hogar grande</div></div>
+      <div class="cards">
+        <div class="card reveal"><div class="ic-wrap">☀️</div><h3>Canadian Solar</h3><p>Paneles de 640W de alta eficiencia, resistentes al clima del Caribe. Garantía de fabricante de hasta 20 años.</p></div>
+        <div class="card reveal d1"><div class="ic-wrap">⚙️</div><h3>Inversor Sol-Ark</h3><p>Híbrido con respaldo automático: cuando la red cae, tu casa sigue. Operación silenciosa y monitoreo desde tu celular.</p></div>
+        <div class="card reveal d2"><div class="ic-wrap">🔋</div><h3>Batería Pytes LFP</h3><p>Química de litio-ferrofosfato: la más segura y de mayor vida útil. Almacena la energía que produces de día.</p></div>
+        <div class="card reveal d3"><div class="ic-wrap">🔧</div><h3>UNIRAC y Hilti</h3><p>Estructura de montaje certificada con anclajes Hilti de 2,000+ lb, seleccionados según tu tipo de techo. Garantía de hasta 25 años.</p></div>
       </div>
-      <p class="fin-disclaimer">Cifras orientativas. La cuota final se confirma en tu evaluación gratuita, según tu consumo y las opciones de financiamiento.</p>
+      <p class="inc-note">También incluye protección Tigo de apagado rápido, cableado PV/UV, puesta a tierra completa, cajas NEMA para exterior, interruptores de transferencia y configuración de monitoreo. El detalle completo te lo entregamos por escrito en la propuesta.</p>
     </div>
   </section>
 
-  <!-- Prueba social -->
+  <!-- Gestiones con LUMA: competencia operativa como argumento de confianza. -->
+  <section class="block">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nos encargamos</span>
+        <h2>Tú no lidias con LUMA. Nosotros sí.</h2>
+        <p>El papeleo es la parte que frena a la mayoría de la gente. Es nuestra responsabilidad, no tuya.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step reveal"><div class="step-num">1</div><h3>Certificación LUMA</h3><p>Instaladores certificados para cumplir los requisitos aplicables de LUMA Energy.</p></div>
+        <div class="step reveal d1"><div class="step-num">2</div><h3>Contrato de medición neta</h3><p>Gestionamos el contrato para que puedas inyectar energía y recibir créditos, sujeto a aprobación.</p></div>
+        <div class="step reveal d2"><div class="step-num">3</div><h3>Interconexión</h3><p>Coordinamos inspección, documentación y todo el proceso de interconexión del sistema.</p></div>
+        <div class="step reveal d3"><div class="step-num">4</div><h3>Permisos y códigos</h3><p>Permisos, documentación y cumplimiento de los códigos eléctricos y de seguridad.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manejo de la objecion principal, tomado del patron del lider del mercado. -->
   <section class="block quote-band">
     <div class="container">
       <div class="quote-card reveal">
-        <div class="stars">★★★★★</div>
         <div class="quote-mark">&ldquo;</div>
-        <p>Familias en todo Puerto Rico ya no le temen al próximo apagón: tienen su factura bajo control y respaldo cuando se va la luz.</p>
-        <div class="who">— El compromiso de Lumina PR con cada hogar</div>
+        <p>&iquest;Por qu&eacute; la inspecci&oacute;n es gratis?</p>
+        <div class="who" style="margin-top:18px;font-size:16px;line-height:1.65;color:var(--text)">
+          Porque la mayoría de la gente no sabe cuánto consume su casa ni qué necesita, y sin
+          eso no puede decidir nada. Vamos, medimos y te explicamos. Si te sirve, te presentamos
+          opciones. Y si no, te quedas con el diagnóstico de tu hogar sin haber pagado nada.
+          <br><br><b>Sin compromiso de compra y sin presión.</b>
+        </div>
       </div>
     </div>
   </section>
@@ -701,7 +661,7 @@
         <!-- El formulario unico vive en la tarjeta del hero (primer viewport). Aqui solo
              hay un CTA que devuelve a esa tarjeta, para no duplicar el formulario ni
              partir la medicion del evento Lead entre dos formularios. -->
-        <a href="#calculadora" class="btn js-to-calc" style="width:100%;text-align:center;justify-content:center">Calcular mi ahorro y solicitar evaluación <span class="arrow">→</span></a>
+        <a href="#agenda" class="btn js-to-calc" style="width:100%;text-align:center;justify-content:center">Agenda mi inspección gratis <span class="arrow">→</span></a>
         <div class="wa-alt">
           <span class="wa-alt-line">¿Prefieres hablar directo con un asesor?</span>
           <a href="#" class="btn-wa js-wa" rel="noopener">
@@ -718,9 +678,9 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="brand-name">LUMINA<span style="color:var(--gold)">PR</span></div>
-        <p>Soluciones solares para hogares y negocios en Puerto Rico. Energía que nunca te abandona.</p>
+        <p>Soluciones solares para hogares y negocios en Puerto Rico.<br>División de Grupo Atabaya · Ave Innovación Solar 16, Valle Tolima, Caguas PR 00727</p>
       </div>
-      <a href="#formulario" class="btn footer-cta">Evaluación gratuita <span class="arrow">→</span></a>
+      <a href="#agenda" class="btn footer-cta js-to-calc">Agenda tu inspección gratis <span class="arrow">→</span></a>
     </div>
     <div class="footer-legal">Copyright © 2025 Grupo Atabaya LLC · Todos los derechos reservados.</div>
   </footer>
@@ -735,7 +695,7 @@
        pantalla. Si la calculadora ya esta a la vista, abre el formulario; si no,
        lleva primero a la calculadora. -->
   <div class="mobile-cta">
-    <a href="#calculadora" class="btn js-cta-smart">Calcular mi ahorro gratis <span class="arrow">→</span></a>
+    <a href="#agenda" class="btn js-cta-smart">Agenda mi inspección gratis <span class="arrow">→</span></a>
   </div>
 
   <script>
@@ -754,217 +714,72 @@
        Misma tabla de financiamiento que el Campaign Studio.
        Da el valor ANTES de pedir datos: sube la conversion.
        ============================================================ -->
+  <!-- ============================================================
+       MEDICION DEL EMBUDO
+         PageView -> ViewContent -> InitiateCheckout -> Lead
+       Aqui vivia la logica de la calculadora de ahorro. Al retirarla, los
+       eventos intermedios se reanclan a interacciones reales con el formulario,
+       que son mejores senales de intencion que mover un slider:
+         - ViewContent      : primera interaccion con cualquier campo
+         - InitiateCheckout : selecciona su rango de factura (paso calificador)
+       Se mantienen los eventos propios para diagnostico y los estandar para que
+       Meta pueda optimizar sin depender de conversiones personalizadas.
+       ============================================================ -->
   <script>
     (function () {
-      // Plazo 20 anos (cuota mas baja), igual que la recomendacion del studio.
-      var PLANS = [
-        { kw: 5,  system: '5kW + batería (8 placas)',   value: 18000, monthly: 150 },
-        { kw: 10, system: '10kW + batería (12 placas)', value: 30000, monthly: 250 },
-        { kw: 15, system: '15kW + batería (15 placas)', value: 45000, monthly: 369 }
-      ];
-      // NO reintroducir calculos de incentivos sin verificar vigencia en la fuente
-      // oficial. El incentivo de PR (30% hasta $15,000) esta cerrado a nuevas
-      // solicitudes desde 2023, y el credito federal del 30% expiro el 31/12/2025.
-      // Prometer cifras de programas inactivos es publicidad enganosa.
+      var form = document.getElementById('lead-form');
+      if (!form) return;
 
-      var slider = document.getElementById('calc-bill');
-      var out = document.getElementById('calc-bill-out');
-      var elMonthly = document.getElementById('calc-monthly');
-      var elSave = document.getElementById('calc-save');
-      var elSaveWrap = document.getElementById('calc-save-wrap');
-      var elSystem = document.getElementById('calc-system');
-      var elIncentive = document.getElementById('calc-incentive');
-      var cta = document.getElementById('calc-cta');
-      if (!slider) return;
+      var inicio = false, factura = false;
 
-      // El sistema mas grande cuya cuota deje al menos un 10% de margen frente a la
-      // factura actual, para que el ahorro sea real y no quede en cero justo en el
-      // limite. Si ninguno cabe (facturas bajas), se muestra el menor y el valor
-      // pasa a ser el respaldo, no el ahorro.
-      function recommend(bill) {
-        var fit = null;
-        for (var i = 0; i < PLANS.length; i++) {
-          if (PLANS[i].monthly <= bill * 0.9) fit = PLANS[i];
-        }
-        return fit || PLANS[0];
-      }
-      function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
-
-      // Termino real de la tabla de financiamiento portada desde la app (20 años, 7.95%).
-      var TERM_YEARS = 20;
-      var elLumaTotal = document.getElementById('calc-luma-total');
-      var elOwnTotal = document.getElementById('calc-own-total');
-      var elOwnNote = document.getElementById('calc-own-note');
-      var elCtaText = document.getElementById('calc-cta-text');
-      // Valor de partida del slider: se lee del HTML para no duplicar la cifra.
-      var DEFAULT_BILL = Number(slider.value);
-
-      var currentBill = Number(slider.value);
-
-      function render() {
-        var bill = Number(slider.value);
-        currentBill = bill;
-        var plan = recommend(bill);
-        var saving = Math.max(bill - plan.monthly, 0);
-
-        out.textContent = money(bill);
-        elMonthly.innerHTML = money(plan.monthly) + '<i>/mes</i>';
-        elSystem.textContent = 'Sistema sugerido: ' + plan.system;
-
-        if (saving > 0) {
-          elSave.innerHTML = money(saving) + '<i>/mes</i>';
-          elSaveWrap.style.display = '';
-          elSave.classList.add('hl');
-        } else {
-          // Sin ahorro directo el valor es el respaldo, no el precio.
-          elSave.innerHTML = 'Respaldo 24/7';
-          elSave.classList.remove('hl');
-        }
-        // Dato verificable de la propia oferta (tabla de financiamiento del repo),
-        // en lugar de una promesa de incentivos que hoy no estan vigentes.
-        elIncentive.innerHTML = 'Sistema de ' + money(plan.value) +
-          ' financiado a 20 años, <b>sin pago inicial</b>.';
-
-        // Propiedad vs alquiler. TERM_YEARS es el termino real de la tabla (20 años).
-        // El total de LUMA usa la tarifa actual sin proyectar aumentos: es una
-        // estimacion conservadora, no infla la comparacion a nuestro favor.
-        var lumaTotal = bill * 12 * TERM_YEARS;
-        var ownTotal = plan.monthly * 12 * TERM_YEARS;
-        elLumaTotal.textContent = money(lumaTotal);
-        elOwnTotal.textContent = money(ownTotal);
-        if (ownTotal < lumaTotal) {
-          elOwnNote.innerHTML = 'Pagarías <b>' + money(lumaTotal - ownTotal) + ' menos</b> que a LUMA y al final el equipo es tuyo. ' +
-            'Después de pagarlo, sigue produciendo tu energía sin cuota.';
-        } else {
-          // Con facturas bajas el argumento no es el dinero, es lo que obtienes.
-          elOwnNote.innerHTML = 'Le pagas a tu propio sistema, no a un recibo que nunca termina: ' +
-            'te queda el equipo, la batería y respaldo en cada apagón.';
-        }
-
-        // CTA personalizado con la cifra que el usuario acaba de ver. Un boton
-        // concreto ("Quiero ahorrar $150/mes") convierte mejor que uno generico.
-        // Texto medido para caber en UNA linea incluso a 375px de ancho: en dos
-        // lineas el boton crece 23px y se sale del fold en telefonos cortos.
-        if (elCtaText) {
-          elCtaText.textContent = saving > 0
-            ? 'Ahorrar ' + money(saving) + '/mes — es gratis'
-            : 'Respaldo 24/7 — es gratis';
-        }
+      function marcarInicio() {
+        if (inicio) return;
+        inicio = true;
+        if (!window.fbq) return;
+        try { fbq('trackCustom', 'FormularioIniciado'); } catch (e) {}
+        try { fbq('track', 'ViewContent', { content_name: 'formulario_agenda' }); } catch (e) {}
       }
 
-      // MEDICION DEL EMBUDO. Sin esto no se puede saber cuanta gente calcula y
-      // se va sin dejar datos, que es justo el dato para decidir si conviene
-      // pedir los datos ANTES de mostrar el resultado.
-      //   PageView -> CalculadoraUsada -> FormularioAbierto -> Lead
-      var calcUsada = false;
-      function marcarUso() {
-        if (calcUsada) return;
-        calcUsada = true;
-        if (window.fbq) {
-          // Evento propio: para nuestro diagnostico del embudo.
-          try { fbq('trackCustom', 'CalculadoraUsada', { factura: currentBill }); } catch (e) {}
-          // Evento ESTANDAR equivalente: los personalizados tardan en aparecer en
-          // el selector de conversiones de Meta, mientras que los estandar se
-          // pueden elegir al instante para optimizar el conjunto de anuncios.
-          // Ademas Meta tiene mucho mas historial de entrenamiento con ViewContent,
-          // asi que optimiza mejor que con un evento inventado por nosotros.
-          try { fbq('track', 'ViewContent', { content_name: 'calculadora', value: currentBill, currency: 'USD' }); } catch (e) {}
-        }
+      function marcarFactura(rango) {
+        if (factura) return;
+        factura = true;
+        if (!window.fbq) return;
+        try { fbq('trackCustom', 'FacturaSeleccionada', { rango: rango }); } catch (e) {}
+        try { fbq('track', 'InitiateCheckout', { content_name: 'factura_' + rango }); } catch (e) {}
       }
 
-      slider.addEventListener('input', function () {
-        render();
-        // Solo cuenta como uso real si movio el slider de su valor inicial.
-        if (Number(slider.value) !== DEFAULT_BILL) marcarUso();
-      });
-      render();
-
-      // El CTA revela el formulario DENTRO de la misma tarjeta: el usuario no
-      // necesita hacer scroll entre ver su ahorro y dejar sus datos.
-      var step1 = document.getElementById('hc-step1');
-      var step2 = document.getElementById('hc-step2');
-      var back = document.getElementById('hc-back');
-      var recap = document.getElementById('hc-recap');
-
-      cta.addEventListener('click', function () {
-        var form = document.getElementById('lead-form');
-        if (form) {
-          var hidden = form.querySelector('input[name="factura_estimada"]');
-          if (hidden) hidden.value = '$' + currentBill + '/mes';
-        }
-        if (recap) {
-          var plan = recommend(currentBill);
-          var saving = Math.max(0, currentBill - plan.monthly);
-          recap.innerHTML = 'Factura actual: <b style="color:var(--navy)">' + money(currentBill) + '/mes</b>' +
-            (saving > 0 ? ' · Ahorro estimado: <b>' + money(saving) + '/mes</b>' : ' · Con respaldo 24/7') +
-            '<br>' + plan.system + ' — y el sistema queda tuyo.';
-        }
-        // Si abre el formulario sin haber tocado el slider, igual cuenta como uso
-        // de la calculadora: vio el resultado por defecto y le sirvio.
-        marcarUso();
-        if (window.fbq) {
-          // Intencion: abrio el formulario. Todavia NO es un Lead.
-          try { fbq('trackCustom', 'FormularioAbierto', { factura: currentBill }); } catch (e) {}
-          // Equivalente estandar, para poder optimizar por este escalon cuando
-          // haya volumen suficiente sin depender de conversiones personalizadas.
-          try { fbq('track', 'InitiateCheckout', { content_name: 'formulario', value: currentBill, currency: 'USD' }); } catch (e) {}
-        }
-        if (step1 && step2) {
-          step1.hidden = true;
-          step2.hidden = false;
-          document.body.classList.add('form-abierto');
-          // Al abrir el formulario alineamos la tarjeta al tope (descontando el
-          // header fijo). Asi los 4 campos y el boton de enviar caben en una sola
-          // pantalla, incluso en telefonos cortos.
-          var card = document.getElementById('calculadora');
-          if (card) {
-            var head = document.getElementById('site-header');
-            var offset = (head ? head.offsetHeight : 0) + 8;
-            var target = card.getBoundingClientRect().top + window.pageYOffset - offset;
-            window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
-          }
-          var first = step2.querySelector('input[name="nombre"]');
-          if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
-        }
+      Array.prototype.forEach.call(form.querySelectorAll('input, select'), function (el) {
+        if (el.type === 'hidden') return;
+        el.addEventListener('focus', marcarInicio, { once: true });
+        el.addEventListener('change', marcarInicio, { once: true });
       });
 
-      if (back) {
-        back.addEventListener('click', function () {
-          if (step1 && step2) {
-            step2.hidden = true;
-            step1.hidden = false;
-            document.body.classList.remove('form-abierto');
-          }
+      var sel = document.getElementById('fld-factura');
+      if (sel) {
+        sel.addEventListener('change', function () {
+          if (sel.value) { marcarInicio(); marcarFactura(sel.value); }
         });
       }
 
-      // El CTA del final de la pagina devuelve a la tarjeta.
-      Array.prototype.forEach.call(document.querySelectorAll('.js-to-calc'), function (a) {
-        a.addEventListener('click', function () {
-          var card = document.getElementById('calculadora');
-          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-      });
-
-      // Barra fija de movil: en pantallas cortas el boton de la tarjeta puede
-      // quedar bajo el fold, asi que esta barra actua de CTA permanente. Si la
-      // calculadora ya se ve, abre el formulario directamente; si no, lleva a ella.
-      Array.prototype.forEach.call(document.querySelectorAll('.js-cta-smart'), function (a) {
-        a.addEventListener('click', function (ev) {
-          ev.preventDefault();
-          var card = document.getElementById('calculadora');
-          if (!card) return;
-          var box = card.getBoundingClientRect();
-          var yaVisible = box.top < innerHeight * 0.6 && box.bottom > 0;
-          if (yaVisible && step2 && step2.hidden) {
-            cta.click();
-          } else if (step2 && !step2.hidden) {
-            var first = step2.querySelector('input[name="nombre"]');
-            if (first) first.focus();
-          } else {
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
+      // CTA del final de pagina y barra fija de movil: llevan a la tarjeta de
+      // agenda y ponen el foco en el primer campo.
+      function irAAgenda(ev) {
+        if (ev) ev.preventDefault();
+        var card = document.getElementById('agenda');
+        if (!card) return;
+        var head = document.getElementById('site-header');
+        var offset = (head ? head.offsetHeight : 0) + 8;
+        var target = card.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+        var primero = form.querySelector('input[name="nombre"]');
+        if (primero) {
+          setTimeout(function () {
+            try { primero.focus({ preventScroll: true }); } catch (e) { primero.focus(); }
+          }, 500);
+        }
+      }
+      Array.prototype.forEach.call(document.querySelectorAll('.js-to-calc, .js-cta-smart'), function (a) {
+        a.addEventListener('click', irAAgenda);
       });
     })();
   </script>
@@ -1084,10 +899,10 @@
             fields: fields,
             context: {
               pageUri: attrib.landing_url || window.location.href,
-              // pageName es texto libre: llevamos ahi la factura estimada de la
-              // calculadora para que el asesor tenga contexto sin depender de una
-              // propiedad personalizada de HubSpot.
-              pageName: 'Landing Lumina' + (val('factura_estimada') ? ' — factura ' + val('factura_estimada') : ''),
+              // pageName es texto libre: llevamos ahi el rango de factura que el
+              // usuario selecciono, para que el asesor llegue a la visita con
+              // contexto sin depender de una propiedad personalizada de HubSpot.
+              pageName: 'Landing Lumina' + (val('factura') ? ' — factura ' + val('factura') : ''),
             },
           }),
         }).then(function (r) {
