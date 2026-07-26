@@ -27,21 +27,19 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '2484699815368533');
     fbq('track', 'PageView');
-    // Conversión: usamos el MISMO event_id que envió la Conversions API
-    // (llega como ?eid=...) para que Meta deduplique y no cuente doble.
+    // Conversión: SOLO se cuenta si llega el event_id que genera el formulario
+    // al enviarse (?eid=...). Sin ese id no hubo envio real, asi que no hay Lead.
+    //
+    // Antes habia un respaldo que disparaba Lead sin id: eso convertia cualquier
+    // visita directa a esta pagina (pruebas, rastreadores, un enlace compartido)
+    // en una conversion falsa, y ademas ensuciaba la senal con la que Meta
+    // optimiza la campana. El envio del formulario es 100% JavaScript, asi que
+    // toda conversion legitima trae su eid; exigirlo no pierde ningun lead real.
     (function () {
       var eid = new URLSearchParams(window.location.search).get('eid');
-      if (eid) {
-        fbq('track', 'Lead', {}, { eventID: eid });
-      } else {
-        fbq('track', 'Lead'); // respaldo si no llegó el id
-      }
+      if (eid) fbq('track', 'Lead', {}, { eventID: eid });
     })();
   </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=2484699815368533&ev=Lead&noscript=1" alt="" />
-  </noscript>
   <!-- ============================================================ -->
 
   <style>
