@@ -108,38 +108,46 @@
     @media (max-width: 640px){ .header-cta{ display:none; } }
 
     /* ---------- Hero (foto de fondo a pantalla completa) ---------- */
-    .hero { position: relative; color: #fff; padding: 88px 0 92px; overflow: hidden; isolation: isolate; }
+    .hero { position: relative; color: #fff; padding: 104px 0 110px; overflow: hidden; isolation: isolate; }
     .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 70% center; transform: scale(1.02); }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 70% center; transform: scale(1.04); }
+    /* Fondo casi negro con un resplandor cálido detrás del titular: da profundidad
+       y hace que la tipografía grande respire, en lugar de competir con la foto. */
     .hero-bg::after {
       content: ''; position: absolute; inset: 0;
       background:
-        linear-gradient(96deg, rgba(5,16,30,.97) 0%, rgba(6,20,38,.92) 34%, rgba(9,28,54,.6) 62%, rgba(10,35,66,.28) 100%),
-        radial-gradient(760px 380px at 88% -10%, rgba(201,168,76,.22), transparent 62%),
-        linear-gradient(0deg, rgba(5,16,30,.9), rgba(5,16,30,0) 58%);
+        radial-gradient(900px 520px at 74% 18%, rgba(224,200,119,.30), transparent 60%),
+        linear-gradient(92deg, rgba(3,10,20,.97) 0%, rgba(4,13,26,.94) 42%, rgba(5,18,36,.80) 72%, rgba(6,22,44,.62) 100%),
+        linear-gradient(0deg, rgba(3,10,20,.96), rgba(3,10,20,.10) 62%);
     }
     .hero-grid { position: relative; z-index: 2; }
-    .hero-copy { max-width: 640px; }
-    .hero h1 { font-size: 37px; line-height: 1.1; font-weight: 800; margin: 20px 0 18px; letter-spacing: -.5px; text-shadow: 0 2px 20px rgba(0,0,0,.25); }
-    .hero h1 .hl { color: var(--gold-2); }
-    .hero .lead { font-size: 17.5px; color: rgba(255,255,255,.9); max-width: 560px; }
-    .benefits { list-style: none; margin: 26px 0 30px; display: grid; gap: 13px; max-width: 560px; }
-    /* align-items:flex-start para que el check quede a la altura de la primera linea
-       cuando el texto ocupa dos renglones; line-height alinea con el circulo de 26px. */
-    .benefits li { display: flex; gap: 13px; align-items: flex-start; font-size: 15.5px; line-height: 1.5; color: rgba(255,255,255,.97); }
-    .benefits li > span:last-child { padding-top: 2px; }
-    .check {
-      flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold-2), var(--gold)); color: var(--navy);
-      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;
-      box-shadow: 0 4px 12px rgba(201,168,76,.4);
+    .hero-copy { max-width: 760px; }
+    /* Titular a dos voces: la primera línea en peso ligero prepara, la segunda en
+       peso fuerte y dorado remata. Es lo que hace que se vea premium y no a folleto. */
+    .hero h1 { font-size: 44px; line-height: 1.06; font-weight: 300; margin: 22px 0 20px;
+      letter-spacing: -1.2px; text-shadow: 0 2px 30px rgba(0,0,0,.4); }
+    .hero h1 .hl { display: block; font-weight: 800; color: var(--gold-2); }
+    .hero .lead { font-size: 18px; color: rgba(255,255,255,.82); max-width: 580px; line-height: 1.6; }
+    /* Micro-beneficios en una sola línea separados por puntos: informan sin
+       convertir el hero en una lista larga. */
+    .hero-points { list-style: none; display: flex; flex-wrap: wrap; align-items: center;
+      gap: 10px 18px; margin: 26px 0 34px; font-size: 14.5px; color: rgba(255,255,255,.9); }
+    .hero-points li { display: flex; align-items: center; gap: 9px; }
+    .hero-points li::before { content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold-2); box-shadow: 0 0 12px rgba(224,200,119,.9); flex-shrink: 0; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .hero-actions .btn { padding: 17px 30px; font-size: 16.5px; }
+    /* Botón secundario translúcido: da jerarquía sin robarle peso al principal. */
+    .btn-ghost-light {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 17px 26px; border-radius: 999px; font-family: 'Poppins'; font-weight: 600;
+      font-size: 16px; color: #fff; text-decoration: none; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.34); background: rgba(255,255,255,.07);
+      backdrop-filter: blur(6px); transition: background .2s ease, border-color .2s ease;
     }
-    .hero-cta-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-    .hero-note { font-size: 13px; color: rgba(255,255,255,.7); }
-    .hero-stats { display: flex; gap: 16px 34px; flex-wrap: wrap; margin-top: 32px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.16); }
-    .hstat b { font-family: 'Poppins'; font-weight: 800; font-size: 27px; color: var(--gold-2); display: block; line-height: 1; }
-    .hstat b span { font-size: 14px; color: rgba(255,255,255,.72); font-weight: 600; }
-    .hstat small { font-size: 12.5px; color: rgba(255,255,255,.72); display: block; margin-top: 5px; }
+    .btn-ghost-light:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.55); }
+    .btn-ghost-light svg { width: 19px; height: 19px; fill: currentColor; }
+    .hero-note { font-size: 13.5px; color: rgba(255,255,255,.62); margin-top: 20px; }
 
     /* ---------- Hero card: calculadora + captura (above the fold) ---------- */
     .hero-card {
@@ -187,6 +195,27 @@
       margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
     .hc-wa > span { font-size: 12.5px; color: var(--muted); }
     .hc-wa .btn-wa { padding: 9px 16px; font-size: 13.5px; }
+
+    /* ---------- Agenda (formulario fuera del hero) ---------- */
+    .form-band { background: linear-gradient(180deg, #eef2f8, var(--bg)); }
+    .agenda-card { background: var(--white); border-radius: 24px; box-shadow: var(--shadow-lg);
+      border: 1px solid var(--line); overflow: hidden; display: grid; }
+    .agenda-copy { padding: 38px 34px 34px; }
+    .agenda-copy h2 { color: var(--navy); font-size: 29px; letter-spacing: -.5px; margin: 10px 0 12px; }
+    .agenda-copy p { color: var(--muted); font-size: 15.5px; line-height: 1.65; }
+    .agenda-list { list-style: none; margin: 20px 0 0; display: grid; gap: 11px; }
+    .agenda-list li { position: relative; padding-left: 26px; font-size: 15px; color: var(--navy); font-weight: 500; }
+    .agenda-list li::before { content: '\2713'; position: absolute; left: 0; top: -1px;
+      color: var(--gold-deep); font-weight: 800; }
+    .agenda-wa { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .agenda-wa > span { font-size: 14px; color: var(--muted); }
+    .agenda-form { padding: 34px; background: #f7f9fd; border-top: 1px solid var(--line); }
+    @media (min-width: 900px) {
+      .agenda-card { grid-template-columns: 1.02fr .98fr; align-items: stretch; }
+      .agenda-copy { padding: 46px 42px; }
+      .agenda-form { padding: 46px 42px; border-top: 0; border-left: 1px solid var(--line); }
+    }
 
     /* ---------- Trust bar ---------- */
     .trust { background: var(--white); border-bottom: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; z-index: 3; }
@@ -316,10 +345,9 @@
 
     /* ---------- Responsive ---------- */
     @media (min-width: 900px) {
-      .hero { padding: 72px 0 78px; min-height: 600px; display: flex; align-items: center; }
-      .hero h1 { font-size: 46px; }
-      .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
-      .hero-copy { max-width: 100%; }
+      .hero { padding: 118px 0 126px; min-height: 640px; display: flex; align-items: center; }
+      .hero h1 { font-size: 62px; }
+      .hero .lead { font-size: 19px; }
       .section-head h2 { font-size: 34px; }
       .mobile-cta { display: none; }
     }
@@ -331,17 +359,17 @@
       .hero .lead { font-size: 15.5px; }
       .benefits { margin: 16px 0 18px; gap: 10px; }
       .benefits li { font-size: 14.5px; }
-      /* REORDEN EN MOVIL: gancho corto -> calculadora -> resto del argumento.
-         display:contents disuelve .hero-copy para que sus dos bloques y la
-         tarjeta sean hermanos directos del flex y se puedan reordenar. Asi la
-         calculadora y su boton entran en el primer viewport del telefono. */
-      .hero-grid { display: flex; flex-direction: column; }
-      .hero-copy { display: contents; }
-      .hero-hook { order: 1; }
-      .hero-card { order: 2; margin-top: 14px; }
-      .hero-rest { order: 3; margin-top: 24px; }
-      /* Los numeros clave ya viven en la lista de beneficios. */
-      .hero-stats { display: none; }
+      /* El hero ya no lleva tarjeta: basta con ajustar escalas y aire. */
+      .hero { padding: 40px 0 46px; }
+      .hero h1 { font-size: 34px; letter-spacing: -.9px; margin: 16px 0 14px; }
+      .hero .lead { font-size: 16px; }
+      .hero-points { gap: 8px 14px; margin: 20px 0 26px; font-size: 13.5px; }
+      .hero-actions { gap: 10px; }
+      .hero-actions .btn, .btn-ghost-light { width: 100%; padding: 15px 22px; font-size: 15.5px; }
+      .hero-note { margin-top: 16px; }
+      .agenda-copy { padding: 28px 22px 24px; }
+      .agenda-copy h2 { font-size: 24px; }
+      .agenda-form { padding: 24px 22px 26px; }
       /* Cabecera de la tarjeta compacta: cada pixel aqui es un pixel que gana
          el boton para quedarse dentro del fold. */
       .hc-head { padding: 12px 16px 11px; }
@@ -398,7 +426,7 @@
         </svg>
         <div class="brand-name">LUMINA<span>PR</span></div>
       </div>
-      <a href="#formulario" class="btn header-cta">Evaluación gratuita</a>
+      <a href="#agenda" class="btn header-cta js-to-calc">Agenda gratis</a>
     </div>
   </header>
 
@@ -409,43 +437,62 @@
     </div>
     <div class="container hero-grid">
       <div class="hero-copy reveal in">
-        <!-- Gancho corto: en movil es lo unico que va ANTES de la calculadora. -->
-        <div class="hero-hook">
-          <span class="eyebrow on-dark">📋 Inspección energética · Gratis</span>
-          <h1>Estamos en temporada de huracanes. <span class="hl">¿Tu casa está lista?</span></h1>
-        </div>
-        <!-- Resto del argumento: en movil baja DEBAJO de la tarjeta de agenda. -->
-        <div class="hero-rest">
-        <p class="lead">Un especialista de Lumina va a tu casa, revisa tu consumo real y tu techo, y te dice exactamente qué necesitas. Sin costo y sin compromiso de compra.</p>
-        <ul class="benefits">
-          <li><span class="check">✓</span><span>Visita <b>en tu casa</b>, no una llamada de venta</span></li>
-          <li><span class="check">✓</span><span>Equipos con marca: Canadian Solar, Sol-Ark, Pytes</span></li>
-          <li><span class="check">✓</span><span>Nos encargamos de todos los trámites con LUMA</span></li>
-          <li><span class="check">✓</span><span>Sin pagar de contado. Decides tú, sin presión</span></li>
+        <span class="eyebrow on-dark">&#128203; Inspecci&oacute;n energ&eacute;tica &middot; Gratis</span>
+        <h1>Llega la temporada de huracanes.<span class="hl">&iquest;Tu casa est&aacute; lista?</span></h1>
+        <p class="lead">Un especialista de Lumina va a tu casa, revisa tu consumo real y tu techo,
+          y te dice exactamente qu&eacute; necesitas. Sin costo y sin compromiso de compra.</p>
+        <ul class="hero-points">
+          <li>Visita en tu casa</li>
+          <li>Menos de una hora</li>
+          <li>Sin compromiso</li>
         </ul>
-        <div class="hero-stats">
-          <div class="hstat"><b>Gratis</b><small>La inspección completa</small></div>
-          <div class="hstat"><b>24/7</b><small>Respaldo con batería</small></div>
-          <div class="hstat"><b>Hasta 25</b><small>Años de garantía</small></div>
+        <div class="hero-actions">
+          <a href="#agenda" class="btn js-to-calc">Agendar inspecci&oacute;n gratis <span class="arrow">&rarr;</span></a>
+          <a href="#" class="btn-ghost-light js-wa" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Escr&iacute;benos por WhatsApp
+          </a>
         </div>
-        </div><!-- /hero-rest -->
+        <p class="hero-note">Natana te contacta el mismo d&iacute;a para coordinar la visita.</p>
       </div>
+    </div>
+  </section>
 
-      <!-- AGENDA LA INSPECCION (visible sin scroll) -->
-      <div class="hero-card reveal in" id="agenda">
-        <div class="hc-head">
-          <span class="hc-badge">&#128203; Inspecci&oacute;n gratis</span>
-          <h2>Agenda tu inspecci&oacute;n</h2>
-          <p>Natana te contacta el mismo d&iacute;a para coordinar la visita.</p>
+  <!-- Trust bar -->
+  <div class="trust">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="ico">🇵🇷</span> Grupo Atabaya · Caguas, PR</div>
+      <div class="trust-item"><span class="ico">✅</span> Instaladores certificados LUMA</div>
+      <div class="trust-item"><span class="ico">🔋</span> Canadian Solar · Sol-Ark · Pytes</div>
+      <div class="trust-item"><span class="ico">🛡️</span> Garantías de hasta 25 años</div>
+    </div>
+  </div>
+
+  <!-- AGENDA: el formulario sale del hero para que el hero respire.
+       Es el patron de la landing del lider del mercado: hero limpio con dos CTA,
+       y el formulario en su propia seccion inmediatamente despues. -->
+  <section class="block form-band" id="agenda">
+    <div class="container">
+      <div class="agenda-card reveal">
+        <div class="agenda-copy">
+          <span class="eyebrow">Agenda tu inspecci&oacute;n</span>
+          <h2>Te contactamos el mismo d&iacute;a</h2>
+          <p>D&eacute;janos tus datos y Natana coordina contigo el d&iacute;a y la hora. La inspecci&oacute;n
+            es gratis, dura menos de una hora y no tienes que comprar nada.</p>
+          <ul class="agenda-list">
+            <li>Revisamos tus facturas y tu consumo real</li>
+            <li>Evaluamos tu techo y tus condiciones el&eacute;ctricas</li>
+            <li>Te explicamos qu&eacute; sistema te sirve y por qu&eacute;</li>
+          </ul>
+          <div class="agenda-wa">
+            <span>&iquest;Prefieres escribir ahora?</span>
+            <a href="#" class="btn-wa js-wa" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
         </div>
-
-        <div class="hc-body">
-          <!-- Aqui vivia una calculadora de ahorro. Se retiro a proposito: para la
-               factura tipica de Puerto Rico mostraba un ahorro de $40-100/mes, lo que
-               descalificaba al visitante antes de que hablara con nadie. La landing del
-               lider del mercado tampoco muestra precios ni ahorros; vende la visita.
-               El monto de la factura se pide como rango dentro del formulario: sirve
-               para calificar sin ensenar una cifra que desanime. -->
+        <div class="agenda-form">
           <!-- Formulario 100% estatico: envia directo a HubSpot desde el navegador y
                dispara el evento Lead del pixel. No depende de ningun servidor. -->
           <form class="lead-form" id="lead-form" method="POST" action="gracias.html">
@@ -491,31 +538,14 @@
                 <option>Comercial</option>
               </select>
             </label>
-            <button type="submit" class="btn" style="width:100%;margin-top:4px">Agendar inspecci&oacute;n gratis <span class="arrow">&rarr;</span></button>
+            <button type="submit" class="btn" style="width:100%;margin-top:6px">Agendar inspecci&oacute;n gratis <span class="arrow">&rarr;</span></button>
             <p id="form-msg" style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--muted);display:none"></p>
           </form>
-          <div class="hc-badges"><span>&#9989; Gratis</span><span>&#128274; Datos protegidos</span><span>&#9201; Respuesta el mismo d&iacute;a</span></div>
-          <div class="hc-wa">
-            <span>&iquest;Prefieres escribir?</span>
-            <a href="#" class="btn-wa js-wa" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              WhatsApp
-            </a>
-          </div>
+          <div class="hc-badges"><span>&#9989; 100% gratis</span><span>&#128274; Datos protegidos</span><span>&#9201; Respuesta el mismo d&iacute;a</span></div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Trust bar -->
-  <div class="trust">
-    <div class="trust-inner">
-      <div class="trust-item"><span class="ico">🇵🇷</span> Grupo Atabaya · Caguas, PR</div>
-      <div class="trust-item"><span class="ico">✅</span> Instaladores certificados LUMA</div>
-      <div class="trust-item"><span class="ico">🔋</span> Canadian Solar · Sol-Ark · Pytes</div>
-      <div class="trust-item"><span class="ico">🛡️</span> Garantías de hasta 25 años</div>
-    </div>
-  </div>
 
   <!-- Por que conviene.
        NOTA: esta seccion prometia "hasta $15,000 del incentivo de PR" y "30% de
