@@ -455,17 +455,17 @@
         </div>
         <!-- Resto del argumento: en movil baja DEBAJO de la calculadora. -->
         <div class="hero-rest">
-        <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar y cuánto cubre el incentivo del gobierno. Sin costo y sin compromiso.</p>
+        <p class="lead">Calcula en 10 segundos cuánto podrías ahorrar cada mes y cuánto costaría tu sistema. Sin costo y sin compromiso.</p>
         <ul class="benefits">
-          <li><span class="check">✓</span><span>Incentivos: hasta <b>$15,000</b> de PR + <b>30%</b> federal</span></li>
+          <li><span class="check">✓</span><span>Tu cuota paga <b>tu propio sistema</b>, no un recibo eterno</span></li>
           <li><span class="check">✓</span><span>Respaldo con batería: sigue con luz en los apagones</span></li>
           <li><span class="check">✓</span><span>Financiamiento desde $150/mes, sin pagar de contado</span></li>
           <li><span class="check">✓</span><span>Empresa 100% puertorriqueña, acompañamiento completo</span></li>
         </ul>
         <div class="hero-stats">
-          <div class="hstat"><b>$15,000</b><small>Incentivo de PR (hasta)</small></div>
-          <div class="hstat"><b>30%</b><small>Crédito federal</small></div>
+          <div class="hstat"><b>$0</b><small>De contado</small></div>
           <div class="hstat"><b>24/7</b><small>Respaldo en apagones</small></div>
+          <div class="hstat"><b>Tuyo</b><small>Al terminar de pagarlo</small></div>
         </div>
         </div><!-- /hero-rest -->
       </div>
@@ -500,7 +500,7 @@
               </div>
             </div>
             <div class="hc-sys" id="calc-system">Sistema sugerido: 10kW + batería</div>
-            <div class="hc-incentive" id="calc-incentive">Con el incentivo de PR podrías recibir hasta <b>$9,000</b> de vuelta.</div>
+            <div class="hc-incentive" id="calc-incentive">Financiamiento a 20 años, <b>sin pago inicial</b>.</div>
           </div>
 
           <!-- Comparacion de propiedad: la cuota no es un recibo, es un activo.
@@ -587,32 +587,42 @@
     </div>
   </div>
 
-  <!-- Incentivos -->
+  <!-- Por que conviene.
+       NOTA: esta seccion prometia "hasta $15,000 del incentivo de PR" y "30% de
+       credito federal". Ambas afirmaciones son falsas a dia de hoy:
+         - El Programa Incentivo Solar de PR (incentivosolar.pr.gov) esta CERRADO
+           a nuevas solicitudes desde su unica ronda de agosto de 2023.
+         - El credito federal residencial del 30% (Seccion 25D) expiro el
+           31/12/2025; el IRS no lo concede a sistemas puestos en servicio
+           despues de esa fecha.
+       Se reemplazan por argumentos que si son verificables y propios de la
+       oferta de Lumina. No volver a poner cifras de programas sin confirmar
+       su vigencia en la fuente oficial. -->
   <section class="block inc-band">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow">Ayudas disponibles</span>
-        <h2>El gobierno cubre buena parte de tu sistema</h2>
-        <p>Entre el incentivo de Puerto Rico y el crédito federal, una parte importante de la inversión regresa a ti.</p>
+        <span class="eyebrow">Por qué conviene</span>
+        <h2>Tu cuota paga tu sistema, no un recibo eterno</h2>
+        <p>Lo que hoy le entregas a LUMA cada mes puede convertirse en un equipo que te pertenece.</p>
       </div>
       <div class="inc-grid">
         <div class="inc-card reveal">
-          <div class="inc-amt">hasta $15,000</div>
-          <h3>Incentivo de Puerto Rico</h3>
-          <p>Cubre el 30% del costo de equipo e instalación, con un máximo de $15,000, para dueños de vivienda que residen a tiempo completo en ella.</p>
-        </div>
-        <div class="inc-card reveal d1">
-          <div class="inc-amt">30%</div>
-          <h3>Crédito contributivo federal</h3>
-          <p>Como territorio de EE.UU., en Puerto Rico aplica el crédito federal del 30% sobre el costo del sistema.</p>
-        </div>
-        <div class="inc-card reveal d2">
           <div class="inc-amt">$0</div>
           <h3>Sin pagar de contado</h3>
           <p>Con financiamiento desde $150/mes empiezas sin desembolso inicial, y en muchos casos la cuota es menor que tu factura de luz.</p>
         </div>
+        <div class="inc-card reveal d1">
+          <div class="inc-amt">24/7</div>
+          <h3>Respaldo en los apagones</h3>
+          <p>El sistema incluye batería de almacenaje: cuando la red falla, tu casa sigue con luz en vez de esperar a que vuelva.</p>
+        </div>
+        <div class="inc-card reveal d2">
+          <div class="inc-amt">Es tuyo</div>
+          <h3>Al terminar de pagarlo</h3>
+          <p>A diferencia de la factura eléctrica, que no termina nunca, aquí cada cuota te acerca a ser dueño del equipo que produce tu energía.</p>
+        </div>
       </div>
-      <p class="inc-note">Los incentivos tienen fondos y requisitos limitados, y pueden cambiar. En tu evaluación gratuita confirmamos a cuáles calificas hoy.</p>
+      <p class="inc-note">Los programas de incentivo del gobierno abren y cierran, y sus requisitos cambian. En tu evaluación gratuita revisamos si hay alguno vigente al que califiques en ese momento, sin prometerte nada de antemano.</p>
     </div>
   </section>
 
@@ -752,8 +762,10 @@
         { kw: 10, system: '10kW + batería (12 placas)', value: 30000, monthly: 250 },
         { kw: 15, system: '15kW + batería (15 placas)', value: 45000, monthly: 369 }
       ];
-      // Incentivo de Puerto Rico: 30% del costo, con tope de $15,000.
-      var PR_RATE = 0.30, PR_CAP = 15000;
+      // NO reintroducir calculos de incentivos sin verificar vigencia en la fuente
+      // oficial. El incentivo de PR (30% hasta $15,000) esta cerrado a nuevas
+      // solicitudes desde 2023, y el credito federal del 30% expiro el 31/12/2025.
+      // Prometer cifras de programas inactivos es publicidad enganosa.
 
       var slider = document.getElementById('calc-bill');
       var out = document.getElementById('calc-bill-out');
@@ -794,7 +806,6 @@
         currentBill = bill;
         var plan = recommend(bill);
         var saving = Math.max(bill - plan.monthly, 0);
-        var incentive = Math.min(plan.value * PR_RATE, PR_CAP);
 
         out.textContent = money(bill);
         elMonthly.innerHTML = money(plan.monthly) + '<i>/mes</i>';
@@ -809,8 +820,10 @@
           elSave.innerHTML = 'Respaldo 24/7';
           elSave.classList.remove('hl');
         }
-        elIncentive.innerHTML = 'Con el incentivo de PR podrías recibir hasta <b>' + money(incentive) +
-          '</b> de vuelta, más el 30% de crédito federal.';
+        // Dato verificable de la propia oferta (tabla de financiamiento del repo),
+        // en lugar de una promesa de incentivos que hoy no estan vigentes.
+        elIncentive.innerHTML = 'Sistema de ' + money(plan.value) +
+          ' financiado a 20 años, <b>sin pago inicial</b>.';
 
         // Propiedad vs alquiler. TERM_YEARS es el termino real de la tabla (20 años).
         // El total de LUMA usa la tarifa actual sin proyectar aumentos: es una
