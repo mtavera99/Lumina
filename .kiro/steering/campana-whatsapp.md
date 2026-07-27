@@ -47,10 +47,17 @@ La landing queda como destino para una segunda campaña más adelante, cuando ha
 
 ### 3.1 Campaña
 
+**Pantalla "Selecciona una configuración de campaña":** elegir **"Campaña de participación
+manual"**, nunca *"Campaña de mensajes personalizados"*.
+
+La opción "personalizada/optimizada" trae **ubicaciones Advantage+** preestablecidas, es decir
+Audience Network y Estados de WhatsApp activados de fábrica: exactamente el inventario que
+tenemos que excluir. Con la ruta manual se configuran las ubicaciones a mano desde el principio.
+
 | Campo | Valor |
 |---|---|
 | Nombre | `LUMINA \| WhatsApp \| Inspección` |
-| Objetivo | **Interacción** (si no aparece, *Clientes potenciales*) |
+| Objetivo | **Interacción** / **Compromiso** (según la traducción que muestre la cuenta) |
 | Advantage+ campaña | **Apagado** |
 | Presupuesto | a nivel de **conjunto**, no de campaña |
 | Reparto de presupuesto entre conjuntos | **Desactivado** |
