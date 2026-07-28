@@ -1,10 +1,10 @@
-# Campaña de WhatsApp — guía de montaje paso a paso
+# Campaña de WhatsApp — guía de montaje y bitácora
 
-Guía completa para lanzar la campaña. Basada en el análisis de la Biblioteca de Anuncios de
-Meta (~100 anuncios activos de WindMar en Puerto Rico), en la propuesta comercial real de
-Lumina, y en los datos de la campaña anterior.
+Guía completa para lanzar y mantener la campaña. Basada en el análisis de la Biblioteca de
+Anuncios de Meta (~100 anuncios activos de WindMar en Puerto Rico), en la propuesta comercial
+real de Lumina, y en los datos de la campaña anterior.
 
-**Actualizado:** 26 de julio de 2026
+**Actualizado:** 28 de julio de 2026 — incluye la bitácora del montaje real en Ads Manager.
 
 ---
 
@@ -35,15 +35,19 @@ La landing queda como destino para una segunda campaña más adelante, cuando ha
 
 - [ ] **Probar el enlace de WhatsApp** desde un celular: `https://wa.me/19393755858`. Debe abrir
       el chat con el número correcto y con WhatsApp activo
-- [ ] **Configurar el mensaje de bienvenida** en WhatsApp Business (sección 5)
+- [ ] **Configurar el mensaje de bienvenida** en WhatsApp Business (sección 6)
 - [ ] **Definir horario de atención** y qué se responde fuera de él
 - [ ] **Confirmar que el equipo NO menciona** los $15,000 del incentivo de PR ni el 30% federal:
       ambos programas están inactivos (ver `lumina-contexto.md`, sección 1.1)
-- [ ] **Tener listas 2–3 fotos reales** de instalaciones de Lumina, o grabar un video vertical
+- [ ] **Revisar cada flyer** antes de subirlo: que no mencione incentivos vencidos ni cuota
+      mensual (ver sección 4)
+- [ ] **Apagar el traductor de Chrome** en `facebook.com` (ver sección 9, trampa 10)
 
 ---
 
-## 3. Configuración en Ads Manager
+## 3. Configuración real publicada
+
+Esta es la configuración que quedó al aire el 27–28 de julio de 2026, no una propuesta.
 
 ### 3.1 Campaña
 
@@ -57,59 +61,175 @@ tenemos que excluir. Con la ruta manual se configuran las ubicaciones a mano des
 | Campo | Valor |
 |---|---|
 | Nombre | `LUMINA \| WhatsApp \| Inspección` |
-| Objetivo | **Interacción** / **Compromiso** (según la traducción que muestre la cuenta) |
+| Objetivo | **Compromiso** / *Interacción* (varía la traducción según la cuenta) |
+| Tipo de compra | Subasta |
+| Anuncio de vídeo en directo | Apagado |
 | Advantage+ campaña | **Apagado** |
-| Presupuesto | a nivel de **conjunto**, no de campaña |
-| Reparto de presupuesto entre conjuntos | **Desactivado** |
+| Estrategia presupuestaria | **Presupuesto del conjunto de anuncios** |
+| Compartir hasta 20% con otros conjuntos | **DESMARCADO** |
+| Estrategia de puja | Costo más bajo / *Highest volume*, **sin límite de puja** |
 
-> **Trampa conocida:** si dejas activo el reparto de presupuesto, Meta **bloquea el objetivo de
-> rendimiento** y no lo podrás cambiar después sin duplicar el conjunto. Ya nos pasó.
+> **Trampa confirmada:** si dejas activo el reparto de presupuesto del 20%, Meta **bloquea el
+> objetivo de rendimiento** y no lo podrás cambiar después sin duplicar el conjunto.
+> **Cómo verificar:** si el campo "Objetivo de rendimiento" aparece en gris, el reparto está
+> activo.
+
+No se usa el objetivo **Clientes potenciales** porque optimiza para formularios web (ya falló),
+ni **Tráfico** porque repite el error original: 104 visitas, 0 leads.
 
 ### 3.2 Conjunto de anuncios
 
-| Campo | Valor |
+| Campo | Valor real |
 |---|---|
-| Nombre | `PR \| Propietarios 30-65 \| WhatsApp` |
-| Ubicación de conversión | **Apps de mensajes → WhatsApp** |
-| Número | 939-375-5858 |
-| Optimización | **Conversaciones iniciadas** |
-| Presupuesto | **$20–25/día** |
-| Edad | **30 – 65** |
+| Nombre | `PR \| Inspección \| 30-65 \| Manual` |
+| ID | `120248969238750786` |
+| Ubicación de conversión | **Destinos de los mensajes → solo WhatsApp** |
+| Número | +1 939-375-5858 |
+| Página | Lumina PR Solar Solution |
+| Messenger / Instagram como destino | **DESMARCADOS** |
+| Compartir datos de anuncios | Apagado |
+| Objetivo de rendimiento | **Maximizar el número de conversaciones** |
+| Presupuesto | **$22.00 diario** |
+| Programación de presupuesto | No |
+| Fecha de fin | Run as ongoing |
+| Género | Todos |
+| Tipo de entrega | Standard |
 
-**Geografía:** Bayamón, Caguas, Guaynabo +25mi, Humacao +25mi, San Juan.
-Desmarcar *"Reach more people likely to respond"* — muestra anuncios a gente **interesada** en
-esos pueblos aunque no viva en Puerto Rico.
+**Por qué $22 y no $50:** una conversación cuesta $3–8 en este mercado, así que $22/día da 3–7
+conversaciones diarias — suficiente para acercarse a las ~50 semanales que Meta necesita. Con
+$50/día se quema el presupuesto mientras Meta todavía aprende; con $22 hay casi tres semanas de
+datos por el mismo dinero que antes duró cinco días.
 
-**Segmentación detallada:**
+**Zona horaria: la cuenta está en Pacific Time y Puerto Rico está 3 horas adelante.**
+Para arrancar a las 8:00 AM de PR hay que poner **5:00 AM Pacific**. Todos los reportes salen en
+hora Pacific: el "martes" del reporte termina a las 3 AM del miércoles hora de PR.
 
-- Intereses: `Solar energy`, `Solar panel`
-- Pulsar **"Define further"** (crea condición **Y**, no **O**) y añadir: `Home Ownership Scheme`,
-  `Home improvement`
+**Nunca arrancar una campaña por la tarde.** Meta intenta gastar el presupuesto diario completo
+dentro del día calendario; si arranca a las 7 PM tiene que colocar $22 en 5 horas, puja
+agresivo, infla el CPM y contamina justo el primer día de aprendizaje.
 
-> Añadir intereses en la caja principal **amplía** la audiencia. Solo *"Define further"* la
-> reduce. Si el número sube al añadir algo, estás en la caja equivocada.
+**Geografía real publicada** (ciudad + radio, no municipio):
 
-Objetivo de tamaño: **280,000 – 350,000**.
+- `Caguas, Caguas, PR` + 10 millas
+- `Humacao, Humacao, PR` + 15 millas
+- `San Juan, San Juan, PR` + 15 millas
 
-**Ubicaciones: manuales.** Incluir Facebook Feed, Instagram Feed, Reels y Stories.
+> El radio **solo existe si la ubicación se agrega como *City***, no como *Region* o
+> *Municipality*. Si no aparece la flechita del radio, hay que borrar la ubicación y volver a
+> agregarla eligiendo la opción etiquetada **City**.
 
-Excluir:
+> Si existe el desplegable **"Tipos de ubicación"** (botón ⌄ al final de la fila de búsqueda),
+> elegir **"Personas que viven en esta ubicación"**. Puerto Rico recibe millones de turistas y
+> boricuas de Florida de visita. En destino WhatsApp Meta a veces no ofrece este control; no es
+> crítico.
 
-- **Audience Network** — histórico de clics accidentales a $0.20 con cero conversión
-- **Estados de WhatsApp** — al activarlo el CPC cayó de $0.69 a $0.30, el patrón del inventario
-  de baja intención. Meta incluso amplió la audiencia sola para esa ubicación
+**Edad:** mínima **30**. El panel nuevo de "Controles" **no tiene campo de edad máxima** para
+destino WhatsApp — no perder tiempo buscándolo. Bajo los 30 casi nadie en PR es dueño de la casa
+donde vive, y sin ser dueño de la estructura no se puede firmar.
 
-Dejar **desmarcada** la casilla *"Permitir gasto limitado en ubicaciones excluidas"*. Verificar
-que quede en `Allowed with limited spend: 0`.
+Dejar **DESMARCADA** la casilla *"Incluir en WhatsApp a personas cuya edad se desconoce"*.
+Al subir la edad mínima por encima de 18, Meta la desmarca sola y el aviso *"Edad desconocida en
+WhatsApp: Incluida"* cambia a *Excluido*.
+
+**Segmentación detallada** — la estructura de dos bloques es lo que importa:
+
+```
+Include people who match          →  funciona como O (amplía)
+   Interests: Solar energy
+   Interests: Solar panel
+
+and must also match               →  funciona como Y (reduce)
+   Interests: Renovation (construction)
+   Interests: Home improvement (home & garden)
+```
+
+El segundo bloque se crea con el botón **"Define further"** / *"and must also match"*.
+**Cómo verificar que se está usando la caja correcta:** si el estimado **sube** al agregar algo,
+está en la caja equivocada. Debe bajar.
+
+`Renovation` + `Home improvement` es el mejor proxy disponible de "dueño de casa": Meta eliminó
+la segmentación directa por propiedad de vivienda hace años.
+
+**Resultado medido:** de **1,800,000–2,100,000** bajó a **598,800–704,400** (−66%).
+
+No apretar más. Con $22/día se generan ~2,000–2,500 impresiones diarias; sobre 600k Meta tiene
+espacio para concentrarse en quien responde. Bajar a 150k sube la frecuencia, cansa a la
+audiencia y encarece la conversación.
+
+**Ubicaciones: manuales. Exactamente 6.**
+
+| Facebook | Instagram |
+|---|---|
+| Feed | Feed |
+| Stories | Stories |
+| Reels | Reels |
+
+Desmarcado todo lo demás:
+
+- **Audience Network** — plataforma completa fuera
+- **Messenger**, **Threads**
+- **WhatsApp Status** — vive escondido dentro del grupo *"Stories, Status, Reels"*. Cuando queda
+  bien, ese grupo muestra un **guion (—)**, no un check lleno
+- **In-stream ads for reels** — corta el Reel de otra persona; clic accidental al saltarlo
+- **Search results** — nadie busca placas solares en el buscador de Facebook
+- **Facebook Notifications** — el peor: tu anuncio en la campanita, junto a "Juan comentó tu
+  foto". Máximo de clics accidentales
+- **Facebook Marketplace** — contexto mental de ganga y regateo, choca con una compra de $20,000
+- **Facebook / Instagram profile feed**, **right column**, **Business Explore**,
+  **Instagram Explore home**
+
+Dejar **DESMARCADA** la casilla *"Allow limited spending to excluded placements"*. Cuando queda
+bien, el botón *"Manage excluded placements"* sale en gris — no hay gasto limitado que
+administrar.
+
+**Brand safety and suitability:** dejar en *Moderate* (por defecto). Solo afecta in-stream y
+Audience Network, que ya no se usan; apretarlo a *Limited* encarece el CPM sin proteger nada.
+
+**Advertiser y Payer (selected locations):** campos **obligatorios**. Si en la pantalla de
+Review dicen *"Please add"*, **Meta no deja publicar**. Poner el nombre legal de la empresa que
+paga, tal como aparece en el método de pago de la cuenta.
+
+**Targeting expansion:** quedó en **Yes**. En objetivos de mensajería Meta no siempre permite
+apagarlo. No pelear con eso: se compensa con el copy y con las 3 preguntas de WhatsApp.
+
+**Guardar la audiencia** como `PR | Duenos solar | 30+`. Al duplicar un conjunto, la
+segmentación detallada se pierde y hay que rehacerla a mano.
 
 ### 3.3 Anuncios
 
-Crear los 4 de la sección 4. Al duplicar cualquier cosa, **desmarcar todas las
-"recomendaciones"** que Meta premarca:
+| Campo | Valor |
+|---|---|
+| Ad setup | Create ad |
+| Format | Single image or video |
+| Identity | Página *Lumina PR Solar Solution* + IG `@luminapr_` |
+| Call to action | **Send WhatsApp message** |
+| **Multi-advertiser ads** | **DESMARCADO** |
+| **Advantage+ creative / Enhancements** | **APAGADO** |
+| **Advantage+ creative image generation (Meta AI)** | **APAGADO / media generada eliminada** |
+| **Optimize text per person** | **APAGADO** |
+| **Embedded overlay** | Apagado si la interfaz lo permite |
+| Description | **vacío** |
 
-- *Advantage+ creative* — recorta y altera las imágenes. Para una marca que vende confianza en
-  una compra de $20,000+, dañino
-- *Formularios instantáneos* — cambia el destino y rompe el flujo a WhatsApp
+**Multi-advertiser ads** merece explicación: tu anuncio se muestra en una cuadrícula junto a
+anuncios de otros anunciantes. Con ~100 anuncios activos de WindMar en el mismo mercado, hay
+probabilidad real de que tu anuncio aparezca al lado del de WindMar, con su Tesla Powerwall y su
+"desde $125/mes" en la misma pantalla. Es pagar por poner a tu competidor frente a tu prospecto.
+Además advierte que el creativo *"may be resized or cropped"*, lo que deshace el trabajo de
+apagar Advantage+ creative.
+
+**Tamaños de imagen:**
+
+| Ubicación | Tamaño |
+|---|---|
+| Feed (FB + IG) | 1080 × 1350 (4:5) |
+| Stories y Reels | 1080 × 1920 (9:16) |
+
+Con Advantage+ creative apagado, Meta ya **no** recorta automáticamente. Si solo se sube la 4:5,
+Stories la muestra con barras negras. Subir las dos versiones usando **"Edit per placement"**.
+
+**Una sola variante de texto por anuncio.** No usar las 5 opciones de *Primary text* ni de
+*Headline*: con 4 ángulos y $22/día, 20 combinaciones no juntan datos suficientes para concluir
+nada. Ignorar el aviso *"Not optimized"*.
 
 ---
 
@@ -124,17 +244,27 @@ literalmente *"te mejoro la oferta de la competencia"*.
 Anunciar "desde $150/mes" nos pone a perder una comparación que el prospecto va a hacer, porque
 los vendedores de WindMar están en el mismo feed. Además la cuota real está en duda: la tabla
 del repo asume 7.95% pero la propuesta comercial dice *"desde 4.95% mediante cooperativa local"*,
-lo que bajaría la entrada a ~$118/mes.
+lo que bajaría la entrada a ~$118/mes — **por debajo de WindMar**. Anunciar $150 es anunciar un
+precio probablemente peor que el real: el peor de los dos mundos.
 
-**Hasta confirmar la tasa, ningún anuncio lleva cifra de cuota.** Se compite por la oferta de la
-inspección gratis y por el dolor del apagón, no por precio. Es también lo que hace la landing
-del líder, que no menciona precio ni una vez.
+**Hasta confirmar la tasa, ningún anuncio ni flyer lleva cifra de cuota.** Se compite por la
+oferta de la inspección gratis y por el dolor del apagón. Es también lo que hace la landing del
+líder, que no menciona precio ni una vez.
+
+> **Flyers heredados:** el flyer *"¿Cuánto más vas a DEPENDER de LUMA?"* traía la viñeta
+> **"Desde $150/mes"**. Sustituirla por **"Garantías hasta 25 años"** — dato verificable de la
+> propuesta de OpenSolar, ya publicado en la landing, y que ataca donde WindMar es débil: sus
+> anuncios dicen 25 años con letra chiquita de *"aplican restricciones"*.
 
 ---
 
 ### Anuncio 1 — Apagones *(el más fuerte)*
 
-**Titular:** Cuando LUMA se va, tu casa sigue encendida
+**Nombre:** `01 | Apagones`
+
+**Titular:** `Cuando LUMA se va, tu casa sigue encendida`
+*Alternativa más corta, 35 caracteres, no se trunca en Reels/Stories:*
+`Tu casa encendida aunque LUMA falle`
 
 ```
 🔌 ¿Cuántas veces este año te quedaste sin luz?
@@ -155,16 +285,16 @@ a quedarte a oscuras.
 Si eres dueño(a) de tu casa en PR, escríbeme y coordinamos.
 ```
 
-**Mensaje prellenado:**
-```
-Hola, soy dueño(a) de casa en PR y quiero la inspección gratis para el respaldo en apagones.
-```
+**Creativo recomendado:** flyer *"¿Cuánto más vas a DEPENDER de LUMA?"* (sin el $150/mes) o foto
+real de instalación. El flyer pregunta y el titular responde.
 
 ---
 
 ### Anuncio 2 — Qué te instalan de verdad
 
-**Titular:** Te decimos marca por marca qué lleva tu sistema
+**Nombre:** `02 | Equipos`
+
+**Titular:** `Te decimos marca por marca qué lleva tu sistema`
 
 ```
 En solar casi todos dicen "equipos de alta calidad".
@@ -183,16 +313,13 @@ Agenda tu inspección gratis y te lo entregamos por escrito,
 sin letra chiquita.
 ```
 
-**Mensaje prellenado:**
-```
-Hola, quiero la inspección gratis y ver qué equipos me recomiendan.
-```
-
 ---
 
 ### Anuncio 3 — La inspección como servicio
 
-**Titular:** Inspección energética gratis en tu casa
+**Nombre:** `03 | Inspeccion`
+
+**Titular:** `Inspección energética gratis en tu casa`
 
 ```
 La mayoría de la gente no sabe cuánto consume su casa
@@ -211,16 +338,13 @@ de tu hogar sin haber pagado nada.
 Escríbeme y coordinamos el día.
 ```
 
-**Mensaje prellenado:**
-```
-Hola, quiero agendar la inspección energética gratis de mi casa.
-```
-
 ---
 
 ### Anuncio 4 — Calificador directo
 
-**Titular:** Si tu factura de luz pasa de $300, esto te conviene
+**Nombre:** `04 | Calificador`
+
+**Titular:** `Si tu factura de luz pasa de $300, esto te conviene`
 
 ```
 Seamos honestos: el solar no le conviene a todo el mundo.
@@ -238,46 +362,80 @@ sin vueltas si te conviene o no.
 Mándame tu factura aproximada y coordinamos.
 ```
 
-**Mensaje prellenado:**
-```
-Hola, pago más de $300 de luz al mes y quiero la inspección gratis.
-```
+> El 04 parece contraproducente — rechaza clientes en un anuncio pagado. Hace dos cosas: filtra
+> al que nunca iba a comprar, y le da credibilidad al que paga $400, porque demuestra que no le
+> vendes a cualquiera. Es el ángulo más interesante de medir.
 
 ---
 
-## 5. Truco de atribución
+## 5. Plantillas de conversación y atribución
 
-Los clics a WhatsApp **no llevan UTMs** a la conversación. Solución: cada anuncio usa un mensaje
-prellenado distinto y reconocible. La primera línea del chat identifica el anuncio de origen.
+Los clics a WhatsApp **no llevan UTMs**. La primera línea del chat es la única atribución que
+existe. **Una plantilla por anuncio**, con nombre reconocible — no dejar el que Meta genera
+solo (`Start conversations 07/27/26`), porque con cuatro plantillas con la misma fecha es
+imposible distinguirlas en el desplegable.
 
-| Primera línea del mensaje | Anuncio |
-|---|---|
-| "...respaldo en apagones" | 1 — Apagones |
-| "...ver qué equipos me recomiendan" | 2 — Equipos |
-| "...inspección energética gratis de mi casa" | 3 — Servicio |
-| "...pago más de $300..." | 4 — Calificador |
+En la sección **Conversations** del anuncio, usar **"Create template"** y elegir la opción simple
+de conversación. **Nunca** la plantilla recomendada con IA: trae un **formulario dentro de
+WhatsApp** pidiendo nombre y email (*"Welcome! Please fill out the form below to sign up!"*).
+Eso repite el error de la landing —pedir datos antes de conversar— y además **impide que se
+envíe el mensaje prellenado**, con lo que se pierde toda la atribución.
 
-Llevar la cuenta a mano una semana basta para saber qué ángulo funciona.
+Si el editor ofrece **preguntas frecuentes** o **botones de respuesta rápida**, dejarlos vacíos.
+Cada botón es una excusa para tocar en vez de escribir.
 
----
-
-## 6. WhatsApp Business
-
-### Mensaje de bienvenida
-
-Califica de entrada y filtra curiosos sin gastar tiempo del equipo:
+### Mensaje de bienvenida (idéntico en las 4 plantillas)
 
 ```
 ¡Hola! Gracias por escribir a Lumina PR ☀️
 
 Para coordinar tu inspección gratis necesito 3 datos:
 
-1️⃣ ¿Cuánto pagas de luz al mes (aproximado)?
-2️⃣ ¿La casa es propia?
-3️⃣ ¿En qué pueblo está?
+1) ¿Cuánto pagas de luz al mes (aproximado)?
+2) ¿La casa es propia?
+3) ¿En qué pueblo está?
 
 Con eso coordinamos el día y la hora que te convenga.
 ```
+
+> Números en texto simple `1)` `2)` `3)`, **no emojis**. Los emojis 1️⃣2️⃣3️⃣ se renderizan como
+> cuadritos vacíos en la vista previa de Meta y en Android viejo. El primer mensaje al prospecto
+> no puede verse roto. El ☀️ sí renderiza bien.
+
+### Mensajes prellenados
+
+| Plantilla | Pre-filled message |
+|---|---|
+| `Apagones` | `Hola, soy dueño(a) de casa en PR y quiero la inspección gratis para el respaldo en apagones.` |
+| `Equipos` | `Hola, quiero la inspección gratis y ver qué equipos me recomiendan.` |
+| `Inspeccion` | `Hola, quiero agendar la inspección energética gratis de mi casa.` |
+| `Calificador` | `Hola, pago más de $300 de luz al mes y quiero la inspección gratis.` |
+
+### Tabla para Natana
+
+| Si el chat empieza con... | Vino del anuncio |
+|---|---|
+| "...respaldo en apagones" | 01 Apagones |
+| "...ver qué equipos me recomiendan" | 02 Equipos |
+| "...inspección energética gratis de mi casa" | 03 Inspección |
+| "...pago más de $300..." | 04 Calificador |
+
+Llevar la cuenta a mano una semana basta para saber qué ángulo trae gente que agenda.
+
+---
+
+## 6. WhatsApp Business
+
+Configurar también el mensaje de bienvenida en la app, además del de la plantilla del anuncio:
+
+**Ajustes → Herramientas para la empresa → Mensaje de bienvenida → activar**
+
+Usar el mismo texto de la sección 5.
+
+> **Redundancia deliberada:** el mensaje de la app **solo se dispara con gente que nunca ha
+> escrito antes**. Si Natana ya chateó con esa persona por cualquier motivo, no aparece. El de la
+> plantilla del anuncio sí se muestra siempre que la persona llegue desde el anuncio. Por eso las
+> 3 preguntas deben estar también en la respuesta manual de Natana.
 
 ### Respuestas para objeciones frecuentes
 
@@ -298,10 +456,29 @@ Por orden de efectividad:
 1. **Foto real de una instalación de Lumina** en un techo de PR
 2. **Video vertical (9:16) de 15–30 s** grabado con celular: Natana hablando a cámara frente a
    una instalación. WindMar usa video en la mayoría de sus anuncios activos
-3. Los flyers actuales, como último recurso
+3. Los flyers, revisados según la sección 4
+
+Criterios para elegir foto:
+
+- **Que se vea que es Puerto Rico** — techo de cemento, vegetación local, el barrio. El prospecto
+  tiene que reconocer su propia casa
+- **Que se vea gente trabajando.** Una instalación vacía vende producto; alguien instalándola
+  vende empresa que existe
+- **Sin editar de más.** Sin filtros, marcos ni texto encima
+
+Reparto sugerido:
+
+| Anuncio | Creativo |
+|---|---|
+| 01 Apagones | Casa con paneles, de tarde. O el flyer de "DEPENDER de LUMA" corregido |
+| 02 Equipos | Primer plano del inversor Sol-Ark o la batería instalada |
+| 03 Inspección | Alguien del equipo trabajando en el techo |
+| 04 Calificador | La instalación terminada más presentable |
 
 **No usar imágenes generadas con IA.** En una compra de $20,000+ de una marca desconocida, una
-imagen que se ve artificial destruye la credibilidad que intentamos construir.
+imagen que se ve artificial destruye la credibilidad que intentamos construir. Esto incluye la
+función *Advantage+ creative image generation* de Meta, que hay que apagar y cuya media generada
+hay que eliminar con el 🗑️.
 
 ---
 
@@ -323,26 +500,91 @@ Revisar a los **7 días**, sin tocar nada antes:
 - Si nadie escribe → el problema es el creativo, no el canal
 - Si escriben y califican → subir presupuesto gradualmente, no de golpe
 
+**No concluir nada con poco gasto.** A $3–8 por conversación, con $3 gastados lo esperado es
+entre 0 y 1 mensaje. Cero mensajes con $3 no es una señal, es ruido. Antes de juzgar hay que
+dejar correr al menos 3 días completos con anuncios bien configurados.
+
 ---
 
 ## 9. Trampas de Meta que ya nos costaron dinero
 
-Documentadas para no repetirlas:
+Documentadas para no repetirlas. Las marcadas con ⭐ se descubrieron en el montaje del 27–28 de
+julio de 2026.
 
 1. **El evento de conversión no se puede cambiar** en un conjunto ya publicado. Hay que duplicar
-2. **El objetivo de rendimiento se bloquea** si el reparto de presupuesto está activo
+2. **El objetivo de rendimiento se bloquea** si el reparto de presupuesto del 20% está activo.
+   Se detecta porque el campo sale en gris
 3. **Al duplicar se pierde la segmentación detallada.** Hay que rehacerla
 4. **Al duplicar, Meta premarca "recomendaciones"** (Advantage+ creative, formularios
-   instantáneos) que hay que desmarcar
-5. **Meta insiste en reactivar todas las ubicaciones** con el botón "Apply now". Ignorar siempre
+   instantáneos) que hay que desmarcar **cada vez**
+5. **Meta insiste en reactivar todas las ubicaciones** con el botón "Apply now" y la tarjeta
+   *"You can lower costs by 9% by selecting more destinations"*. Ese botón **reactiva
+   Advantage+ Placements y deshace toda la configuración manual de un clic**. Ignorar siempre
 6. **La casilla "gasto limitado en ubicaciones excluidas"** gasta ~5% en lo que excluiste
 7. **Advantage+ audience no se puede desactivar** en algunos objetivos: trata los intereses como
-   sugerencia. Solo respeta al 100% ubicación, edad y género. **Por eso el creativo es la
-   segmentación real**
+   sugerencia. Solo respeta al 100% ubicación, edad y exclusiones. **Por eso el creativo y las 3
+   preguntas de WhatsApp son la segmentación real.** Aun así los intereses sirven como semilla de
+   arranque: sin ellos Meta empieza desde 1.8M al azar y gasta el presupuesto aprendiendo
 8. **La pestaña "Overview" del Administrador de eventos tiene retraso** de horas. Para verificar
    en tiempo real usar "Test events"
 9. **Meta filtra eventos de navegadores automatizados.** Las pruebas hay que hacerlas desde un
    teléfono real
+10. ⭐ **El traductor de Chrome corrompe campos guardados.** Tradujo el nombre del conjunto
+    `PR | Inspección` a `relaciones públicas | Inspección` y **Meta guardó la traducción**. Si
+    pasa con un nombre, puede pasar con el texto de un anuncio publicado.
+    **Desactivar: clic derecho → Traducir al... → engranaje → "Nunca traducir facebook.com"**
+11. ⭐ **"Multi-advertiser ads" viene marcado.** Muestra tu anuncio en cuadrícula junto a otros
+    anunciantes —incluido WindMar— y advierte que el creativo puede ser recortado
+12. ⭐ **"Advantage+ creative image generation" genera imágenes con Meta AI** y las rota sin
+    avisar. Apagarla **y borrar la media generada** con el 🗑️
+13. ⭐ **"Optimize text per person" reescribe tu texto** por persona. Imposible medir qué ángulo
+    funcionó. Apagar
+14. ⭐ **La plantilla de conversación "recomendada" con IA es un formulario**, no una
+    conversación. Pide nombre y email dentro de WhatsApp y bloquea el mensaje prellenado
+15. ⭐ **Los campos "Advertiser" y "Payer" son obligatorios.** Con *"Please add"* en Review, Meta
+    no deja publicar
+16. ⭐ **WhatsApp Status está escondido** dentro del grupo *"Stories, Status, Reels"*. Marcar el
+    grupo completo lo incluye de paquete
+17. ⭐ **El radio de ubicación solo existe para *City***, no para *Region* / *Municipality*
+18. ⭐ **La cuenta reporta en Pacific Time**, PR está 3 horas adelante. 8 AM de PR = 5 AM Pacific
+19. ⭐ **La "Puntuación de la campaña" mide obediencia a Meta, no resultados.** Bajó de 100 a 80
+    aplicando decisiones correctas. Que baje es buena señal
+
+### ⭐ Errores de captura de texto que ya nos pasaron
+
+Costaron horas y $3 de gasto con anuncios vacíos.
+
+**El copy terminó en el campo `Description`.** Description **casi nunca se muestra** en Feed,
+Stories ni Reels. El anuncio corrió con Primary text y Headline vacíos: la gente vio una imagen
+sin oferta y sin llamada a la acción.
+
+| Campo | Qué va | Se muestra |
+|---|---|---|
+| **Primary text** | El texto largo del anuncio | ✅ Sí, arriba de la imagen |
+| **Headline** | Una línea corta, obligatoria en mensajería | ✅ Sí, debajo de la imagen |
+| **Description** | Nada | ❌ Casi nunca |
+
+**El texto "se borraba solo" al pegarlo.** Causa: espacios de variante vacíos.
+Con *"Primary text (1 of 5)"* o *"Headline 1 of 5"* y algún espacio vacío, Meta muestra
+*"Enter unique text or remove this option to publish"* (error **#2016052**), **bloquea la
+validación del bloque completo y revierte lo que escribes**.
+
+**Orden que sí funciona:**
+
+1. Eliminar **todas** las opciones extra de Headline y Primary text (X o 🗑️ al pasar el cursor).
+   Dejar **una sola** de cada uno
+2. Vaciar **Description** por completo
+3. Esperar a que abajo diga **"All edits saved"**
+4. Escribir el **Headline** a mano
+5. Esperar a que guarde otra vez
+6. Pegar el **Primary text** con `Cmd + Shift + V` (pegar sin formato). Si sigue fallando, pasar
+   el texto por la app **Notas** con *Formato → Convertir a texto simple*
+7. Verificar en la vista previa que el texto aparezca sobre la imagen con *"...See more"*
+8. **Publish** — el badge **"Unpublished edits"** significa que los cambios están en borrador y
+   **no están al aire**
+
+**No aceptar el mismo texto en dos campos.** Meta lo rechaza como duplicado: hay que vaciar
+Description **antes** de pegar en Primary text.
 
 ---
 
@@ -355,3 +597,9 @@ Documentadas para no repetirlas:
    de cemento. Si Lumina aprueba menos, ahí hay un mercado que el líder rechaza activamente, y
    un titular que se escribe solo: *"¿Te dijeron que no cualificabas para solar?"*
 4. **Prueba social:** testimonios reales con nombre y pueblo, fotos de instalaciones, licencia
+5. **Zona de servicio real:** ¿solo metro y este, o también Ponce, Mayagüez, Arecibo? Las
+   ubicaciones actuales asumen metro y este
+6. **Auditar los flyers restantes** (*"¿CÓMO BAJAR TU FACTURA DE LUZ?"*, *"La mejor INVERSIÓN"*,
+   *"Tu factura sube"*): confirmar que ninguno mencione los $15,000 de PR, el 30% federal ni
+   cuota mensual
+7. **Crear los anuncios 02, 03 y 04.** Al 28/07/2026 solo el 01 quedó con texto correcto
