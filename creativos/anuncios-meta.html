@@ -128,10 +128,12 @@
   body.exportar .frame { width: 1080px !important; height: auto !important; border-radius: 0; }
   body.exportar .canvas45  { position: relative; width: 1080px; height: 1350px; transform: none; }
   body.exportar .canvas916 { position: relative; width: 1080px; height: 1920px; transform: none; }
+  /* En flujo normal, NO fija: si es fija, Chrome la incluye en la captura */
   body.exportar .aviso-export {
-    display: block; position: fixed; top: 0; left: 0; right: 0; z-index: 99;
-    background: #25D366; color: #06301B; font-size: 13px; font-weight: 700;
-    padding: 12px 20px; text-align: center; cursor: pointer;
+    display: block; position: static;
+    background: #25D366; color: #06301B; font-size: 14px; font-weight: 700;
+    padding: 16px 20px; text-align: center; cursor: pointer;
+    margin-bottom: 32px; border-radius: 6px;
   }
   .aviso-export { display: none; }
 
