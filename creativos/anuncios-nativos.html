@@ -76,6 +76,24 @@
   .upload { background: #F5C518; color: #0F2347; }
   .upload:hover { background: #ffd633; }
   .upload input { display: none; }
+  .btn-export { background: #25D366; color: #06301B; }
+  .btn-export:hover { background: #2ee87a; }
+
+  /* ===== MODO EXPORTAR: quita la reducción para capturar a 1080 px ===== */
+  body.exportar .sub, body.exportar .why, body.exportar .howto,
+  body.exportar h1, body.exportar h2, body.exportar .cap,
+  body.exportar .upload, body.exportar .toggle:not(.btn-export) { display: none; }
+  body.exportar .safe { display: none; }
+  body.exportar .row { flex-direction: column; gap: 40px; }
+  body.exportar .frame { width: 1080px !important; height: auto !important; border-radius: 0; }
+  body.exportar .canvas45  { position: relative; width: 1080px; height: 1350px; transform: none; }
+  body.exportar .canvas916 { position: relative; width: 1080px; height: 1920px; transform: none; }
+  body.exportar .aviso-export {
+    display: block; position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+    background: #25D366; color: #06301B; font-size: 13px; font-weight: 700;
+    padding: 12px 20px; text-align: center;
+  }
+  .aviso-export { display: none; }
 
   .howto { margin-top: 66px; max-width: 800px; font-size: 13px; line-height: 1.85; color: #9A9AA6; }
   .howto h3 { color: #E8E8EA; font-size: 14px; margin: 28px 0 10px; font-weight: 800; }
@@ -94,11 +112,17 @@
   conversación que va a pasar. Los dos salen en 1080×1350 (Feed) y 1080×1920 (Stories/Reels).
 </p>
 
+<div class="aviso-export" onclick="document.body.classList.remove('exportar')">
+  MODO EXPORTAR ACTIVO · las piezas están a 1080 px reales · clic aquí para volver
+</div>
+
 <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
   <label class="upload">Subir foto de Natana
     <input type="file" id="fotoPersona" accept="image/*"></label>
   <button class="toggle" onclick="document.body.classList.toggle('hide-safe')">
     Mostrar / ocultar zonas seguras</button>
+  <button class="toggle btn-export" onclick="document.body.classList.add('exportar')">
+    Activar modo exportar (1080 px)</button>
 </div>
 
 <!-- ================= CONCEPTO A ================= -->
@@ -291,15 +315,31 @@
 
 <!-- ================= INSTRUCCIONES ================= -->
 <div class="howto">
-  <h3>Editar y exportar</h3>
+  <h3>Editar</h3>
   <ul>
     <li><strong>Textos:</strong> clic encima y escribe. Aparece un borde dorado en lo editable.</li>
     <li><strong>Foto:</strong> el botón amarillo de arriba la coloca en los dos formatos del
         concepto A.</li>
-    <li><strong>Exportar:</strong> oculta las zonas seguras → clic derecho → Inspeccionar → busca
-        la línea <code>&lt;div class="art ..."&gt;</code> de la pieza → clic derecho →
-        <strong>Capture node screenshot</strong>. Sale a 1080 px exactos.</li>
   </ul>
+
+  <h3>Exportar a 1080 px — importante</h3>
+  <p style="margin-bottom:12px;">
+    En pantalla las piezas están reducidas al 30% para que quepan. Si capturas así, el PNG sale
+    a 324×405 y borroso. <strong>Hay que activar el modo exportar primero.</strong>
+  </p>
+  <ol>
+    <li>Termina de editar todos los textos y sube la foto.</li>
+    <li>Clic en el botón verde <strong>«Activar modo exportar (1080 px)»</strong>. Las piezas se
+        van a ver gigantes y en una sola columna: eso es correcto, ahora están a tamaño real.</li>
+    <li>Clic derecho sobre la pieza → <strong>Inspeccionar</strong>.</li>
+    <li>En el panel de código busca la línea <code>&lt;div class="art ..."&gt;</code>. Al pasar el
+        cursor por las líneas se ilumina en azul la pieza: cuando se ilumine el creativo completo,
+        esa es la línea correcta.</li>
+    <li>Clic derecho sobre esa línea → <strong>Capture node screenshot</strong>.</li>
+    <li>Verifica el archivo descargado: debe decir <strong>1080 × 1350</strong> o
+        <strong>1080 × 1920</strong>. Si dice 324 × 405, el modo exportar no estaba activo.</li>
+    <li>Para volver a editar, clic en la barra verde de arriba.</li>
+  </ol>
 
   <h3>Qué foto necesita el concepto A</h3>
   <ul>

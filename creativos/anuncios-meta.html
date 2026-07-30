@@ -116,6 +116,24 @@
   }
   .upload:hover { background: #ffd633; }
   .upload input { display: none; }
+  .btn-export { background: #25D366 !important; color: #06301B !important; border-color: #25D366 !important; }
+  .btn-export:hover { background: #2ee87a !important; }
+
+  /* ===== MODO EXPORTAR: quita la reducción para capturar a 1080 px ===== */
+  body.exportar .sub, body.exportar .warn, body.exportar .howto,
+  body.exportar h1, body.exportar h2, body.exportar .cap,
+  body.exportar .upload, body.exportar .toggle:not(.btn-export) { display: none; }
+  body.exportar .safe { display: none; }
+  body.exportar .row { flex-direction: column; gap: 40px; }
+  body.exportar .frame { width: 1080px !important; height: auto !important; border-radius: 0; }
+  body.exportar .canvas45  { position: relative; width: 1080px; height: 1350px; transform: none; }
+  body.exportar .canvas916 { position: relative; width: 1080px; height: 1920px; transform: none; }
+  body.exportar .aviso-export {
+    display: block; position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+    background: #25D366; color: #06301B; font-size: 13px; font-weight: 700;
+    padding: 12px 20px; text-align: center; cursor: pointer;
+  }
+  .aviso-export { display: none; }
 
   .howto {
     margin-top: 64px; max-width: 780px; font-size: 13px; line-height: 1.85; color: #9A9AA6;
@@ -145,8 +163,15 @@
   que es el umbral de factura del cliente, no un precio nuestro.
 </div>
 
+<div class="aviso-export" onclick="document.body.classList.remove('exportar')">
+  MODO EXPORTAR ACTIVO · las piezas están a 1080 px reales · clic aquí para volver
+</div>
+
 <button class="toggle" onclick="document.body.classList.toggle('hide-safe')">
   Mostrar / ocultar zonas seguras de Stories
+</button>
+<button class="toggle btn-export" onclick="document.body.classList.add('exportar')">
+  Activar modo exportar (1080 px)
 </button>
 
 <!-- ============================================================ -->
@@ -496,14 +521,22 @@
   </p>
 
   <h3>Cómo exportar a 1080 px exactos</h3>
+  <p style="margin-bottom:12px;">
+    En pantalla las piezas están reducidas al 30% para que quepan. Si capturas así, el PNG sale a
+    324×405 y borroso. <strong>Hay que activar el modo exportar primero.</strong>
+  </p>
   <ol>
-    <li>Oculta las zonas seguras con el botón de arriba (esas guías rojas no van en el anuncio).</li>
+    <li>Termina de editar los textos y sube la foto.</li>
+    <li>Clic en el botón verde <strong>«Activar modo exportar (1080 px)»</strong>. Las piezas se
+        verán gigantes y en una sola columna: así es correcto, están a tamaño real.</li>
     <li>Clic derecho sobre el creativo → <strong>Inspeccionar</strong>.</li>
     <li>En el panel de código, busca la línea del <code>&lt;div class="art ..."&gt;</code> de esa
         pieza. Al pasar el cursor por las líneas, se ilumina en azul la pieza correspondiente:
         cuando se ilumine el creativo completo, esa es la línea.</li>
     <li>Clic derecho sobre esa línea → <strong>Capture node screenshot</strong>.</li>
-    <li>Chrome descarga el PNG al tamaño real del lienzo: 1080×1350 o 1080×1920.</li>
+    <li>Verifica el archivo: debe decir <strong>1080 × 1350</strong> o <strong>1080 × 1920</strong>.
+        Si dice 324 × 405, el modo exportar no estaba activo.</li>
+    <li>Para volver a editar, clic en la barra verde de arriba.</li>
   </ol>
 
   <h3>Textos que van en Ads Manager</h3>
