@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina PR — Creativos Meta Ads 02 y 04</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy-deep: #0A1628;
+    --navy: #0F2347;
+    --navy-mid: #1B3A6B;
+    --blue: #2B6CB0;
+    --blue-light: #4A9FD4;
+    --gold: #F5C518;
+    --white: #FFFFFF;
+    --gray: #8A9BB5;
+  }
+
+  body {
+    background: #101014;
+    font-family: 'Montserrat', sans-serif;
+    padding: 40px 24px 80px;
+    color: #E8E8EA;
+  }
+
+  h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+  .sub { font-size: 13px; color: #7A7A85; margin-bottom: 8px; line-height: 1.6; }
+  .warn {
+    font-size: 12px; color: #F5C518; background: rgba(245,197,24,0.08);
+    border-left: 3px solid #F5C518; padding: 10px 14px; margin: 20px 0 36px;
+    max-width: 760px; line-height: 1.7;
+  }
+  h2 {
+    font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: #6C6C78; margin: 48px 0 18px; font-weight: 700;
+  }
+  .row { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .item { display: flex; flex-direction: column; gap: 8px; }
+  .cap { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #5A5A66; }
+
+  /* Marcos de previsualización */
+  .frame { position: relative; overflow: hidden; border-radius: 10px; background: #000; }
+  .f45  { width: 324px; height: 405px; }
+  .f916 { width: 270px; height: 480px; }
+  .canvas45  { width: 1080px; height: 1350px; position: absolute; top: 0; left: 0;
+               transform: scale(0.3); transform-origin: top left; }
+  .canvas916 { width: 1080px; height: 1920px; position: absolute; top: 0; left: 0;
+               transform: scale(0.25); transform-origin: top left; }
+
+  /* Piezas — lienzos reales 1080px */
+  .art { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .bg-navy { background: linear-gradient(160deg, #0A1628 0%, #0F2347 100%); }
+  .bg-gold { background: #F5C518; }
+  .goldbar { position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: #F5C518; }
+  .navybar { position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: #0F2347; }
+
+  .watermark { position: absolute; opacity: 0.05; }
+
+  .eyebrow {
+    font-weight: 600; color: #F5C518; text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+  .title { font-weight: 900; color: #FFF; line-height: 1.04; }
+
+  .spec {
+    display: flex; align-items: center; background: rgba(255,255,255,0.045);
+    border-left: 6px solid #F5C518; border-radius: 14px;
+  }
+  .spec .ic { flex-shrink: 0; text-align: center; }
+  .spec .nm { font-weight: 700; color: #FFF; }
+  .spec .ds { font-weight: 300; color: #8A9BB5; }
+
+  /* Guías de zona segura para 9:16 */
+  .safe { position: absolute; left: 0; right: 0; background: rgba(255,0,80,0.10);
+          border-top: 2px dashed rgba(255,0,80,0.45); border-bottom: 2px dashed rgba(255,0,80,0.45);
+          pointer-events: none; }
+  .safe span { position: absolute; left: 24px; top: 8px; font-size: 22px; color: rgba(255,120,150,0.9);
+               font-weight: 700; letter-spacing: 2px; }
+  body.hide-safe .safe { display: none; }
+
+  .toggle {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 12px;
+    background: #1E1E24; border: 1px solid #33333D; color: #C8C8D0;
+    padding: 8px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
+  }
+  .toggle:hover { background: #26262E; }
+
+  /* Edición de texto en el navegador */
+  [contenteditable]:hover { outline: 2px dashed rgba(245,197,24,0.35); outline-offset: 4px; }
+  [contenteditable]:focus { outline: 3px solid rgba(245,197,24,0.85); outline-offset: 4px; }
+
+  /* Slot de foto para el anuncio 03 */
+  .foto-bg {
+    background-color: #12202E;
+    background-size: cover;
+    background-position: center 35%;
+    background-repeat: no-repeat;
+  }
+  .foto-vacia::after {
+    content: 'Sube tu foto con el botón de arriba';
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.28); font-size: 40px; font-weight: 600; text-align: center;
+    padding: 0 120px; line-height: 1.5;
+  }
+  .scrim-abajo {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(6,14,28,0.96) 0%, rgba(6,14,28,0.86) 45%, rgba(6,14,28,0) 100%);
+  }
+  .upload {
+    display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;
+    background: #F5C518; color: #0F2347; padding: 11px 18px; border-radius: 6px;
+    cursor: pointer; margin-bottom: 6px;
+  }
+  .upload:hover { background: #ffd633; }
+  .upload input { display: none; }
+
+  .howto {
+    margin-top: 64px; max-width: 780px; font-size: 13px; line-height: 1.85; color: #9A9AA6;
+  }
+  .howto h3 { color: #E8E8EA; font-size: 14px; margin-bottom: 12px; font-weight: 800; }
+  .howto ol { padding-left: 20px; }
+  .howto li { margin-bottom: 8px; }
+  .howto code {
+    background: #1E1E24; padding: 2px 7px; border-radius: 4px;
+    font-family: ui-monospace, monospace; font-size: 12px; color: #F5C518;
+  }
+  .howto strong { color: #E8E8EA; }
+</style>
+</head>
+<body>
+
+<h1>Creativos Meta Ads — 02 Equipos y 04 Calificador</h1>
+<p class="sub">
+  Lienzos reales de 1080&nbsp;×&nbsp;1350 (Feed) y 1080&nbsp;×&nbsp;1920 (Stories/Reels).
+  Lo que ves está reducido a escala; la exportación sale a tamaño completo.
+</p>
+
+<div class="warn">
+  <strong>Reglas fijas de estos creativos:</strong> sin cuota mensual, sin el incentivo de $15,000 de PR,
+  sin el crédito federal del 30%. El programa de PR está cerrado desde agosto de 2023 y el crédito
+  federal expiró el 31/12/2025. El único número permitido es el <strong>$300</strong> del anuncio 04,
+  que es el umbral de factura del cliente, no un precio nuestro.
+</div>
+
+<button class="toggle" onclick="document.body.classList.toggle('hide-safe')">
+  Mostrar / ocultar zonas seguras de Stories
+</button>
+
+<!-- ============================================================ -->
+<h2>02 · Equipos — «Te decimos marca por marca»</h2>
+<div class="row">
+
+  <!-- 02 · 4:5 -->
+  <div class="item">
+    <div class="frame f45"><div class="canvas45">
+      <div class="art bg-navy">
+        <div class="goldbar"></div>
+        <svg class="watermark" style="right:-60px;top:60px;" width="700" height="700" viewBox="0 0 720 720">
+          <rect x="0" y="0" width="720" height="720" fill="none" stroke="#4A9FD4" stroke-width="3"/>
+          <line x1="240" y1="0" x2="240" y2="720" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="480" y1="0" x2="480" y2="720" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="0" y1="240" x2="720" y2="240" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="0" y1="480" x2="720" y2="480" stroke="#4A9FD4" stroke-width="2"/>
+        </svg>
+
+        <!-- Logo -->
+        <svg style="position:absolute;top:70px;left:82px;" width="300" height="76" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#F5C518"/>
+          <circle cx="57" cy="36" r="8" fill="#2B6CB0"/><circle cx="73" cy="36" r="8" fill="#4A9FD4"/>
+          <circle cx="89" cy="36" r="8" fill="#2B6CB0"/><circle cx="65" cy="52" r="8" fill="#4A9FD4"/>
+          <circle cx="81" cy="52" r="8" fill="#2B6CB0"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#4A9FD4" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div style="position:absolute;top:210px;left:96px;right:82px;">
+          <div class="eyebrow" style="font-size:25px;margin-bottom:26px;">Sin letra chiquita</div>
+          <div class="title" style="font-size:82px;margin-bottom:52px;">
+            Te decimos marca<br>por <span style="color:#F5C518;">marca</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="spec" style="padding:26px 30px;gap:26px;">
+              <div class="ic" style="font-size:46px;width:56px;">☀️</div>
+              <div><div class="nm" style="font-size:31px;margin-bottom:5px;">Canadian Solar 640W</div>
+                   <div class="ds" style="font-size:21px;">Paneles de alta eficiencia</div></div>
+            </div>
+            <div class="spec" style="padding:26px 30px;gap:26px;">
+              <div class="ic" style="font-size:46px;width:56px;">⚙️</div>
+              <div><div class="nm" style="font-size:31px;margin-bottom:5px;">Inversor Sol-Ark</div>
+                   <div class="ds" style="font-size:21px;">Respaldo automático</div></div>
+            </div>
+            <div class="spec" style="padding:26px 30px;gap:26px;">
+              <div class="ic" style="font-size:46px;width:56px;">🔋</div>
+              <div><div class="nm" style="font-size:31px;margin-bottom:5px;">Batería Pytes LFP</div>
+                   <div class="ds" style="font-size:21px;">Litio-ferrofosfato</div></div>
+            </div>
+            <div class="spec" style="padding:26px 30px;gap:26px;">
+              <div class="ic" style="font-size:46px;width:56px;">🔧</div>
+              <div><div class="nm" style="font-size:31px;margin-bottom:5px;">UNIRAC + Hilti</div>
+                   <div class="ds" style="font-size:21px;">Anclajes de 2,000+ lb</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:0;left:0;right:0;height:104px;background:#F5C518;display:flex;align-items:center;padding:0 96px;">
+          <div style="font-size:31px;font-weight:800;color:#0F2347;letter-spacing:0.5px;">
+            Garantías de hasta 25 años
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cap">02 · Feed 1080×1350</div>
+  </div>
+
+  <!-- 02 · 9:16 -->
+  <div class="item">
+    <div class="frame f916"><div class="canvas916">
+      <div class="art bg-navy">
+        <div class="goldbar"></div>
+        <svg class="watermark" style="right:-80px;top:520px;" width="760" height="760" viewBox="0 0 720 720">
+          <rect x="0" y="0" width="720" height="720" fill="none" stroke="#4A9FD4" stroke-width="3"/>
+          <line x1="240" y1="0" x2="240" y2="720" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="480" y1="0" x2="480" y2="720" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="0" y1="240" x2="720" y2="240" stroke="#4A9FD4" stroke-width="2"/>
+          <line x1="0" y1="480" x2="720" y2="480" stroke="#4A9FD4" stroke-width="2"/>
+        </svg>
+
+        <svg style="position:absolute;top:330px;left:82px;" width="300" height="76" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#F5C518"/>
+          <circle cx="57" cy="36" r="8" fill="#2B6CB0"/><circle cx="73" cy="36" r="8" fill="#4A9FD4"/>
+          <circle cx="89" cy="36" r="8" fill="#2B6CB0"/><circle cx="65" cy="52" r="8" fill="#4A9FD4"/>
+          <circle cx="81" cy="52" r="8" fill="#2B6CB0"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#4A9FD4" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div style="position:absolute;top:480px;left:96px;right:82px;">
+          <div class="eyebrow" style="font-size:26px;margin-bottom:28px;">Sin letra chiquita</div>
+          <div class="title" style="font-size:88px;margin-bottom:60px;">
+            Te decimos<br>marca por<br><span style="color:#F5C518;">marca</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:24px;">
+            <div class="spec" style="padding:30px 32px;gap:28px;">
+              <div class="ic" style="font-size:50px;width:60px;">☀️</div>
+              <div><div class="nm" style="font-size:34px;margin-bottom:6px;">Canadian Solar 640W</div>
+                   <div class="ds" style="font-size:23px;">Paneles de alta eficiencia</div></div>
+            </div>
+            <div class="spec" style="padding:30px 32px;gap:28px;">
+              <div class="ic" style="font-size:50px;width:60px;">⚙️</div>
+              <div><div class="nm" style="font-size:34px;margin-bottom:6px;">Inversor Sol-Ark</div>
+                   <div class="ds" style="font-size:23px;">Respaldo automático</div></div>
+            </div>
+            <div class="spec" style="padding:30px 32px;gap:28px;">
+              <div class="ic" style="font-size:50px;width:60px;">🔋</div>
+              <div><div class="nm" style="font-size:34px;margin-bottom:6px;">Batería Pytes LFP</div>
+                   <div class="ds" style="font-size:23px;">Litio-ferrofosfato</div></div>
+            </div>
+            <div class="spec" style="padding:30px 32px;gap:28px;">
+              <div class="ic" style="font-size:50px;width:60px;">🔧</div>
+              <div><div class="nm" style="font-size:34px;margin-bottom:6px;">UNIRAC + Hilti</div>
+                   <div class="ds" style="font-size:23px;">Anclajes de 2,000+ lb</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:56px;font-size:34px;font-weight:800;color:#F5C518;">
+            Garantías de hasta 25 años
+          </div>
+        </div>
+
+        <div class="safe" style="top:0;height:250px;"><span>ZONA SEGURA · 250 px</span></div>
+        <div class="safe" style="bottom:0;height:340px;"><span>ZONA SEGURA · 340 px</span></div>
+      </div>
+    </div></div>
+    <div class="cap">02 · Stories 1080×1920</div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>04 · Calificador — «Si tu factura pasa de $300»</h2>
+<div class="row">
+
+  <!-- 04 · 4:5 -->
+  <div class="item">
+    <div class="frame f45"><div class="canvas45">
+      <div class="art bg-gold">
+        <div class="navybar"></div>
+        <svg class="watermark" style="right:-50px;bottom:0;opacity:0.08;" width="620" height="620" viewBox="0 0 600 600">
+          <rect x="0" y="0" width="600" height="600" fill="none" stroke="#0F2347" stroke-width="4"/>
+          <line x1="200" y1="0" x2="200" y2="600" stroke="#0F2347" stroke-width="2"/>
+          <line x1="400" y1="0" x2="400" y2="600" stroke="#0F2347" stroke-width="2"/>
+          <line x1="0" y1="200" x2="600" y2="200" stroke="#0F2347" stroke-width="2"/>
+          <line x1="0" y1="400" x2="600" y2="400" stroke="#0F2347" stroke-width="2"/>
+        </svg>
+
+        <svg style="position:absolute;top:70px;left:82px;" width="270" height="70" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#0F2347"/>
+          <circle cx="57" cy="36" r="8" fill="#0F2347" opacity="0.4"/><circle cx="73" cy="36" r="8" fill="#0F2347" opacity="0.6"/>
+          <circle cx="89" cy="36" r="8" fill="#0F2347" opacity="0.4"/><circle cx="65" cy="52" r="8" fill="#0F2347" opacity="0.5"/>
+          <circle cx="81" cy="52" r="8" fill="#0F2347" opacity="0.4"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#0F2347" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div style="position:absolute;top:250px;left:96px;right:82px;">
+          <div style="font-size:27px;font-weight:700;color:#0F2347;letter-spacing:5px;text-transform:uppercase;opacity:0.55;margin-bottom:10px;">
+            Seamos honestos
+          </div>
+          <div style="font-size:250px;font-weight:900;color:#0F2347;line-height:0.92;letter-spacing:-10px;margin-bottom:14px;">
+            $300
+          </div>
+          <div style="font-size:68px;font-weight:900;color:#0F2347;line-height:1.06;margin-bottom:40px;">
+            Si tu factura pasa<br>de ahí, hablemos
+          </div>
+          <div style="width:120px;height:8px;background:#0F2347;opacity:0.25;margin-bottom:38px;"></div>
+          <div style="font-size:31px;font-weight:400;color:#0F2347;opacity:0.68;line-height:1.5;">
+            Si pagas menos, te lo decimos<br>de frente: todavía no te conviene.
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:0;left:0;right:0;height:104px;background:#0F2347;display:flex;align-items:center;padding:0 96px;gap:20px;">
+          <div style="font-size:31px;font-weight:800;color:#F5C518;letter-spacing:0.5px;">Inspección gratis en tu casa</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cap">04 · Feed 1080×1350</div>
+  </div>
+
+  <!-- 04 · 9:16 -->
+  <div class="item">
+    <div class="frame f916"><div class="canvas916">
+      <div class="art bg-gold">
+        <div class="navybar"></div>
+        <svg class="watermark" style="right:-60px;bottom:120px;opacity:0.08;" width="660" height="660" viewBox="0 0 600 600">
+          <rect x="0" y="0" width="600" height="600" fill="none" stroke="#0F2347" stroke-width="4"/>
+          <line x1="200" y1="0" x2="200" y2="600" stroke="#0F2347" stroke-width="2"/>
+          <line x1="400" y1="0" x2="400" y2="600" stroke="#0F2347" stroke-width="2"/>
+          <line x1="0" y1="200" x2="600" y2="200" stroke="#0F2347" stroke-width="2"/>
+          <line x1="0" y1="400" x2="600" y2="400" stroke="#0F2347" stroke-width="2"/>
+        </svg>
+
+        <svg style="position:absolute;top:330px;left:82px;" width="270" height="70" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#0F2347"/>
+          <circle cx="57" cy="36" r="8" fill="#0F2347" opacity="0.4"/><circle cx="73" cy="36" r="8" fill="#0F2347" opacity="0.6"/>
+          <circle cx="89" cy="36" r="8" fill="#0F2347" opacity="0.4"/><circle cx="65" cy="52" r="8" fill="#0F2347" opacity="0.5"/>
+          <circle cx="81" cy="52" r="8" fill="#0F2347" opacity="0.4"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#0F2347" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#0F2347" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div style="position:absolute;top:560px;left:96px;right:82px;">
+          <div style="font-size:29px;font-weight:700;color:#0F2347;letter-spacing:5px;text-transform:uppercase;opacity:0.55;margin-bottom:14px;">
+            Seamos honestos
+          </div>
+          <div style="font-size:290px;font-weight:900;color:#0F2347;line-height:0.92;letter-spacing:-12px;margin-bottom:20px;">
+            $300
+          </div>
+          <div style="font-size:76px;font-weight:900;color:#0F2347;line-height:1.06;margin-bottom:46px;">
+            Si tu factura<br>pasa de ahí,<br>hablemos
+          </div>
+          <div style="width:130px;height:9px;background:#0F2347;opacity:0.25;margin-bottom:44px;"></div>
+          <div style="font-size:34px;font-weight:400;color:#0F2347;opacity:0.68;line-height:1.5;">
+            Si pagas menos, te lo<br>decimos de frente:<br>todavía no te conviene.
+          </div>
+          <div style="margin-top:64px;display:inline-block;background:#0F2347;color:#F5C518;font-size:32px;font-weight:800;padding:30px 54px;border-radius:100px;">
+            Inspección gratis
+          </div>
+        </div>
+
+        <div class="safe" style="top:0;height:250px;"><span>ZONA SEGURA · 250 px</span></div>
+        <div class="safe" style="bottom:0;height:340px;"><span>ZONA SEGURA · 340 px</span></div>
+      </div>
+    </div></div>
+    <div class="cap">04 · Stories 1080×1920</div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>03 · Inspección — con tu foto real</h2>
+
+<label class="upload">
+  Subir la foto del instalador
+  <input type="file" id="fotoInput" accept="image/*">
+</label>
+<p class="sub" style="margin-bottom:18px;">
+  Sube la foto ya retocada por Gemini. Se coloca sola en los dos formatos.
+  No se guarda en ningún servidor: se queda en tu navegador.
+</p>
+
+<div class="row">
+
+  <!-- 03 · 4:5 -->
+  <div class="item">
+    <div class="frame f45"><div class="canvas45">
+      <div class="art foto-bg foto-vacia" data-foto>
+        <div class="goldbar" style="z-index:3;"></div>
+
+        <svg style="position:absolute;top:70px;left:82px;z-index:3;" width="270" height="70" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#F5C518"/>
+          <circle cx="57" cy="36" r="8" fill="#2B6CB0"/><circle cx="73" cy="36" r="8" fill="#4A9FD4"/>
+          <circle cx="89" cy="36" r="8" fill="#2B6CB0"/><circle cx="65" cy="52" r="8" fill="#4A9FD4"/>
+          <circle cx="81" cy="52" r="8" fill="#2B6CB0"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#4A9FD4" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div class="scrim-abajo" style="height:620px;z-index:2;"></div>
+
+        <div style="position:absolute;bottom:118px;left:96px;right:82px;z-index:3;">
+          <div class="eyebrow" style="font-size:25px;margin-bottom:22px;">Trabajo real en PR</div>
+          <div class="title" style="font-size:84px;margin-bottom:26px;">Vamos a tu<br><span style="color:#F5C518;">techo</span></div>
+          <div style="font-size:31px;font-weight:300;color:#C9D4E4;line-height:1.45;">
+            Revisamos tu consumo, tu techo y<br>tu panel eléctrico. Sin compromiso.
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:0;left:0;right:0;height:104px;background:#F5C518;display:flex;align-items:center;padding:0 96px;z-index:3;">
+          <div style="font-size:31px;font-weight:800;color:#0F2347;">Inspección energética gratis</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cap">03 · Feed 1080×1350</div>
+  </div>
+
+  <!-- 03 · 9:16 -->
+  <div class="item">
+    <div class="frame f916"><div class="canvas916">
+      <div class="art foto-bg foto-vacia" data-foto>
+        <div class="goldbar" style="z-index:3;"></div>
+
+        <svg style="position:absolute;top:330px;left:82px;z-index:3;" width="270" height="70" viewBox="0 0 380 96" fill="none">
+          <text x="0" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">L</text>
+          <text x="44" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">U</text>
+          <rect x="62" y="6" width="20" height="16" rx="3" fill="#F5C518"/>
+          <circle cx="57" cy="36" r="8" fill="#2B6CB0"/><circle cx="73" cy="36" r="8" fill="#4A9FD4"/>
+          <circle cx="89" cy="36" r="8" fill="#2B6CB0"/><circle cx="65" cy="52" r="8" fill="#4A9FD4"/>
+          <circle cx="81" cy="52" r="8" fill="#2B6CB0"/>
+          <text x="104" y="68" font-family="Montserrat,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" letter-spacing="-2">MINA</text>
+          <text x="274" y="68" font-family="Montserrat,sans-serif" font-weight="700" font-size="72" fill="none" stroke="#4A9FD4" stroke-width="3" letter-spacing="-2">PR</text>
+        </svg>
+
+        <div class="scrim-abajo" style="height:900px;z-index:2;"></div>
+
+        <div style="position:absolute;bottom:400px;left:96px;right:82px;z-index:3;">
+          <div class="eyebrow" style="font-size:27px;margin-bottom:24px;">Trabajo real en PR</div>
+          <div class="title" style="font-size:96px;margin-bottom:30px;">Vamos a<br>tu <span style="color:#F5C518;">techo</span></div>
+          <div style="font-size:34px;font-weight:300;color:#C9D4E4;line-height:1.45;">
+            Revisamos tu consumo, tu<br>techo y tu panel eléctrico.<br>Sin compromiso.
+          </div>
+          <div style="margin-top:56px;display:inline-block;background:#F5C518;color:#0F2347;font-size:32px;font-weight:800;padding:30px 54px;border-radius:100px;">
+            Inspección gratis
+          </div>
+        </div>
+
+        <div class="safe" style="top:0;height:250px;z-index:4;"><span>ZONA SEGURA · 250 px</span></div>
+        <div class="safe" style="bottom:0;height:340px;z-index:4;"><span>ZONA SEGURA · 340 px</span></div>
+      </div>
+    </div></div>
+    <div class="cap">03 · Stories 1080×1920</div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<div class="howto">
+  <h3>Cómo cambiar los textos — sin Photoshop</h3>
+  <p style="margin-bottom:12px;">
+    Todos los textos de las piezas son editables. <strong>Haz clic encima y escribe.</strong>
+    Al pasar el cursor verás un borde dorado punteado sobre lo que puedes cambiar.
+  </p>
+  <ol>
+    <li>Clic sobre el texto que quieras cambiar (titular, subtexto, nombre de equipo, etc.).</li>
+    <li>Bórralo y escribe el nuevo. El tamaño, el color y la tipografía se mantienen solos.</li>
+    <li>Si te equivocas, <code>Cmd + Z</code> deshace.</li>
+    <li>Si algo se desacomoda mucho, recarga la página con <code>Cmd + R</code> y vuelve al
+        original.</li>
+  </ol>
+  <p style="margin-top:12px;">
+    Los textos no se guardan al recargar. Exporta la imagen antes de cerrar o recargar.
+  </p>
+
+  <h3>Cómo exportar a 1080 px exactos</h3>
+  <ol>
+    <li>Oculta las zonas seguras con el botón de arriba (esas guías rojas no van en el anuncio).</li>
+    <li>Clic derecho sobre el creativo → <strong>Inspeccionar</strong>.</li>
+    <li>En el panel de código, busca la línea del <code>&lt;div class="art ..."&gt;</code> de esa
+        pieza. Al pasar el cursor por las líneas, se ilumina en azul la pieza correspondiente:
+        cuando se ilumine el creativo completo, esa es la línea.</li>
+    <li>Clic derecho sobre esa línea → <strong>Capture node screenshot</strong>.</li>
+    <li>Chrome descarga el PNG al tamaño real del lienzo: 1080×1350 o 1080×1920.</li>
+  </ol>
+
+  <h3>Textos que van en Ads Manager</h3>
+  <p style="margin-bottom:14px;">
+    <strong>02 · Equipos</strong> — Headline: <em>Te decimos marca por marca qué lleva tu sistema</em> ·
+    Prellenado: <code>Hola, quiero la inspección gratis 🔋</code>
+  </p>
+  <p style="margin-bottom:14px;">
+    <strong>04 · Calificador</strong> — Headline: <em>Si tu factura de luz pasa de $300, esto te conviene</em> ·
+    Prellenado: <code>Hola, quiero la inspección gratis 💡</code>
+  </p>
+  <p>
+    El texto principal completo de cada anuncio está en
+    <code>.kiro/steering/campana-whatsapp.md</code>, sección 4.
+  </p>
+
+  <h3>Antes de subirlos</h3>
+  <ol>
+    <li>Los dos van <strong>dentro del conjunto que ya existe</strong>, no en uno nuevo:
+        duplicar el conjunto partiría en dos el aprendizaje de Meta.</li>
+    <li>Desmarcar en cada anuncio: <em>Multi-advertiser ads</em>, <em>Advantage+ creative</em>,
+        <em>image generation</em> y <em>Optimize text per person</em>.</li>
+    <li><em>Description</em> vacío. Una sola variante de <em>Primary text</em> y de
+        <em>Headline</em>.</li>
+    <li>Plantilla de conversación propia para cada anuncio, con su emoji de atribución.</li>
+  </ol>
+</div>
+
+<script>
+  // Hace editable todo el texto de las piezas, sin tocar los logos (SVG).
+  document.querySelectorAll('.art *').forEach(function (el) {
+    var esSvg = el instanceof SVGElement;
+    var tieneHijos = el.children.length > 0;
+    var tieneTexto = el.textContent.trim().length > 0;
+    if (!esSvg && !tieneHijos && tieneTexto && !el.classList.contains('safe')) {
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('spellcheck', 'false');
+    }
+  });
+
+  // Carga la foto del anuncio 03 en los dos formatos.
+  document.getElementById('fotoInput').addEventListener('change', function (e) {
+    var archivo = e.target.files && e.target.files[0];
+    if (!archivo) return;
+    var url = URL.createObjectURL(archivo);
+    document.querySelectorAll('[data-foto]').forEach(function (el) {
+      el.style.backgroundImage = 'url("' + url + '")';
+      el.classList.remove('foto-vacia');
+    });
+  });
+</script>
+
+</body>
+</html>
