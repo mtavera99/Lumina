@@ -4,7 +4,9 @@ Guía completa para lanzar y mantener la campaña. Basada en el análisis de la 
 Anuncios de Meta (~100 anuncios activos de WindMar en Puerto Rico), en la propuesta comercial
 real de Lumina, y en los datos de la campaña anterior.
 
-**Actualizado:** 28 de julio de 2026 — incluye la bitácora del montaje real en Ads Manager.
+**Actualizado:** 30 de julio de 2026 — incluye los primeros resultados, el hallazgo de que Meta
+cuenta más conversaciones de las que llegan (sección 5.1), la inteligencia competitiva de la
+Biblioteca de Anuncios (sección 11) y el flujo de producción de creativos (sección 12).
 
 ---
 
@@ -402,25 +404,73 @@ Con eso coordinamos el día y la hora que te convenga.
 > cuadritos vacíos en la vista previa de Meta y en Android viejo. El primer mensaje al prospecto
 > no puede verse roto. El ☀️ sí renderiza bien.
 
-### Mensajes prellenados
+### Mensajes prellenados — versión corta con emoji
+
+**Corregido el 30/07/2026.** La primera versión eran frases de ~92 caracteres del tipo
+*"Hola, soy dueño(a) de casa en PR y quiero la inspección gratis para el respaldo en apagones."*
+Eran largas para tener atribución legible, y fue el intercambio equivocado: la persona toca el
+anuncio con curiosidad, se abre WhatsApp y se encuentra un párrafo ya escrito **declarando** que
+es dueña de casa y que quiere una inspección. Se siente como firmar algo y muchos cierran la app.
+
+La atribución se traslada a un **emoji**, que ocupa un carácter y se distingue igual:
 
 | Plantilla | Pre-filled message |
 |---|---|
-| `Apagones` | `Hola, soy dueño(a) de casa en PR y quiero la inspección gratis para el respaldo en apagones.` |
-| `Equipos` | `Hola, quiero la inspección gratis y ver qué equipos me recomiendan.` |
-| `Inspeccion` | `Hola, quiero agendar la inspección energética gratis de mi casa.` |
-| `Calificador` | `Hola, pago más de $300 de luz al mes y quiero la inspección gratis.` |
+| `Apagones` | `Hola, quiero la inspección gratis ⚡` |
+| `Equipos` | `Hola, quiero la inspección gratis 🔋` |
+| `Inspeccion` | `Hola, quiero la inspección gratis 🏠` |
+| `Calificador` | `Hola, quiero la inspección gratis 💡` |
+| `Sin call center` | `Hola, quiero la inspección gratis 🔧` |
+| `Conversacion` | `Hola, quiero la inspección gratis 💬` |
+
+35 caracteres en vez de 92, con la misma capacidad de atribución.
 
 ### Tabla para Natana
 
-| Si el chat empieza con... | Vino del anuncio |
+| Emoji en el primer mensaje | Vino del anuncio |
 |---|---|
-| "...respaldo en apagones" | 01 Apagones |
-| "...ver qué equipos me recomiendan" | 02 Equipos |
-| "...inspección energética gratis de mi casa" | 03 Inspección |
-| "...pago más de $300..." | 04 Calificador |
+| ⚡ | 01 Apagones |
+| 🔧 | 02 Sin call center |
+| 💬 | 03 Conversación |
+| 🔋 | Equipos |
+| 🏠 | Inspección |
+| 💡 | Calificador |
 
 Llevar la cuenta a mano una semana basta para saber qué ángulo trae gente que agenda.
+
+---
+
+## 5.1 ⚠️ Meta cuenta más conversaciones de las que llegan
+
+**Descubierto el 30/07/2026.** Meta reportaba **6 conversaciones iniciadas** y a Natana solo le
+habían entrado **2 mensajes**.
+
+**No es un fallo de configuración.** Meta cuenta cuando se **abre** el chat, no cuando se envía el
+mensaje: la persona toca el anuncio, WhatsApp abre con el texto prellenado, y no le da a enviar.
+
+La brecha es conocida en el canal. Un análisis de campañas click-to-WhatsApp encontró que
+alrededor del **8.5%** de los clics en el botón terminan en conversación real
+([Pete Bowen](https://pete-bowen.com/how-many-whatsapp-clicks-turn-into-leads)), y las
+plataformas de gestión de WhatsApp documentan la diferencia como esperada
+([DoubleTick](https://learn.doubletick.io/why-do-i-see-a-difference-between-meta-ad-clicks-and-chats-initiated-on-doubletick)).
+Nuestra proporción de 2 sobre 6 (**33%**) está bastante por encima de esa referencia.
+
+**Consecuencia para la medición: el número de Meta no sirve como métrica de negocio.**
+
+| | Meta dice | Realidad |
+|---|---|---|
+| Conversaciones | 6 | **2** |
+| Costo por conversación | $11.08 | **$33.25** |
+
+**Usar siempre el conteo de Natana como denominador real.** Y antes de culpar a la
+configuración, revisar: carpeta de archivados en WhatsApp Business, y si el número está vinculado
+a alguna otra plataforma o a WhatsApp Web en otro equipo.
+
+Palancas para cerrar la brecha, por orden de impacto:
+
+1. **Mensaje prellenado corto** (arriba). Es la más grande y es gratis
+2. **Creativo que muestre la conversación** antes del clic: la gente no envía porque no sabe qué
+   le va a caer encima (ver `creativos/anuncios-nativos.html`, concepto B)
 
 ---
 
@@ -503,6 +553,45 @@ Revisar a los **7 días**, sin tocar nada antes:
 **No concluir nada con poco gasto.** A $3–8 por conversación, con $3 gastados lo esperado es
 entre 0 y 1 mensaje. Cero mensajes con $3 no es una señal, es ruido. Antes de juzgar hay que
 dejar correr al menos 3 días completos con anuncios bien configurados.
+
+### Resultados reales de los primeros días
+
+| Fecha | Conv. (Meta) | Costo/conv. (Meta) | Gastado | Impresiones |
+|---|---|---|---|---|
+| 28/07 | 2 | $22.96 | $45.91 | 2,877 |
+| 30/07 | 6 | $11.08 | $66.50 | 4,280 |
+
+El costo por conversación bajó **52% en dos días**: es la señal de que Meta empezó a salir de la
+fase de aprendizaje. Pero el número real es peor, porque de esas 6 solo 2 llegaron a Natana
+(sección 5.1): **$33.25 por conversación real**.
+
+**La comparación que justifica todo el cambio de estrategia:**
+
+| | Campaña vieja (Leads) | Campaña nueva (WhatsApp) |
+|---|---|---|
+| Gastado | $184.97 | $66.50 |
+| Impresiones | 50,493 | 4,280 |
+| CPM | **$3.66** | **$15.54** |
+| Resultados reales | **0** | **2 conversaciones** |
+
+La campaña vieja compraba impresiones **4 veces más baratas** y no producía nada: 50,493 personas
+vieron el anuncio y ninguna escribió. Ese CPM bajo venía de Audience Network y Estados de
+WhatsApp. **Costo por resultado de la campaña vieja: infinito.** No importa qué tan barato sea el
+CPM si el resultado es cero.
+
+### Cómo escalar, y cuándo no
+
+**No subir presupuesto y no duplicar el conjunto** mientras el costo real por conversación siga
+arriba de $15.
+
+Duplicar el conjunto para probar creativos es un error con este volumen: Meta necesita ~50
+conversaciones semanales **por conjunto**, y con ~14 semanales repartirlas en dos deja a los dos
+atascados en aprendizaje de forma permanente. **Los creativos nuevos van dentro del conjunto que
+ya existe**, donde Meta los rota y concentra el presupuesto en el que funciona. Duplicar el
+conjunto solo tiene sentido para probar **otra audiencia**.
+
+Cuando el costo real esté entre $8 y $15 y más del 25% califique: subir **20–30% cada 3–4 días**,
+nunca el doble de golpe, porque un salto grande reinicia el aprendizaje.
 
 ---
 
@@ -590,8 +679,8 @@ Description **antes** de pegar en Primary text.
 
 ## 10. Pendientes que siguen abiertos
 
-1. **¿Tasa 4.95% o 7.95%?** A 4.95% la entrada queda en ~$118/mes, **por debajo de los $125 de
-   WindMar**. Cambia por completo si podemos competir por precio
+1. **¿Tasa 4.95% o 7.95%?** A 4.95% la entrada queda en ~$118/mes. **Ojo: WindMar ya anuncia
+   desde $100/mes**, así que ni a 4.95% ganamos la comparación de precio
 2. **¿15kW cuesta $45,000 o $52,897?** El repo y la cotización real difieren un 13%
 3. **¿Cuál es el crédito mínimo que aprueba Lumina?** WindMar exige **700+ de empírica** y techo
    de cemento. Si Lumina aprueba menos, ahí hay un mercado que el líder rechaza activamente, y
@@ -602,4 +691,114 @@ Description **antes** de pegar en Primary text.
 6. **Auditar los flyers restantes** (*"¿CÓMO BAJAR TU FACTURA DE LUZ?"*, *"La mejor INVERSIÓN"*,
    *"Tu factura sube"*): confirmar que ninguno mencione los $15,000 de PR, el 30% federal ni
    cuota mensual
-7. **Crear los anuncios 02, 03 y 04.** Al 28/07/2026 solo el 01 quedó con texto correcto
+7. **Cargar los anuncios 02 y 03** con los creativos nativos, y cambiar el prellenado del 01 a la
+   versión corta con emoji
+8. **¿Natana autoriza el uso de su foto?** Sin eso, el concepto A va firmado como *Lumina PR* en
+   plural, no en primera persona
+
+---
+
+## 11. Inteligencia competitiva — Biblioteca de Anuncios, 30/07/2026
+
+Consultada en la [Biblioteca de Anuncios de Meta](https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=PR&q=windmar&search_type=keyword_unordered),
+que es pública y no requiere cuenta.
+
+### Los anuncios que más duran no son de la marca
+
+Los que llevan meses activos son de **vendedores individuales**: *"Jonathan Torres By Windmar
+Home"*, *"Marleen Ramos by Windmar Home"*, *"Alejandro Tu Solución Solar"*. Todos con la misma
+estructura y saliendo a `API.WHATSAPP.COM`:
+
+```
+🚨 [pregunta con dolor local concreto] 🚨
+
+[por qué duele, en términos de familia y día a día]
+
+✅ [qué incluye]
+✅ [qué incluye]
+✅ Financiamiento disponible
+
+📲 Escríbame hoy para una orientación sin compromiso.
+
+Jonathan Torres
+Líder de Ventas
+787-444-2395
+```
+
+**Nombre. Cargo. Teléfono. "Escríbame".** Los creativos pulidos y con diseño de marca son los
+corporativos; los que generan conversaciones son los de personas.
+
+Esto coincide con la investigación de creativos: el contenido estilo creador o cliente rinde
+mejor que el producido en estudio porque **se integra al feed en vez de interrumpirlo**
+([Chatterbuzz](https://www.chatterbuzzmedia.com/blog/ugc-ads-that-convert/)), y con Advantage+
+manejando la segmentación, **el creativo es lo que decide si convierte**
+([Flighted](https://www.flighted.co/blog/7-meta-ads-creative-strategies-that-work)).
+
+### Datos duros del líder
+
+- **Ya anuncian desde $100/mes**, no $125: *"Paga por placas, no por cuentos. ☀️ Con Windmar Home
+  paga por tus placas empezando desde $100/mes"*
+- **Prueba social como arma principal:** 40,000 hogares, 21 años, 275 brigadas, 1,100 técnicos,
+  instalador Tesla #1 del mundo con 20,000 Powerwall, 70,000 placas de producción propia
+- **Comparación agresiva:** *"¿Ya tienes una cotización solar? Tráela al ring — la comparamos con
+  la nuestra... o ganas más ahorro, o confirmas que ya tenías la mejor oferta 🥊"*
+- **Usan video largo:** hasta 1:19 en anuncios que van a WhatsApp
+
+### El líder está pivotando al agua
+
+**La mayoría de sus anuncios activos son de cisternas (*Windmar Water*), no de solar.** Tanques
+EcoWater de 150 galones e instalaciones presurizadas **desde $58/mes**, con el ángulo de las
+interrupciones del servicio de agua.
+
+Puede significar que el mercado solar de PR se está saturando, o que el dolor del agua convierte
+mejor ahora mismo. Vale la pena tenerlo en el radar: es el mismo modelo de "puerta de entrada
+barata" que ya les funcionó con solar.
+
+### Qué implica para Lumina
+
+En volumen, historia y prueba social **no se les gana en nada**. La única ventaja reclamable hoy
+sin inventar datos: ellos tienen call center y 275 brigadas; nosotros una persona que contesta.
+De ahí sale el concepto *"Aquí no hay call center"*.
+
+---
+
+## 12. Producción de creativos sin diseñador
+
+Los creativos se producen con dos archivos HTML del repo, sin Photoshop y sin saber diseño:
+
+| Archivo | Contenido |
+|---|---|
+| `creativos/anuncios-nativos.html` | **A** · La persona (foto + «Aquí no hay call center») · **B** · La conversación (maqueta del chat de WhatsApp) |
+| `creativos/anuncios-meta.html` | Creativos de marca: Equipos, Inspección, Calificador |
+
+**Cómo se usan:**
+
+1. Abrir con `https://htmlpreview.github.io/?<url del archivo en GitHub>`
+2. **Los textos se editan haciendo clic encima y escribiendo.** Los logos SVG están protegidos
+3. La foto se carga con el botón amarillo; se queda en el navegador, no sube a ningún servidor
+4. **Activar el botón verde «modo exportar (1080 px)»**
+5. Clic derecho → Inspeccionar → seleccionar la línea del `<div class="art ...">` → clic derecho →
+   **Capture node screenshot**
+
+> **Trampa 1:** en pantalla las piezas están reducidas al 30% con `transform: scale(0.3)`. Chrome
+> captura el nodo **como se ve**, incluyendo la transformación del padre, así que sin el modo
+> exportar el PNG sale a **324×405** y borroso. Verificar siempre que el archivo diga 1080×1350 o
+> 1080×1920.
+>
+> Al verificar esto en código, medir con `getBoundingClientRect`, **no** con
+> `offsetWidth`/`offsetHeight`: los segundos reportan 1080 aunque la pieza se renderice al 30%.
+>
+> **Trampa 2:** cualquier elemento con `position: fixed` que quede sobre la pieza **sale dentro de
+> la captura**. Por eso la barra de aviso del modo exportar va en flujo normal.
+
+**Reglas de contenido en todo creativo:** sin cuota mensual, sin el incentivo de $15,000 de PR,
+sin el crédito federal del 30%. La única cifra permitida es el **$300** del calificador, que es el
+umbral de factura del cliente y no un precio nuestro.
+
+**Nada de personas generadas con IA.** Presentar una persona inventada como quien contesta el
+WhatsApp es fabricar una identidad en un anuncio pagado, y mata precisamente el argumento del
+concepto A. Gemini sirve para **revelar** una foto real (exposición, balance de blancos,
+degradado), nunca para inventar la escena ni para dibujar el texto: falla con las tildes.
+
+**El nombre del creativo tiene que ser de quien realmente contesta.** Si dice Natana, contesta
+Natana. Si no hay autorización de imagen, se firma *Lumina PR* y el texto va en plural.
