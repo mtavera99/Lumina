@@ -4,9 +4,14 @@ Guía completa para lanzar y mantener la campaña. Basada en el análisis de la 
 Anuncios de Meta (~100 anuncios activos de WindMar en Puerto Rico), en la propuesta comercial
 real de Lumina, y en los datos de la campaña anterior.
 
-**Actualizado:** 30 de julio de 2026 — incluye los primeros resultados, el hallazgo de que Meta
-cuenta más conversaciones de las que llegan (sección 5.1), la inteligencia competitiva de la
-Biblioteca de Anuncios (sección 11) y el flujo de producción de creativos (sección 12).
+**Actualizado:** 30 de julio de 2026, 5:00 p.m. — incluye el estado de los cuatro anuncios con su
+rendimiento individual, el hallazgo de que Meta cuenta más conversaciones de las que llegan
+(sección 5.1), la inteligencia competitiva de la Biblioteca de Anuncios (sección 11) y el flujo de
+producción de creativos (sección 12).
+
+> **Si retomas el proyecto desde cero, lee en este orden:** sección 5.1 (por qué las métricas de
+> Meta engañan), sección 8 (resultados y cómo escalar), sección 9 (las trampas que ya nos costaron
+> dinero) y sección 10 (qué falta por resolver).
 
 ---
 
@@ -432,9 +437,14 @@ La atribución se traslada a un **emoji**, que ocupa un carácter y se distingue
 | ⚡ | 01 Apagones |
 | 🔧 | 02 Sin call center |
 | 💬 | 03 Conversación |
+| 🔆 | F2 (flyer) |
 | 🔋 | Equipos |
 | 🏠 | Inspección |
 | 💡 | Calificador |
+
+Además del emoji, que Natana apunte por cada persona: **si contestó las 3 preguntas**, **si es
+dueña de la propiedad** y **cuánto paga de luz**. Esa libreta vale más que cualquier reporte de
+Ads Manager, porque los números de Meta cuentan chats que nunca llegaron (sección 5.1).
 
 Llevar la cuenta a mano una semana basta para saber qué ángulo trae gente que agenda.
 
@@ -553,6 +563,34 @@ Revisar a los **7 días**, sin tocar nada antes:
 **No concluir nada con poco gasto.** A $3–8 por conversación, con $3 gastados lo esperado es
 entre 0 y 1 mensaje. Cero mensajes con $3 no es una señal, es ruido. Antes de juzgar hay que
 dejar correr al menos 3 días completos con anuncios bien configurados.
+
+### Estado de los anuncios — 30/07/2026, 5:00 p.m.
+
+Cuatro anuncios en el conjunto `PR | Inspección | 30-65 | Manual`, $22/día compartido:
+
+| Anuncio | Conv. (Meta) | Costo/conv. | Estado |
+|---|---|---|---|
+| `F2 CON TEXTO` | **4** | **$7.59** | Active — el mejor |
+| `CREATIVO CON TEXTO F1` | 2 | $16.86 | Active |
+| `02 \| Sin call center` | — | — | Preparing (en revisión) |
+| `03 \| Conversacion` | — | — | Preparing (en revisión) |
+| | **6** | **$10.77** | |
+
+**F2 está dentro del rango objetivo de $3–8.** Es el mejor rendimiento de la cuenta hasta ahora.
+
+> **Corrección importante:** estos dos anuncios (antes `Flayer` y `Flayer 2`) se recomendó apagarlos
+> cuando corrían con el copy metido en `Description` y por tanto invisible. **Una vez corregido el
+> texto, F2 pasó a ser el anuncio con mejor rendimiento.** No apagar un anuncio por su historial:
+> apagarlo por sus números una vez que está bien configurado.
+
+**Cuántos anuncios mantener con $22/día:** con cuatro, cada uno recibe ~$5.50 y ninguno junta datos
+suficientes. Además Meta favorece al que ya sabe que funciona, así que los nuevos casi no reciben
+entregas y nunca se sabe si eran mejores. Recomendación: **apagar el peor (F1, al doble de costo
+que F2) y quedarse con tres** — el ganador probado más los dos nuevos con presupuesto real.
+
+**Pendiente de arreglar en F1 y F2:** nombres que no dicen el ángulo (`CREATIVO CON TEXTO F1`,
+`F2 CON TEXTO`) y mensajes prellenados sin emoji propio, lo que rompe la atribución en el chat de
+Natana.
 
 ### Resultados reales de los primeros días
 
@@ -691,10 +729,15 @@ Description **antes** de pegar en Primary text.
 6. **Auditar los flyers restantes** (*"¿CÓMO BAJAR TU FACTURA DE LUZ?"*, *"La mejor INVERSIÓN"*,
    *"Tu factura sube"*): confirmar que ninguno mencione los $15,000 de PR, el 30% federal ni
    cuota mensual
-7. **Cargar los anuncios 02 y 03** con los creativos nativos, y cambiar el prellenado del 01 a la
-   versión corta con emoji
+7. **¿Cuántos mensajes tiene Natana en total?** Es el pendiente más urgente. Meta reporta 6
+   conversaciones; si la proporción del 33% se mantiene, F2 no cuesta $7.59 sino ~$23 reales. Ese
+   número dividido entre lo gastado es **la única cifra que decide** si se sube presupuesto o se
+   sigue arreglando el embudo
 8. **¿Natana autoriza el uso de su foto?** Sin eso, el concepto A va firmado como *Lumina PR* en
    plural, no en primera persona
+9. **Renombrar F1 y F2** con su ángulo y darle a cada uno una plantilla con emoji propio
+10. **Apagar F1** para concentrar el presupuesto en tres anuncios
+11. **¿Existe todavía el `01 | Apagones`?** No aparecía en la lista de anuncios del 30/07
 
 ---
 
