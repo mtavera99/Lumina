@@ -463,7 +463,33 @@ alrededor del **8.5%** de los clics en el botón terminan en conversación real
 ([Pete Bowen](https://pete-bowen.com/how-many-whatsapp-clicks-turn-into-leads)), y las
 plataformas de gestión de WhatsApp documentan la diferencia como esperada
 ([DoubleTick](https://learn.doubletick.io/why-do-i-see-a-difference-between-meta-ad-clicks-and-chats-initiated-on-doubletick)).
-Nuestra proporción de 2 sobre 6 (**33%**) está bastante por encima de esa referencia.
+
+> ### ⚠️ CORRECCIÓN (01/08/2026) — la versión anterior de este párrafo era falsa
+>
+> Aquí estaba escrito que *"nuestra proporción de 2 sobre 6 (33%) está bastante por encima de esa
+> referencia"*. **Es falso, y es peligroso: invita a subir presupuesto.**
+>
+> El error fue comparar dos fracciones con denominadores distintos. La referencia del 8.5% es
+> **clics → conversación real**. Nuestro 33% era **conversaciones de Meta → mensajes reales**, que
+> es otra cosa.
+>
+> La comparación correcta usa el mismo denominador:
+>
+> | | Clics | Conversaciones reales | Tasa |
+> |---|---|---|---|
+> | Referencia del canal | — | — | **8.5%** |
+> | Nosotros (a 01/08) | 78 | 2 | **2.6%** |
+>
+> **A 01/08 estábamos a un tercio de la referencia, no por encima.** Si alguien lee la versión vieja
+> y decide escalar, pierde dinero.
+>
+> **Actualización 04/08:** tras arreglar el robot (sección 5.3), la tasa de llegada
+> conversación→mensaje pasó de 18% a **58% en el margen**, y el costo real por conversación de
+> $55.99 a **$9.70**. Ver la tabla completa en la sección 8. **La brecha se cerró arreglando la
+> operación de atención, no el embudo publicitario.**
+>
+> **Regla:** para comparar con cualquier referencia del canal, el denominador es **clics**, y el
+> numerador es **el conteo de Natana**. Nunca la cifra de Meta.
 
 **Consecuencia para la medición: el número de Meta no sirve como métrica de negocio.**
 
@@ -481,6 +507,152 @@ Palancas para cerrar la brecha, por orden de impacto:
 1. **Mensaje prellenado corto** (arriba). Es la más grande y es gratis
 2. **Creativo que muestre la conversación** antes del clic: la gente no envía porque no sabe qué
    le va a caer encima (ver `creativos/anuncios-nativos.html`, concepto B)
+
+---
+
+## 5.2 Diagnóstico de la brecha — 01/08/2026
+
+Meta reportaba **11 conversaciones** y Natana seguía teniendo **2**. Se persiguieron cinco
+hipótesis y se descartaron cuatro. Queda escrito el orden, porque es reutilizable.
+
+### Lo que se descartó, y cómo
+
+**1 · La plomería. DESCARTADA con prueba real.**
+
+Se hizo la prueba de punta a punta: tocar el anuncio desde un teléfono, enviar el mensaje, y
+confirmar la llegada. **El enlace abre WhatsApp, el número es correcto, el mensaje prellenado
+llega, y el mensaje entra normal a WhatsApp Business.**
+
+No hay problema de enrutamiento. Esta prueba cuesta 15 minutos y $0, y debió hacerse el primer
+día. **Hacerla antes de cualquier análisis de métricas.**
+
+**2 · Una ubicación de baja intención habilitada por error. DESCARTADA.**
+
+El 30/07 el costo por conversación se cayó a $2.29–$2.66, y se planteó que la edición de ese día
+(*"Last significant edit: 2026-07-30 12:57 PT"*) había reactivado Estados de WhatsApp.
+
+**Se descartó porque el 31/07 el costo volvió a subir a $18.12.** Una ubicación mal habilitada no
+se apaga sola. Lo del 30 fue la ráfaga de exploración que Meta da a un anuncio nuevo —entró el
+`02`— más el reinicio de aprendizaje por la edición.
+
+**3 · Clics de prueba del propio equipo. DESCARTADA como causa principal.**
+
+Habría afectado solo a los anuncios que alguien tocó, y el `F2` —sin tocar— también cambió de
+comportamiento ese día.
+
+**4 · Una "fuga mecánica" entre clic y apertura de chat. DESCARTADA.**
+
+Se planteó que de 78 clics solo 11 abrieran chat señalaba un fallo en el traspaso a WhatsApp. La
+prueba del punto 1 lo desmintió. **`Link clicks` y `conversaciones iniciadas` no forman un embudo
+limpio y no deben restarse entre sí.**
+
+### La causa confirmada, por eliminación
+
+> **La gente abre el chat de WhatsApp, ve el mensaje listo para enviar, y cierra la app sin
+> enviarlo.** Meta cuenta la apertura; el negocio necesita el envío.
+
+Nada roto en Meta, ni en el número, ni en el creativo, ni en la segmentación. El CTR (0.93%) es
+normal: **el anuncio funciona, el último paso no.**
+
+### Serie día por día (conjunto `PR | Inspección`)
+
+| Día | Conversaciones | Costo prom. | Nota |
+|---|---|---|---|
+| 27 jul | 0 | — | |
+| 28 jul | 1 | $26.35 | |
+| 29 jul | 3 | $7.85 | |
+| 30 jul | 4 | **$5.36** | Entra el `02` + edición significativa |
+| 31 jul | 1 | $18.12 | El costo vuelve a subir |
+| 1 ago | 2 | — | |
+| **Total** | **11** | **$10.18** | **2 reales → $55.99** |
+
+Por anuncio, acumulado al 31/07:
+
+| Anuncio | Conversaciones | Mensajes reales |
+|---|---|---|
+| `F2 CON TEXTO` | 4 | ← de estos 6 salieron |
+| `CREATIVO CON TEXTO F1` | 2 | ← los 2 reales |
+| `02 \| Sin call center` | 3 | **0** |
+| `03 \| Conversacion` | **0** | 0 |
+
+### ⭐ La espiral: Meta premia al anuncio que peor convierte
+
+El 30/07 el `02` produjo conversaciones a **$2.66** mientras el `F2` las producía a **$10.57**.
+Para Meta el `02` era cuatro veces mejor, así que **le movió la entrega**: el 31 el `F2` —el único
+que había producido mensajes reales— bajó a **cero conversaciones**.
+
+> Le pedimos a Meta maximizar chats abiertos. El anuncio que peor consigue que la gente escriba es
+> justamente el que abre chats más baratos, así que se lleva el presupuesto. **Mientras peor
+> convierte, más presupuesto recibe.**
+
+Es el mismo error del PR #29, cuando `Lead` se disparaba sin envío real y Meta aprendía de
+conversiones inventadas. **Aquí no se puede arreglar igual:** en una campaña de clic-a-WhatsApp,
+"conversaciones iniciadas" es el único evento de optimización disponible, y es inmutable después de
+publicar (trampa #1).
+
+**Consecuencia práctica: un costo por conversación que baja es AMBIGUO.** Puede ser mejora real o
+puede ser la espiral. En Ads Manager se ven idénticos. **El único dato que los distingue es el
+conteo de Natana.**
+
+---
+
+## 5.3 ⚠️ La métrica suma tres canales, y había un robot cerrando conversaciones
+
+**Descubierto el 01/08/2026 al abrir la Bandeja de entrada de Business Suite.**
+
+### La cifra de Meta no es solo de WhatsApp
+
+`messaging_conversation_started_7d` suma **WhatsApp + Messenger + Instagram Direct** en un solo
+número. Durante días se comparó ese total contra el conteo de un solo canal. **No son
+comparables.**
+
+La bandeja unificada está en Business Suite → **Bandeja de entrada**, con pestañas separadas para
+Messenger, Instagram y WhatsApp. **Natana debe mirar esa bandeja, no solo su app.**
+
+### Había mensajes sin contestar que nadie miraba
+
+Dos personas escribieron por Messenger el 31/07 y seguían esperando al día siguiente. Más un
+comentario de Facebook sin responder.
+
+**No venían de la campaña** —el primer mensaje era *"Saludos"*, no el texto prellenado, y el
+conjunto solo entrega a WhatsApp— o sea que eran **leads orgánicos y gratis, ignorados**.
+
+### El robot los despedía a todos
+
+Una **Respuesta instantánea** contestaba automáticamente:
+
+> ¡Hola [nombre], gracias por contactarnos! Puedes solicitar tu cotización gratuita llamándonos al
+> 787-401-4444 o escribiéndonos a luminaventas@atabaya.com. También puedes visitar
+> https://luminapr.net/ para más información.
+
+Tres cosas mal, en orden de gravedad:
+
+1. **Cierra la conversación.** No pregunta nada, no califica, y ofrece **tres salidas** del chat
+   (teléfono, correo, web). Cada salida es una fuga
+2. **Contradice el anuncio.** El `02 | Sin call center` promete que aquí **no hay call center** y
+   que contesta una persona. El robot responde *"llámanos al 787-401-4444"*. Le prometemos lo
+   contrario de lo que recibe, en el primer segundo. **Y el `02` es justo el anuncio con 3
+   conversaciones y 0 mensajes reales**
+3. **Manda a la landing** que lleva 381 visitas y 0 leads
+
+**Dónde se cambia:** Business Suite → Bandeja de entrada → icono de engranaje con desplegable
+(junto a *"Create messaging ad"*) → **Automatizaciones** → **Respuesta instantánea**. Revisar
+también *Mensaje de ausencia* y *Preguntas frecuentes*.
+
+**No apagarla: reemplazarla.** Si se apaga, quien escriba de madrugada recibe silencio, y el
+silencio también mata. El texto debe mantener a la persona en el chat y calificar, sin teléfono,
+sin correo y sin enlace.
+
+> **La automatización de WhatsApp es aparte y NO está en Business Suite.** Vive en el teléfono:
+> **Ajustes → Herramientas para la empresa → Mensaje de bienvenida** (y *Mensaje de ausencia*).
+> Hay que revisar las dos. Y al conectar WhatsApp a Business Suite, verificar cuál de los dos
+> textos dispara.
+
+### ⚠️ Al vincular WhatsApp a Business Suite
+
+Si en algún momento el flujo pide **migrar el número a la plataforma de WhatsApp Business (API /
+Cloud API), detenerse.** Eso inhabilita la app en el teléfono. Lo que se quiere es solo vincular la
+cuenta a la bandeja, conservando el uso normal de la app.
 
 ---
 
@@ -631,6 +803,64 @@ conjunto solo tiene sentido para probar **otra audiencia**.
 Cuando el costo real esté entre $8 y $15 y más del 25% califique: subir **20–30% cada 3–4 días**,
 nunca el doble de golpe, porque un salto grande reinicia el aprendizaje.
 
+### ⭐ Estado al 04/08/2026 — arreglar el robot fue lo que funcionó
+
+| | 01 ago | 04 ago |
+|---|---|---|
+| Conversaciones (Meta) | 11 | **23** |
+| Mensajes reales (Natana) | 2 | **9** |
+| Tasa de llegada | 18% | **39%** |
+| Gastado | $111.98 | ~$179.86 |
+| Costo Meta por conversación | $10.18 | $7.82 |
+| **Costo REAL por conversación** | **$55.99** | **$19.98** |
+
+**Lo que importa es el margen.** Aislando solo los 3 días posteriores al arreglo del robot:
+
+| | Del 01 al 04 de agosto |
+|---|---|
+| Conversaciones nuevas (Meta) | 12 |
+| Mensajes reales nuevos | **7** |
+| Gasto del período | $67.88 |
+| **Tasa de llegada marginal** | **58%** |
+| **Costo real marginal** | **$9.70** |
+
+> **El costo real por conversación bajó de $55.99 a $9.70 — casi 6 veces — y la tasa de llegada
+> pasó de 18% a 58%.**
+
+**Esto resuelve la ambigüedad de la sección 5.2.** Un costo que baja podía ser mejora real o la
+espiral de chats vacíos. Aquí los mensajes reales **subieron más rápido** que las conversaciones de
+Meta, así que es mejora real. La forma de distinguirlas es exactamente esta: comparar la pendiente
+del conteo de Natana contra la de Meta.
+
+**Y queda claro qué lo arregló:** el único cambio de fondo fue reemplazar la respuesta automática
+(sección 5.3). No el creativo, no la audiencia, no las ubicaciones, no el presupuesto.
+
+> **Lección de $297:** se gastaron tres conjuntos y dos semanas culpando al creativo, al copy, a la
+> maquetación de la landing y al canal. El problema era **un robot mal escrito y un buzón que nadie
+> abría.** Antes de rediseñar nada, verificar la operación de atención de punta a punta.
+
+### ⚠️ Antes de subir presupuesto: la lista de tres
+
+Un costo que baja **no** es autorización para escalar (sección 5.2, la espiral). Antes de tocar el
+presupuesto:
+
+1. **El conteo de Natana en el mismo período.** Sin ese número, subir es apostar. Regla de
+   decisión sobre las conversaciones nuevas del período:
+
+   | Llegaron como mensaje | Costo real | Decisión |
+   |---|---|---|
+   | ≥ 2 de cada 3 | ~$8 | **Subir 20–25%** |
+   | 1 de cada 3 | $10–17 | Mantener y bajar fricción |
+   | < 1 de cada 4 | $22+ | **Es la espiral. No subir** |
+
+2. **Capacidad de respuesta.** Más presupuesto = más mensajes. Contestar en 5 minutos o en 5 horas
+   cambia el resultado por completo, y es **una sola persona**. Definir quién contesta y en qué
+   horario **antes** de subir, o la mejora se pierde en tiempos de respuesta.
+
+3. **Prefijos fuera de zona.** Verificar que los números entrantes sean de PR (+1 787 / +1 939). Se
+   detectó un **+57 (Colombia)** en la bandeja el 04/08. Si hay más, hay fuga de segmentación
+   geográfica y se está pagando por gente que nunca va a comprar.
+
 ---
 
 ## 9. Trampas de Meta que ya nos costaron dinero
@@ -723,21 +953,50 @@ Description **antes** de pegar en Primary text.
 3. **¿Cuál es el crédito mínimo que aprueba Lumina?** WindMar exige **700+ de empírica** y techo
    de cemento. Si Lumina aprueba menos, ahí hay un mercado que el líder rechaza activamente, y
    un titular que se escribe solo: *"¿Te dijeron que no cualificabas para solar?"*
-4. **Prueba social:** testimonios reales con nombre y pueblo, fotos de instalaciones, licencia
+4. **Prueba social:** testimonios reales con nombre y pueblo, fotos de instalaciones, licencia,
+   cuántas casas instaladas.
+
+   **Por qué se sospechó que era la causa raíz (01/08):** los dos canales probados fallaban de forma
+   idéntica —landing 381 visitas → 0 leads; WhatsApp 78 clics → 2 mensajes—. Cuando dos canales
+   distintos fracasan en el mismo punto, el problema no está en ninguno de los dos. Y del otro lado
+   del feed WindMar dice 40,000 hogares, 21 años, 275 brigadas, 1,100 técnicos, mientras Lumina no
+   ofrece **una sola** razón para confiar.
+
+   **⚠️ Pero el dato del 04/08 debilita esta hipótesis:** el costo marginal bajó a $5.66 sin haber
+   añadido ninguna prueba social. Lo único que cambió fue el robot. **Queda como hipótesis abierta,
+   no como causa confirmada.** Se resuelve con el conteo de Natana: si las conversaciones nuevas
+   llegan, el problema era operativo; si no llegan, vuelve a ser la falta de credibilidad.
+
+   **Pregunta que lo desbloquea: ¿hay instalaciones terminadas con clientes contentos?** Si sí, la
+   solución cuesta $0 y son unas llamadas. Si no, no hay anuncio que lo arregle todavía.
 5. **Zona de servicio real:** ¿solo metro y este, o también Ponce, Mayagüez, Arecibo? Las
    ubicaciones actuales asumen metro y este
 6. **Auditar los flyers restantes** (*"¿CÓMO BAJAR TU FACTURA DE LUZ?"*, *"La mejor INVERSIÓN"*,
    *"Tu factura sube"*): confirmar que ninguno mencione los $15,000 de PR, el 30% federal ni
    cuota mensual
-7. **¿Cuántos mensajes tiene Natana en total?** Es el pendiente más urgente. Meta reporta 6
-   conversaciones; si la proporción del 33% se mantiene, F2 no cuesta $7.59 sino ~$23 reales. Ese
-   número dividido entre lo gastado es **la única cifra que decide** si se sube presupuesto o se
-   sigue arreglando el embudo
+7. ~~**¿Cuántos mensajes tiene Natana en total?**~~ — **RESUELTO el 04/08/2026: son 9.** Costo real
+   $19.98 por conversación, y **$9.70 en el margen** desde que se arregló el robot (sección 8).
+   Mantener el conteo semanal: es el denominador de todo
+8. **¿Qué pasó con esas 9 conversaciones?** Ahora es el pendiente #1. No basta contarlas: **¿cuántas
+   son dueños? ¿cuánto pagan de luz? ¿cuántas están en la zona de servicio? ¿alguna agendó
+   inspección?** La regla documentada exige **más del 25% calificado** para escalar, y ese dato no
+   existe todavía. Si de 9 conversaciones salen 2 citas reales, esto es un canal viable; si son 9
+   curiosos, el $9.70 engaña
 8. **¿Natana autoriza el uso de su foto?** Sin eso, el concepto A va firmado como *Lumina PR* en
    plural, no en primera persona
 9. **Renombrar F1 y F2** con su ángulo y darle a cada uno una plantilla con emoji propio
-10. **Apagar F1** para concentrar el presupuesto en tres anuncios
+10. ~~**Apagar F1**~~ — **RETIRADO.** Se recomendó apagarlo por su costo acumulado, pero el 29/07
+    produjo 2 conversaciones a $6.50. **Segunda vez que se recomienda apagar un anuncio por su
+    historial en lugar de por sus números actuales** (la primera fue con F1 y F2 cuando corrían con
+    el copy invisible en `Description`). La lección no se aprendió: **no apagar nada con datos de un
+    solo día**
 11. **¿Existe todavía el `01 | Apagones`?** No aparecía en la lista de anuncios del 30/07
+12. **Apagar `03 | Conversacion`.** Cuatro días activo (28–31/07) gastando presupuesto con **cero
+    conversiones**. Este sí tiene evidencia suficiente. Con $22/día y 4 anuncios cada uno recibe
+    ~$5.50 y ninguno junta datos
+13. **Borrar el mensaje de phishing** del 18/03 en la bandeja de Instagram: suplanta a Meta,
+    amenaza con bloquear la página y trae un adjunto llamado *"Meta Términos y soporte"*. **No abrir
+    el adjunto.** Meta nunca avisa de eso por mensaje directo con archivo adjunto
 
 ---
 
