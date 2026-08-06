@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina PR — Post estático: ¿qué pasa con tus paneles en un apagón?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #101014; font-family: 'Montserrat', sans-serif;
+    padding: 40px 24px 90px; color: #E8E8EA;
+  }
+  h1 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .sub { font-size: 13px; color: #7A7A85; line-height: 1.7; max-width: 820px; }
+  h2 { font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+       color: #6C6C78; margin: 52px 0 8px; font-weight: 700; }
+  .why { font-size: 12.5px; color: #8A8A96; line-height: 1.75; max-width: 800px; margin-bottom: 20px; }
+  .why b { color: #F5C518; font-weight: 600; }
+
+  .row { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .item { display: flex; flex-direction: column; gap: 8px; }
+  .cap { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #5A5A66; }
+
+  .frame { position: relative; overflow: hidden; border-radius: 10px; background: #000; }
+  .f45  { width: 324px; height: 405px; }
+  .f916 { width: 270px; height: 480px; }
+  .canvas45  { width: 1080px; height: 1350px; position: absolute; top: 0; left: 0;
+               transform: scale(0.3); transform-origin: top left; }
+  .canvas916 { width: 1080px; height: 1920px; position: absolute; top: 0; left: 0;
+               transform: scale(0.25); transform-origin: top left; }
+
+  /* ============ LA PIEZA ============ */
+  .art {
+    position: relative; width: 100%; height: 100%; overflow: hidden;
+    background:
+      radial-gradient(1100px 700px at 78% 6%, rgba(245,197,24,0.16) 0%, rgba(245,197,24,0) 62%),
+      linear-gradient(168deg, #0F2347 0%, #0A1930 55%, #060F1E 100%);
+    display: flex; flex-direction: column;
+  }
+  .pad45  { padding: 84px 80px 78px; flex: 1; display: flex; flex-direction: column;
+            justify-content: space-between; }
+  .pad916 { padding: 268px 80px 356px; flex: 1; display: flex; flex-direction: column;
+            justify-content: space-between; }
+
+  /* marca */
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand svg { width: 40px; height: 40px; display: block; }
+  .brand .wm { font-size: 31px; font-weight: 800; letter-spacing: 6px; color: #FFFFFF; }
+  .brand .wm span { color: #F5C518; }
+
+  /* titular */
+  .kicker { font-size: 25px; font-weight: 700; letter-spacing: 4.5px; text-transform: uppercase;
+            color: #F5C518; margin-bottom: 26px; }
+  .h-a { font-size: 82px; font-weight: 300; line-height: 1.04; color: #FFFFFF; letter-spacing: -1px; }
+  .h-b { font-size: 95px; font-weight: 800; line-height: 1.04; color: #F5C518; letter-spacing: -2px; }
+
+  /* tarjetas de contraste */
+  .cards { display: flex; flex-direction: column; gap: 26px; }
+  .card-c { border-radius: 22px; padding: 40px 44px; border: 3px solid transparent; }
+  .card-c .lbl { font-size: 27px; font-weight: 800; letter-spacing: 3.5px;
+                 text-transform: uppercase; margin-bottom: 16px; }
+  .card-c .txt { font-size: 41px; font-weight: 500; line-height: 1.32; }
+
+  .c-sin { background: rgba(255,255,255,0.045); border-color: rgba(255,255,255,0.10); }
+  .c-sin .lbl { color: #8E9BB0; }
+  .c-sin .txt { color: #A9B4C6; }
+
+  .c-con { background: rgba(245,197,24,0.11); border-color: rgba(245,197,24,0.55); }
+  .c-con .lbl { color: #F5C518; }
+  .c-con .txt { color: #FFFFFF; font-weight: 600; }
+
+  /* cierre */
+  .close-t { font-size: 38px; font-weight: 500; line-height: 1.36; color: #FFFFFF; }
+  .close-t b { color: #F5C518; font-weight: 700; }
+  .foot { display: flex; align-items: center; gap: 16px; margin-top: 30px;
+          font-size: 24px; font-weight: 600; color: #93A1B8; letter-spacing: 0.4px; }
+  .foot .dot { width: 9px; height: 9px; border-radius: 50%; background: #F5C518; flex: none; }
+
+  /* zonas seguras solo 9:16 */
+  .safe { position: absolute; left: 0; right: 0; border: 2px dashed rgba(255,60,60,0.75);
+          background: rgba(255,60,60,0.07); pointer-events: none; z-index: 5; }
+  .safe.top { top: 0; height: 250px; }
+  .safe.bot { bottom: 0; height: 340px; }
+  body.hide-safe .safe { display: none; }
+
+  [contenteditable]:hover { outline: 2px dashed rgba(245,197,24,0.35); outline-offset: 4px; }
+
+  .toggle, .upload {
+    background: #1E1E24; color: #E8E8EA; border: 1px solid #33333D; border-radius: 7px;
+    padding: 11px 18px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .toggle:hover { background: #2A2A33; }
+  .btn-export { background: #25D366; color: #06301B; border-color: #25D366; }
+  .btn-export:hover { background: #2ee87a; }
+
+  /* ===== MODO EXPORTAR: quita la reducción para capturar a 1080 px ===== */
+  body.exportar .sub, body.exportar .why, body.exportar .howto,
+  body.exportar h1, body.exportar h2, body.exportar .cap,
+  body.exportar .toggle:not(.btn-export) { display: none; }
+  body.exportar .safe { display: none; }
+  body.exportar .row { flex-direction: column; gap: 40px; }
+  body.exportar .frame { width: 1080px !important; height: auto !important; border-radius: 0; }
+  body.exportar .canvas45  { position: relative; width: 1080px; height: 1350px; transform: none; }
+  body.exportar .canvas916 { position: relative; width: 1080px; height: 1920px; transform: none; }
+  /* En flujo normal, NUNCA fija: un elemento fijo encima de la pieza
+     sale dentro de "Capture node screenshot". */
+  body.exportar .aviso-export {
+    display: block; position: static;
+    background: #25D366; color: #06301B; font-size: 14px; font-weight: 700;
+    padding: 16px 20px; text-align: center; cursor: pointer;
+    margin-bottom: 32px; border-radius: 6px;
+  }
+  .aviso-export { display: none; }
+
+  .howto { margin-top: 66px; max-width: 820px; font-size: 13px; line-height: 1.85; color: #9A9AA6; }
+  .howto h3 { color: #E8E8EA; font-size: 14px; margin: 28px 0 10px; font-weight: 800; }
+  .howto ol, .howto ul { padding-left: 20px; }
+  .howto li { margin-bottom: 7px; }
+  .howto code { background: #1E1E24; padding: 2px 7px; border-radius: 4px;
+                font-family: ui-monospace, monospace; font-size: 12px; color: #F5C518; }
+  .howto strong { color: #E8E8EA; }
+  .howto .warn { color: #F5C518; }
+</style>
+</head>
+<body>
+
+<h1>Post estático — «¿Qué pasa con tus paneles cuando se va la luz?»</h1>
+<p class="sub">
+  Pieza de imagen fija para el post orgánico de la batería. Pura tipografía y color: no necesita
+  fotos ni diseñador. El texto se edita con clic directo en el navegador.
+</p>
+
+<div class="aviso-export" onclick="document.body.classList.remove('exportar')">
+  MODO EXPORTAR ACTIVO · las piezas están a 1080 px reales · clic aquí para volver
+</div>
+
+<div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
+  <button class="toggle" onclick="document.body.classList.toggle('hide-safe')">
+    Mostrar / ocultar zonas seguras</button>
+  <button class="toggle btn-export" onclick="document.body.classList.add('exportar')">
+    Activar modo exportar (1080 px)</button>
+</div>
+
+<h2>El contraste: sin batería / con batería</h2>
+<p class="why">
+  El post explica que unos paneles sin batería se apagan igual en un apagón. La pieza lo dice con
+  dos bloques enfrentados, que es lo que se entiende de un vistazo mientras alguien hace scroll.
+  <b>El cierre admite que no todos los casos la necesitan</b> — es lo que sostiene el «ni más, ni
+  menos» del copy, y es lo único que nos diferencia de quien vende batería a todo el mundo.
+</p>
+
+<div class="row">
+
+  <!-- ---------- FEED 4:5 ---------- -->
+  <div class="item">
+    <div class="frame f45"><div class="canvas45">
+      <div class="art"><div class="pad45">
+
+        <div>
+          <div class="brand">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" fill="#F5C518"/>
+            </svg>
+            <div class="wm noedit">LUMINA<span>.</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="kicker">Se va la luz</div>
+          <div class="h-a">¿Y tus paneles</div>
+          <div class="h-b">siguen dando?</div>
+        </div>
+
+        <div class="cards">
+          <div class="card-c c-sin">
+            <div class="lbl">Sin batería</div>
+            <div class="txt">Se apagan igual que todo lo demás.</div>
+          </div>
+          <div class="card-c c-con">
+            <div class="lbl">Con batería</div>
+            <div class="txt">Nevera, abanicos e internet siguen funcionando.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="close-t">Te decimos <b>si de verdad te conviene</b>, según tu consumo. No todos los casos la necesitan.</div>
+          <div class="foot"><span class="dot"></span>Inspección energética gratis · Caguas, PR</div>
+        </div>
+
+      </div></div>
+    </div></div>
+    <div class="cap">Feed · 1080 × 1350</div>
+  </div>
+
+  <!-- ---------- STORY 9:16 ---------- -->
+  <div class="item">
+    <div class="frame f916"><div class="canvas916">
+      <div class="art">
+        <div class="safe top"></div>
+        <div class="safe bot"></div>
+        <div class="pad916">
+
+          <div>
+            <div class="brand">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" fill="#F5C518"/>
+              </svg>
+              <div class="wm noedit">LUMINA<span>.</span></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="kicker">Se va la luz</div>
+            <div class="h-a">¿Y tus paneles</div>
+            <div class="h-b">siguen dando?</div>
+          </div>
+
+          <div class="cards">
+            <div class="card-c c-sin">
+              <div class="lbl">Sin batería</div>
+              <div class="txt">Se apagan igual que todo lo demás.</div>
+            </div>
+            <div class="card-c c-con">
+              <div class="lbl">Con batería</div>
+              <div class="txt">Nevera, abanicos e internet siguen funcionando.</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="close-t">Te decimos <b>si de verdad te conviene</b>, según tu consumo.</div>
+            <div class="foot"><span class="dot"></span>Inspección energética gratis · Caguas, PR</div>
+          </div>
+
+        </div>
+      </div>
+    </div></div>
+    <div class="cap">Story / Reel · 1080 × 1920</div>
+  </div>
+
+</div>
+
+<div class="howto">
+  <h3>Cómo se edita</h3>
+  <p>
+    Clic sobre cualquier texto de la pieza y escribe encima. El tamaño, color y tipografía se
+    mantienen. El logotipo está protegido y no se puede editar por accidente.
+  </p>
+
+  <h3>Cómo se exporta</h3>
+  <ol>
+    <li>Pulsa <strong>«Activar modo exportar (1080 px)»</strong>. Las piezas pasan a tamaño real y
+      se ocultan solas los textos de ayuda, los botones y las guías rojas.</li>
+    <li>Clic derecho sobre la pieza → <strong>Inspeccionar</strong>.</li>
+    <li>En el panel, clic derecho sobre el nodo <code>&lt;div class="art"&gt;</code> →
+      <strong>Capture node screenshot</strong>.</li>
+    <li><span class="warn">Verifica el archivo descargado:</span> debe decir
+      <strong>1080 × 1350</strong> o <strong>1080 × 1920</strong>. Si dice
+      <code>324 × 405</code>, no activaste el modo exportar.</li>
+  </ol>
+
+  <h3>Copy para publicar</h3>
+  <p>
+    La pregunta del millón ⚡<br><br>
+    Unos paneles SIN batería se apagan durante un apagón. La batería es la que guarda tu energía
+    para que la nevera, los abanicos y el internet sigan funcionando aunque LUMA falle.<br><br>
+    Por eso te explicamos cuándo tiene sentido incluirla según tu caso. Ni más, ni menos: lo
+    correcto para tu hogar.<br><br>
+    <code>#IndependenciaEnergetica #EnergiaSolar #PuertoRico #AdiosLUMA</code>
+  </p>
+
+  <h3>Antes de publicar</h3>
+  <ul>
+    <li><span class="warn">El «link en bio» debe apuntar a WhatsApp, no a la landing.</span> La
+      landing lleva 381 visitas y 0 leads; WhatsApp va a $9.70 por conversación real. Mandar el
+      tráfico orgánico a la landing es tirarlo.</li>
+    <li>La pieza no lleva cuota mensual ni menciona incentivos, por las razones de
+      <code>.kiro/steering/campana-whatsapp.md</code>: la tasa (4.95% vs 7.95%) sigue sin
+      confirmar, el programa de PR está cerrado y el crédito federal expiró el 31/12/2025.</li>
+    <li>Zonas seguras del 9:16: 250 px arriba y 340 px abajo, donde Instagram pone su interfaz. El
+      contenido ya respeta ese margen.</li>
+  </ul>
+</div>
+
+<script>
+  document.querySelectorAll('.art *').forEach(function (el) {
+    if (!(el instanceof SVGElement) && el.children.length === 0 &&
+        el.textContent.trim().length > 0 &&
+        !el.classList.contains('safe') && !el.classList.contains('noedit')) {
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('spellcheck', 'false');
+    }
+  });
+</script>
+
+</body>
+</html>
