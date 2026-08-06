@@ -46,9 +46,12 @@
             justify-content: space-between; }
 
   /* marca */
-  .brand { display: flex; align-items: center; gap: 18px; }
-  .brand svg { width: 40px; height: 40px; display: block; }
-  .brand .wm { font-size: 31px; font-weight: 800; letter-spacing: 6px; color: #FFFFFF; }
+  /* Marca oficial: el sol de src/components/Logo.tsx y public/favicon.svg.
+     Se omite la placa navy del logotipo porque existe para dar contraste sobre
+     fondos claros; aqui el fondo ya es navy y la placa seria invisible. */
+  .brand { display: flex; align-items: center; gap: 20px; }
+  .brand svg { width: 56px; height: 56px; display: block; }
+  .brand .wm { font-size: 33px; font-weight: 800; letter-spacing: 2.5px; color: #FFFFFF; }
   .brand .wm span { color: #F5C518; }
 
   /* titular */
@@ -162,10 +165,16 @@
 
         <div>
           <div class="brand">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" fill="#F5C518"/>
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="11" fill="#F5C518"/>
+              <g stroke="#F5C518" stroke-width="3" stroke-linecap="round">
+                <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
+                <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
+                <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
+                <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
+              </g>
             </svg>
-            <div class="wm noedit">LUMINA<span>.</span></div>
+            <div class="wm noedit">LUMINA<span>PR</span></div>
           </div>
         </div>
 
@@ -206,10 +215,16 @@
 
           <div>
             <div class="brand">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" fill="#F5C518"/>
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="11" fill="#F5C518"/>
+                <g stroke="#F5C518" stroke-width="3" stroke-linecap="round">
+                  <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
+                  <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
+                  <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
+                  <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
+                </g>
               </svg>
-              <div class="wm noedit">LUMINA<span>.</span></div>
+              <div class="wm noedit">LUMINA<span>PR</span></div>
             </div>
           </div>
 
