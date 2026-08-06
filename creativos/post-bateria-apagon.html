@@ -46,13 +46,28 @@
             justify-content: space-between; }
 
   /* marca */
-  /* Marca oficial: el sol de src/components/Logo.tsx y public/favicon.svg.
-     Se omite la placa navy del logotipo porque existe para dar contraste sobre
-     fondos claros; aqui el fondo ya es navy y la placa seria invisible. */
+  /* ===== MARCA =====
+     El logotipo real de LuminaPR es el wordmark "LUMINAPR / SOLAR SOLUTION"
+     (ver instagram.com/luminapr_). NO es un sol de rayos: el sol que hay en
+     src/components/Logo.tsx y public/favicon.svg es un marcador de posicion
+     que no corresponde a la marca.
+     Como el archivo del logo no esta en el repo, aqui hay dos modos:
+       1. Subir el logo real con el boton -> se usa la imagen
+       2. Sin subirlo -> se dibuja el wordmark como respaldo
+     Lo correcto es guardar el archivo en creativos/assets/ y dejarlo fijo. */
   .brand { display: flex; align-items: center; gap: 20px; }
-  .brand svg { width: 56px; height: 56px; display: block; }
-  .brand .wm { font-size: 33px; font-weight: 800; letter-spacing: 2.5px; color: #FFFFFF; }
+  /* height fija + width auto conserva la proporcion del archivo que se suba.
+     El max-width evita que un logo muy alargado se coma el ancho de la pieza
+     (el area util es 920 px). */
+  .brand .logo-img { display: none; height: 92px; width: auto;
+                     max-width: 620px; object-fit: contain; }
+  body.con-logo .brand .logo-img { display: block; }
+  body.con-logo .brand .logo-text { display: none; }
+  .brand .wm { font-size: 34px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF;
+               line-height: 1; }
   .brand .wm span { color: #F5C518; }
+  .brand .tag { font-size: 13.5px; font-weight: 600; letter-spacing: 6.5px;
+                color: #93A1B8; margin-top: 7px; }
 
   /* titular */
   .kicker { font-size: 25px; font-weight: 700; letter-spacing: 4.5px; text-transform: uppercase;
@@ -97,13 +112,16 @@
     font-family: inherit;
   }
   .toggle:hover { background: #2A2A33; }
+  .upload { background: #F5C518; color: #0F2347; border-color: #F5C518; }
+  .upload:hover { background: #ffd633; }
+  .upload input { display: none; }
   .btn-export { background: #25D366; color: #06301B; border-color: #25D366; }
   .btn-export:hover { background: #2ee87a; }
 
   /* ===== MODO EXPORTAR: quita la reducción para capturar a 1080 px ===== */
   body.exportar .sub, body.exportar .why, body.exportar .howto,
   body.exportar h1, body.exportar h2, body.exportar .cap,
-  body.exportar .toggle:not(.btn-export) { display: none; }
+  body.exportar .upload, body.exportar .toggle:not(.btn-export) { display: none; }
   body.exportar .safe { display: none; }
   body.exportar .row { flex-direction: column; gap: 40px; }
   body.exportar .frame { width: 1080px !important; height: auto !important; border-radius: 0; }
@@ -142,11 +160,19 @@
 </div>
 
 <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
+  <label class="upload">Subir el logo de LuminaPR
+    <input type="file" id="logoFile" accept="image/*"></label>
   <button class="toggle" onclick="document.body.classList.toggle('hide-safe')">
     Mostrar / ocultar zonas seguras</button>
   <button class="toggle btn-export" onclick="document.body.classList.add('exportar')">
     Activar modo exportar (1080 px)</button>
 </div>
+<p class="why" style="margin-top:14px;">
+  <b>Sube el logo real</b> con el botón de arriba (PNG con fondo transparente es lo ideal). Sin
+  subirlo, la pieza dibuja el wordmark <i>LUMINAPR / SOLAR SOLUTION</i> como respaldo. El archivo
+  del logo no está en el repositorio todavía: si lo guardas en <code>creativos/assets/</code>, se
+  puede dejar fijo y no habría que subirlo cada vez.
+</p>
 
 <h2>El contraste: sin batería / con batería</h2>
 <p class="why">
@@ -165,16 +191,11 @@
 
         <div>
           <div class="brand">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <circle cx="32" cy="32" r="11" fill="#F5C518"/>
-              <g stroke="#F5C518" stroke-width="3" stroke-linecap="round">
-                <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
-                <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
-                <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
-                <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
-              </g>
-            </svg>
-            <div class="wm noedit">LUMINA<span>PR</span></div>
+            <img class="logo-img" data-logo alt="LuminaPR Solar Solution">
+            <div class="logo-text">
+              <div class="wm noedit">LUMINA<span>PR</span></div>
+              <div class="tag noedit">SOLAR SOLUTION</div>
+            </div>
           </div>
         </div>
 
@@ -215,16 +236,11 @@
 
           <div>
             <div class="brand">
-              <svg viewBox="0 0 64 64" aria-hidden="true">
-                <circle cx="32" cy="32" r="11" fill="#F5C518"/>
-                <g stroke="#F5C518" stroke-width="3" stroke-linecap="round">
-                  <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
-                  <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
-                  <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
-                  <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
-                </g>
-              </svg>
-              <div class="wm noedit">LUMINA<span>PR</span></div>
+              <img class="logo-img" data-logo alt="LuminaPR Solar Solution">
+              <div class="logo-text">
+                <div class="wm noedit">LUMINA<span>PR</span></div>
+                <div class="tag noedit">SOLAR SOLUTION</div>
+              </div>
             </div>
           </div>
 
@@ -308,6 +324,15 @@
       el.setAttribute('contenteditable', 'true');
       el.setAttribute('spellcheck', 'false');
     }
+  });
+
+  // Sube el logo real. Se queda en el navegador, no viaja a ningun servidor.
+  document.getElementById('logoFile').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    var url = URL.createObjectURL(f);
+    document.querySelectorAll('[data-logo]').forEach(function (img) { img.src = url; });
+    document.body.classList.add('con-logo');
   });
 </script>
 
