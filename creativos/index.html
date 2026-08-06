@@ -12,9 +12,13 @@
          padding: 56px 24px 100px; }
   .wrap { max-width: 780px; margin: 0 auto; }
   .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
-  .brand svg { width: 30px; height: 30px; display: block; }
-  .brand span { font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
+  /* El logotipo real es el wordmark LUMINAPR / SOLAR SOLUTION, no un sol de rayos.
+     El sol de src/components/Logo.tsx y public/favicon.svg es un marcador de
+     posicion que no corresponde a la marca. */
+  .brand { flex-direction: column; align-items: flex-start; gap: 5px; }
+  .brand span { font-size: 15px; font-weight: 800; letter-spacing: 1.5px; line-height: 1; }
   .brand span i { color: #F5C518; font-style: normal; }
+  .brand .tagline { font-size: 8.5px; font-weight: 600; letter-spacing: 4.5px; color: #6C6C78; }
   h1 { font-size: 25px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
   .sub { font-size: 13.5px; color: #8A8A96; line-height: 1.75; margin-bottom: 42px; }
   a.card { display: block; text-decoration: none; background: #17171D; border: 1px solid #2A2A33;
@@ -37,16 +41,8 @@
 <div class="wrap">
 
   <div class="brand">
-    <svg viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="32" cy="32" r="11" fill="#F5C518"/>
-      <g stroke="#F5C518" stroke-width="3" stroke-linecap="round">
-        <line x1="32" y1="8" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="56"/>
-        <line x1="8" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="56" y2="32"/>
-        <line x1="15" y1="15" x2="20" y2="20"/><line x1="44" y1="44" x2="49" y2="49"/>
-        <line x1="49" y1="15" x2="44" y2="20"/><line x1="20" y1="44" x2="15" y2="49"/>
-      </g>
-    </svg>
     <span>LUMINA<i>PR</i></span>
+    <span class="tagline">SOLAR SOLUTION</span>
   </div>
 
   <h1>Productores de creativos</h1>
