@@ -45,6 +45,11 @@ jobs:
           cp -r landing/assets/. site/assets/
           # App interna (dashboard de marketing) bajo /studio.
           cp -r dist/. site/studio/
+          # Productores de creativos bajo /creativos. Son herramientas internas del
+          # equipo: el navegador es la unica forma de abrirlas y exportar los PNG.
+          # Llevan <meta name="robots" content="noindex"> para no aparecer en buscadores.
+          mkdir -p site/creativos
+          cp creativos/*.html site/creativos/
           # Dominio personalizado para GitHub Pages (se conserva en cada deploy).
           echo "luminapr.net" > site/CNAME
 
