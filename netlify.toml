@@ -1,6 +1,10 @@
 # Configuración de Netlify para el sitio de la landing de Lumina
 [build]
   publish = "landing"
+  # Copia los productores de creativos dentro de la carpeta publicada para que se
+  # puedan abrir desde el navegador (son herramientas internas y el navegador es la
+  # unica forma de usarlas). Sin esto, /creativos/... responde 404.
+  command = "mkdir -p landing/creativos && cp creativos/*.html landing/creativos/"
   functions = "netlify/functions"
 
 [functions]
