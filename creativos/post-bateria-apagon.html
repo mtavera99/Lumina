@@ -56,7 +56,11 @@
        2. Sin subirlo -> se dibuja el wordmark como respaldo
      Lo correcto es guardar el archivo en creativos/assets/ y dejarlo fijo. */
   .brand { display: flex; align-items: center; gap: 20px; }
-  .brand .logo-img { display: none; height: 92px; width: auto; }
+  /* height fija + width auto conserva la proporcion del archivo que se suba.
+     El max-width evita que un logo muy alargado se coma el ancho de la pieza
+     (el area util es 920 px). */
+  .brand .logo-img { display: none; height: 92px; width: auto;
+                     max-width: 620px; object-fit: contain; }
   body.con-logo .brand .logo-img { display: block; }
   body.con-logo .brand .logo-text { display: none; }
   .brand .wm { font-size: 34px; font-weight: 800; letter-spacing: 2px; color: #FFFFFF;
