@@ -863,6 +863,145 @@ presupuesto:
 
 ---
 
+## 8.1 ⭐⭐ Estado al 07/08/2026 — la primera cita, y la métrica que importa
+
+Conjunto `PR | Inspección | 30-65 | Manual`, presupuesto $27/día.
+
+| | |
+|---|---|
+| Gastado (acumulado del conjunto) | **$247.15** |
+| Conversaciones según Meta | 30 |
+| Mensajes reales (Natana) | **13** |
+| Tasa de llegada | **43%** |
+| Costo real por conversación | **$19.01** |
+| **Citas agendadas** | **1** |
+| **Costo por cita** | **$247** |
+
+### Por anuncio
+
+| Anuncio | Conv. | Costo c/u | CPC | Gastado | Impresiones |
+|---|---|---|---|---|---|
+| **`03 \| Conversacion`** | **16** | **$4.95** | **$0.83** | $79.12 | 10,498 |
+| `F2 CON TEXTO` | 9 | $9.74 | $1.83 | $87.62 | 4,375 |
+| `02 \| Sin call center` | 3 | $13.11 | $1.64 | $39.34 | 3,284 |
+| `CREATIVO CON TEXTO F1` | 2 | $18.57 | $2.32 | $37.14 | 1,849 |
+| `Flayer` + `Flayer 2` | 0 | — | — | $3.93 | 280 |
+
+### ⭐ El objetivo de $3–8 por conversación estaba mal planteado
+
+Ese rango se fijó al principio **sin ninguna referencia real**. Con perspectiva: **$19 por una
+conversación entrante de solar no es caro**, en esta industria un lead cuesta bastante más.
+
+La cadena que sí importa:
+
+```
+costo por conversación real  →  costo por CITA  →  costo por VENTA
+        $19                          $247            ~$1,000-1,250
+```
+
+Con una cita a $247 y un cierre típico de 1 de cada 4 o 5 inspecciones a domicilio, la venta sale a
+**$1,000–1,250 sobre un sistema de $45,000: un 2–3% de costo de adquisición.** En solar residencial
+es normal ver $3,000–$7,000 por instalación.
+
+> **Si esto se sostiene, el canal es muy bueno, no apenas aceptable.** Pero es **una sola cita**:
+> con n=1 el rango verdadero va desde 1 de cada 50 hasta 1 de cada 3. **No se escala sobre un solo
+> evento.**
+
+### ⭐ La palanca más grande no es el presupuesto
+
+De 13 mensajes salió 1 cita: **7.7%**. Mejorar esa tasa no cuesta dinero:
+
+| Tasa mensaje → cita | Costo por cita |
+|---|---|
+| **7.7% (hoy)** | **$247** |
+| 15% | $127 |
+| 20% | **$95** |
+
+**Llevarla a 20% vale 2.6 veces más que cualquier subida de presupuesto.** Las tres palancas
+concretas:
+
+1. **Tiempo de respuesta.** En minutos, no en horas
+2. **Pedir la cita explícitamente.** No *"avísame si te interesa"*, sino *"¿te sirve el jueves a las
+   6?"*. Muchas conversaciones mueren porque nadie propone día y hora
+3. **No descalificar de más.** Con factura sobre $250 y techo propio, va a inspección
+
+### ⚠️ Corrección: la subida de $22 a $27 NO degradó la eficiencia de forma demostrada
+
+Se afirmó que subir el presupuesto encareció la conversación real un 73% ($9.70 → $16.82), con esta
+comparación:
+
+| Período | Gasto | Conv. Meta | Costo Meta c/u | Reales | Costo real c/u |
+|---|---|---|---|---|---|
+| 1 → 4 ago (a $22/día) | $67.88 | 12 | $5.66 | 7 | $9.70 |
+| 4 → 6 ago (a $27/día) | $67.29 | 7 | $9.61 | 4 | $16.82 |
+
+**Ese razonamiento no se sostiene.** Observar 7 conversaciones cuando lo esperado eran 12 ocurre por
+azar cerca del **9%** de las veces: es sugestivo, no prueba. Y hay un hecho que lo contradice
+directamente: el `03`, el anuncio **más barato** ($4.95), tomó fuerza justo en el segundo período,
+así que el costo debería haber bajado.
+
+**Queda como hipótesis no confirmada, no como hecho.** La saturación de audiencia es plausible
+—600–700k personas es poco— pero no está demostrada con estos datos.
+
+### ⚠️ Con este volumen la campaña nunca sale de aprendizaje
+
+30 conversaciones en dos semanas son ~**15 por semana**. Meta necesita **50 por semana**. Para
+llegar harían falta unos **$90/día**, más del triple.
+
+> Quedarse en $27 es, en cierto sentido, lo peor de los dos mundos: se gasta sin que el algoritmo
+> llegue a optimizar. Pero saltar a $90 sin saber si las citas cierran es temerario. **El camino es
+> escalonado y atado a las citas, no al costo por conversación.**
+
+### Plan de escalado vigente
+
+Subido a **$33/día el 07/08**. Revisar cada 3–4 días con tres números: conversaciones de Meta,
+mensajes reales y **citas**.
+
+| Citas nuevas en el período | Decisión |
+|---|---|
+| 2 o más | **Subir a $45** |
+| 1 | Subir a $40 |
+| 0 | **Parar y revisar la conversación**, no el presupuesto |
+
+---
+
+## 8.2 ⭐⭐ No apagar un anuncio con pocos datos — tres veces se falló en esto
+
+**Es el error más repetido del proyecto.** Tres recomendaciones de apagar anuncios, las tres
+equivocadas:
+
+| # | Recomendación | Qué pasó de verdad |
+|---|---|---|
+| 1 | Apagar `Flayer` y `Flayer 2` | Corregido el texto, **F2 pasó a ser el mejor de la cuenta** |
+| 2 | Apagar `CREATIVO CON TEXTO F1` (30/07) | Había producido 2 conversaciones a $6.50 el día antes |
+| 3 | Apagar `03 \| Conversacion` (01/08) por 4 días en cero | **Hoy es el mejor anuncio: 16 conversaciones a $4.95** |
+
+### Por qué la intuición falla: 2 conversaciones no distinguen nada
+
+El `F1` mostraba $18.57 por conversación contra $9.74 del `F2`, y parecía obvio apagarlo. La cuenta
+correcta:
+
+- El `F1` gastó **$37.14**. Al rendimiento del `F2` ($9.74), lo esperado serían **~4 conversaciones**
+- Observó **2**
+- La probabilidad de ver 2 o menos cuando lo esperado son 4 es de **cerca del 27%**
+
+**No es evidencia de nada.** Con 2 eventos, el verdadero costo del `F1` podría ser $8 o $40. Comparar
+$18.57 contra $4.95 como si fueran medidas confiables es leer ruido como señal.
+
+> **Regla: no apagar un anuncio hasta que tenga al menos ~10 conversaciones propias.** Antes de eso
+> no hay con qué decidir, y Meta ya reparte poco al que rinde mal (el `F1` recibió 1,849
+> impresiones contra 10,498 del `03`, o sea que apagarlo libera menos presupuesto de lo que parece).
+
+**Corolario del otro lado:** barato tampoco es bueno. El 30/07 el `02` daba conversaciones a $2.66,
+las más baratas de la campaña, y **llegaron cero mensajes reales**. Lo caro que llega vale más que lo
+barato que no llega.
+
+**Cómo se decide de verdad:** con el desglose de los mensajes de Natana **por texto prellenado**.
+Cada anuncio tiene su emoji propio justo para esto (sección 5). Eso dice qué anuncio trae mensajes
+que llegan y agendan, que es lo único que importa.
+
+---
+
 ## 9. Trampas de Meta que ya nos costaron dinero
 
 Documentadas para no repetirlas. Las marcadas con ⭐ se descubrieron en el montaje del 27–28 de
@@ -906,6 +1045,25 @@ julio de 2026.
 18. ⭐ **La cuenta reporta en Pacific Time**, PR está 3 horas adelante. 8 AM de PR = 5 AM Pacific
 19. ⭐ **La "Puntuación de la campaña" mide obediencia a Meta, no resultados.** Bajó de 100 a 80
     aplicando decisiones correctas. Que baje es buena señal
+20. ⭐⭐ **El "Opportunity score" recomienda añadir imágenes generadas con IA.** Apareció el
+    07/08/2026 con el texto *"You could get 10% higher clickthrough rate by adding AI-generated
+    images"*. **Rechazada.** Dos razones, y la primera es la que hay que entender:
+
+    **a) Optimiza la métrica que no está rota.** El CTR ya es normal (0.85–1.1%). El problema está
+    **después del clic**: 43% de llegada y 7.7% de conversación a cita. Más clics con la misma tasa
+    de llegada da **más gasto y el mismo negocio**, mientras Ads Manager se ve mejor. Es el tipo
+    exacto de "mejora" que engañó a esta campaña durante dos semanas.
+
+    **b) Le dispara al único activo que hay.** El diferenciador es que contesta una persona real
+    —está en el nombre del anuncio `02 | Sin call center`— y el mejor anuncio, el `03` a $4.95,
+    funciona porque **muestra una conversación real de WhatsApp**. Sin testimonios, sin fotos de
+    instalaciones y sin volumen que presumir, **lo único reclamable hoy es ser auténtico**.
+    Fabricar imágenes destruye eso desde adentro. Ver la regla en la sección 7 y en la 12.
+
+    **Regla general para el score:** ese número no califica la campaña, mide **cuántas sugerencias
+    de Meta has aceptado**, y las sugerencias empujan a lo que le conviene a Meta (audiencias más
+    amplias, más ubicaciones, creativos automáticos). **Un score bajo no es un problema. Aceptar
+    sugerencias a ciegas sí.** Leerlas, nunca aplicarlas sin revisar.
 
 ### ⭐ Errores de captura de texto que ya nos pasaron
 
@@ -974,14 +1132,22 @@ Description **antes** de pegar en Primary text.
 6. **Auditar los flyers restantes** (*"¿CÓMO BAJAR TU FACTURA DE LUZ?"*, *"La mejor INVERSIÓN"*,
    *"Tu factura sube"*): confirmar que ninguno mencione los $15,000 de PR, el 30% federal ni
    cuota mensual
-7. ~~**¿Cuántos mensajes tiene Natana en total?**~~ — **RESUELTO el 04/08/2026: son 9.** Costo real
-   $19.98 por conversación, y **$9.70 en el margen** desde que se arregló el robot (sección 8).
-   Mantener el conteo semanal: es el denominador de todo
-8. **¿Qué pasó con esas 9 conversaciones?** Ahora es el pendiente #1. No basta contarlas: **¿cuántas
-   son dueños? ¿cuánto pagan de luz? ¿cuántas están en la zona de servicio? ¿alguna agendó
-   inspección?** La regla documentada exige **más del 25% calificado** para escalar, y ese dato no
-   existe todavía. Si de 9 conversaciones salen 2 citas reales, esto es un canal viable; si son 9
-   curiosos, el $9.70 engaña
+7. ~~**¿Cuántos mensajes tiene Natana en total?**~~ — **RESUELTO.** Al 07/08 son **13**, con 30
+   conversaciones de Meta: 43% de llegada, **$19.01 real por conversación**. Mantener el conteo cada
+   3–4 días: es el denominador de todo
+8. ~~**¿Alguna agendó inspección?**~~ — **RESUELTO el 07/08: salió la primera cita.** 1 de 13
+   mensajes (7.7%), **$247 por cita**. Ver la economía completa en la sección 8.1: si el cierre es de
+   1 de cada 4–5 inspecciones, la venta sale a ~$1,000–1,250 sobre un sistema de $45,000, un 2–3% de
+   costo de adquisición. **Pero es n=1: no se escala sobre un solo evento**
+8bis. **¿Cierra esa cita?** Es ahora el pendiente #1. Es el dato que convierte el canal de "promesa"
+   a "probado", y el único que justificaría ir a los ~$90/día que Meta necesita para salir de fase
+   de aprendizaje
+8ter. **¿Quién contesta cuando Natana no puede?** Sigue sin definirse y es el riesgo real del
+   escalado. A $33/día son ~16 mensajes por período; a $50 son 25 o más. **El tiempo de respuesta es
+   lo que sostiene el 43% de llegada.** Si se degrada, el dinero extra no compra nada
+8quater. **Desglosar los 13 mensajes por texto prellenado.** Cada anuncio tiene su emoji propio
+   (sección 5). Es lo que dice qué anuncio trae mensajes que llegan **y agendan**, y lo que decide el
+   destino del `F1` sin adivinar (sección 8.2)
 8. **¿Natana autoriza el uso de su foto?** Sin eso, el concepto A va firmado como *Lumina PR* en
    plural, no en primera persona
 9. **Renombrar F1 y F2** con su ángulo y darle a cada uno una plantilla con emoji propio
@@ -991,9 +1157,17 @@ Description **antes** de pegar en Primary text.
     el copy invisible en `Description`). La lección no se aprendió: **no apagar nada con datos de un
     solo día**
 11. **¿Existe todavía el `01 | Apagones`?** No aparecía en la lista de anuncios del 30/07
-12. **Apagar `03 | Conversacion`.** Cuatro días activo (28–31/07) gastando presupuesto con **cero
-    conversiones**. Este sí tiene evidencia suficiente. Con $22/día y 4 anuncios cada uno recibe
-    ~$5.50 y ninguno junta datos
+12. ~~**Apagar `03 | Conversacion`**~~ — **RETIRADO, y fue el peor de los tres fallos.** Se
+    recomendó apagarlo el 01/08 por llevar cuatro días en cero, afirmando que *"este sí tiene
+    evidencia suficiente"*. **No la tenía: hoy es el mejor anuncio de la cuenta, con 16
+    conversaciones a $4.95 y el CPC más bajo ($0.83).** Tercera vez que se falla en lo mismo. Ver la
+    regla y la aritmética en la sección 8.2
+12bis. ~~**Apagar `CREATIVO CON TEXTO F1`**~~ — **RETIRADO el 07/08.** Se volvió a recomendar
+    comparando sus $18.57 contra los $4.95 del `03`. Pero con **2 conversaciones** la diferencia no
+    es distinguible del azar: observar 2 cuando lo esperado eran ~4 pasa el **27%** de las veces. Y
+    el argumento de que lo caro puede ser mejor tiene respaldo en nuestros propios datos: las
+    conversaciones de $2.66 del 30/07 fueron las que **no llegaron**. Se decide con el desglose por
+    prellenado, no con el costo
 13. **Borrar el mensaje de phishing** del 18/03 en la bandeja de Instagram: suplanta a Meta,
     amenaza con bloquear la página y trae un adjunto llamado *"Meta Términos y soporte"*. **No abrir
     el adjunto.** Meta nunca avisa de eso por mensaje directo con archivo adjunto
@@ -1070,12 +1244,56 @@ Los creativos se producen con dos archivos HTML del repo, sin Photoshop y sin sa
 
 | Archivo | Contenido |
 |---|---|
+| `creativos/index.html` | Índice con los tres productores y las instrucciones |
 | `creativos/anuncios-nativos.html` | **A** · La persona (foto + «Aquí no hay call center») · **B** · La conversación (maqueta del chat de WhatsApp) |
 | `creativos/anuncios-meta.html` | Creativos de marca: Equipos, Inspección, Calificador |
+| `creativos/post-bateria-apagon.html` | Post orgánico estático de la batería (`s2-mar` de la parrilla) |
+
+### ⭐ Dónde se abren: `luminapr.net/creativos/`
+
+**Durante cinco PRs los creativos no se pudieron abrir desde ningún navegador.** Netlify publica
+solo `landing/` y el *assemble* de GitHub Pages armaba el sitio sin la carpeta, así que
+`/creativos/...` devolvía **404**. Como son herramientas de navegador y el equipo no tiene acceso al
+sistema de archivos, en la práctica no eran usables.
+
+Arreglado el 06/08: `deploy.yml` copia `creativos/*.html` a `site/creativos` y `netlify.toml` hace lo
+mismo para las deploy previews. **Todos los archivos llevan `<meta name="robots" content="noindex,
+nofollow">`** porque son herramientas internas. El repositorio es público, así que el `noindex` evita
+buscadores pero **no hace privado el contenido**.
+
+### ⚠️ Dos cosas que hacen parecer que un cambio no surtió efecto
+
+1. **El workflow de Pages tarda en dispararse.** El merge del PR #47 tardó **~15 minutos** en
+   disparar la corrida por `push`. Se llegó a concluir que el trigger estaba roto y era falso: solo
+   iba con retraso. **Esperar 15–20 minutos antes de asumir que falló**, o lanzarlo a mano en
+   **Actions → Deploy to GitHub Pages → Run workflow**.
+   Nota: el filtro `?head_sha=` del API de GitHub devuelve 0 a través del gateway aunque la corrida
+   exista — no sirve para verificar.
+2. **GitHub Pages manda `cache-control: max-age=600`.** Diez minutos de caché de navegador. Después
+   de publicar un cambio, si no se ve: **`Cmd`+`Shift`+`R`**. Ya pasó una vez, dando la impresión de
+   que el deploy no había funcionado.
+
+### ⭐ El logotipo real es un wordmark, NO un sol de rayos
+
+**El sol con círculo dorado y ocho rayos que hay en `src/components/Logo.tsx`, `public/favicon.svg` y
+el encabezado de la landing NO es el logo de la empresa.** Es un marcador de posición, y está en tres
+sitios del repo, así que cualquiera lo toma por oficial.
+
+El logotipo real, visible en [instagram.com/luminapr_](https://instagram.com/luminapr_), es el
+wordmark **LUMINAPR** con **SOLAR SOLUTION** debajo, sobre fondo azul.
+
+**El archivo del logo no está en el repositorio**, y desde el avatar de Instagram no se puede
+reconstruir con fidelidad. Por eso `post-bateria-apagon.html` tiene un botón **«Subir el logo de
+LuminaPR»** y, si no se sube nada, dibuja el wordmark como respaldo.
+
+**Pendiente:** conseguir el archivo (PNG con transparencia o SVG), guardarlo en `creativos/assets/` y
+**corregir `Logo.tsx` y el favicon**, que hoy le muestran a los clientes un logo que no es el de la
+empresa en el panel interno y en la pestaña del navegador de la landing.
 
 **Cómo se usan:**
 
-1. Abrir con `https://htmlpreview.github.io/?<url del archivo en GitHub>`
+1. Abrir en `https://luminapr.net/creativos/` (o `https://htmlpreview.github.io/?<url del archivo>`
+   si aún no está desplegado)
 2. **Los textos se editan haciendo clic encima y escribiendo.** Los logos SVG están protegidos
 3. La foto se carga con el botón amarillo; se queda en el navegador, no sube a ningún servidor
 4. **Activar el botón verde «modo exportar (1080 px)»**
@@ -1104,3 +1322,58 @@ degradado), nunca para inventar la escena ni para dibujar el texto: falla con la
 
 **El nombre del creativo tiene que ser de quien realmente contesta.** Si dice Natana, contesta
 Natana. Si no hay autorización de imagen, se firma *Lumina PR* y el texto va en plural.
+
+
+---
+
+## 13. ⚠️ Auditoría de la parrilla de contenido orgánico — 06/08/2026
+
+La parrilla vive en `CONTENT_CALENDAR` (`src/data/campaign.ts`) y se ve en la sección *Calendario*
+del Studio. **Se escribió antes de todos los hallazgos de la campaña, y 7 de los 8 posts no se pueden
+publicar como están.**
+
+| ID | Título | Estado |
+|---|---|---|
+| `s1-mar` | 5 mitos sobre la energía solar | ⚠️ dice **$150** |
+| `s1-jue` | Un día con el equipo de instalación | ⚠️ necesita **video real** de una instalación |
+| **`s2-mar`** | **¿Qué pasa con tus paneles cuando se va la luz?** | ✅ **producido** (`creativos/post-bateria-apagon.html`) |
+| `s2-jue` | La historia de una familia que ya no le teme al apagón | 🚫 **testimonio que no existe** |
+| `s3-mar` | ¿Cuánto cuesta? Te lo mostramos claro | 🚫 **$150 / $250 / $369** |
+| `s3-jue` | Qué incluye tu evaluación solar gratuita | ⚠️ oferta vieja |
+| `s4-mar` | Antes y después: la factura de la **familia Rivera** | 🚫 **familia inventada** |
+| `s4-jue` | El próximo apagón va a llegar | ⚠️ oferta vieja |
+
+**Los tres 🚫 son bloqueantes:** dos se apoyan en clientes que no existen (fabricar un testimonio en
+contenido de marca es el mismo error que fabricar una persona con IA) y uno publica cuotas que siguen
+sin confirmarse — y que además pierden la comparación, porque WindMar ya anuncia desde $100/mes.
+
+**Los cuatro ⚠️ tienen arreglo fácil:** siete de los ocho dicen *"evaluación gratuita"*, que es la
+oferta que se retiró en el PR #33. Ahora es **"inspección energética gratis en tu casa"**.
+
+### El `s2-mar` era el único limpio
+
+No lleva precio, no lleva incentivos y no inventa a nadie. Se produjo como **imagen estática**, aunque
+la parrilla lo tenía planificado como *Reel (educativo)* — si se quiere el Reel, el guion es otro
+trabajo.
+
+### Ángulos disponibles para reescribir los otros siete
+
+Todos verificables con lo que Lumina ya tiene, sin inventar nada:
+
+- **Los equipos con nombre y garantía** — Canadian Solar 640W, Sol-Ark, batería Pytes LFP, UNIRAC con
+  anclajes Hilti, Tigo. Garantías de 20–25 años. WindMar vende *"Tesla"* como sello de calidad;
+  Lumina tiene equipos comparables y **no los menciona en ningún lado**
+- **«Aquí no hay call center»** — el ángulo del `02`, con quien de verdad contesta
+- **El papeleo con LUMA** — certificación, medición neta, interconexión, permisos. Nadie lo explica y
+  es competencia operativa demostrable
+- **«¿Por qué es gratis?»** — la objeción principal, de frente
+- **El calificador honesto** — *"si tu factura es baja, todavía no te conviene"*. Decir cuándo **no**
+  comprar es lo que más confianza construye cuando no hay testimonios
+- **La verdad de los incentivos** — el programa de PR está cerrado y el crédito federal expiró el
+  31/12/2025. Es verificable, cuesta $0, y hay competencia que **todavía los anuncia**
+
+### Regla para el link en bio
+
+**Tiene que apuntar a WhatsApp, no a la landing.** La landing lleva **381 visitas y 0 leads**;
+WhatsApp va a $19 por conversación real y ya produjo la primera cita. Mandar el tráfico orgánico
+—que es gratis— a la landing es tirarlo.
